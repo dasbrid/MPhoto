@@ -1,5 +1,6 @@
 package asbridge.me.uk.MPhoto.Activities;
 
+import android.app.ActionBar;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import asbridge.me.uk.MPhoto.R;
 
 import java.io.File;
 import java.util.*;
-
+import android.view.Window;
 /**
  * Created by David on 04/11/2015.
  * See http://developer.android.com/training/animation/screen-slide.html
@@ -29,6 +30,8 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
      */
     private int numPages;
 
+    // the time (in seconds) for which the navigation controls are visible after screen interaction.
+    private static int SHOW_NAVIGATION_CONTROLS_TIME = 3;
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
@@ -53,16 +56,73 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
         }
     };
 
-    /**
-     * The pager adapter, which provides the pages to the view pager widget.
-     */
-//    private PagerAdapter mPagerAdapter;
+    Handler h = new Handler();
+
+    private Runnable hidenavigation = new  Runnable() {
+
+        @Override
+        public void run() {
+            // DO DELAYED STUFF
+            Button btnEnableSwiping = (Button)findViewById(R.id.btnEnableSwiping);
+            btnEnableSwiping.setText("hidden");
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(uiOptions);
+
+            getActionBar().hide();
+        }
+    };
+
     private MyStatePagerAdapter myStatePageAdapter;
     private NonSwipeableViewPager pager;
 
     @Override
+    protected void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        // Code to make layout fullscreen. In onResume, otherwise when activity comes back it will revert to non-fullscreen
+        // http://developer.android.com/training/system-ui/status.html
+        // hide the status bar and application bar (top of the screen) with SYSTEM_UI_FLAG_FULLSCREEN
+        // hide the navigation bar (back, home at bottom of screen) with SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        // SYSTEM_UI_FLAG_LAYOUT_STABLE puts the navigation controls on top of the activity layout (stays fullscreen)
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(uiOptions);
+        // You should never show the action bar (application bar) if the
+        // status bar is hidden, so hide that too if necessary.
+        ActionBar actionBar = getActionBar();
+        actionBar.hide();
+    }
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+            // http://developer.android.com/training/system-ui/visibility.html
+            View decorView = getWindow().getDecorView();
+            decorView.setOnSystemUiVisibilityChangeListener
+                    (new View.OnSystemUiVisibilityChangeListener() {
+                        @Override
+                        public void onSystemUiVisibilityChange(int visibility) {
+                            // Note that system bars will only be "visible" if none of the
+                            // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+                            Button btnEnableSwiping = (Button)findViewById(R.id.btnEnableSwiping);
+                            if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                                // TODO: The system bars are visible. Make any desired
+                                // adjustments to your UI, such as showing the action bar or
+                                // other navigational controls.
+                                btnEnableSwiping.setText("vis");
+                                Handler vishandler = new Handler();
+                                vishandler.postDelayed(hidenavigation, SHOW_NAVIGATION_CONTROLS_TIME*1000); // milliseconds
+                            } else {
+                                // TODO: The system bars are NOT visible. Make any desired
+                                // adjustments to your UI, such as hiding the action bar or
+                                // other navigational controls.
+
+                                btnEnableSwiping.setText("not vis");
+                            }
+                        }
+                    });
+
         setContentView(R.layout.activity_screen_slide_pager);
 
         myStatePageAdapter = new MyStatePagerAdapter(getSupportFragmentManager(), this);
