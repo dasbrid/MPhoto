@@ -5,15 +5,19 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp" >
 
-    <Button android:id="@+id/btnEnableSwiping"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Play/Pause" />
+
 
     <asbridge.me.uk.MPhoto.Classes.NonSwipeableViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/dynamicpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-            android:layout_below="@id/btnEnableSwiping"/>
+            />
+
+    <Button android:id="@+id/btnEnableSwiping"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Play/Pause" />
 </RelativeLayout>

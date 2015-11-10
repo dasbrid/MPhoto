@@ -41,7 +41,7 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
     private int page = 0;
 
     private Handler handler = new Handler();
-    private static final int slideshowDelay = 5; // in seconds
+    private static final int SLIDE_SHOW_DELAY = 2; // in seconds
 
     private Runnable runnable = new Runnable() {
         @Override
@@ -51,20 +51,18 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
             if (page >= numPages)
                 page = 0;
 
-            /* and here comes the "trick" */
-            handler.postDelayed(this, slideshowDelay*1000);
+            /* to keep the slideshow going, start te timer again */
+            handler.postDelayed(this, SLIDE_SHOW_DELAY * 1000);
         }
     };
 
-    Handler h = new Handler();
 
+    // Runnable called by handler x seconds after user interaction
     private Runnable hidenavigation = new  Runnable() {
-
         @Override
         public void run() {
-            // DO DELAYED STUFF
             Button btnEnableSwiping = (Button)findViewById(R.id.btnEnableSwiping);
-            btnEnableSwiping.setText("hidden");
+            btnEnableSwiping.setVisibility(View.INVISIBLE);
             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(uiOptions);
@@ -107,18 +105,14 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
                             // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
                             Button btnEnableSwiping = (Button)findViewById(R.id.btnEnableSwiping);
                             if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                                // TODO: The system bars are visible. Make any desired
-                                // adjustments to your UI, such as showing the action bar or
-                                // other navigational controls.
-                                btnEnableSwiping.setText("vis");
+                                // Navigation is here, show our custom navigation buttons
+                                btnEnableSwiping.setVisibility(View.VISIBLE);
+                                // start timer to hide navigation after x seconds
                                 Handler vishandler = new Handler();
                                 vishandler.postDelayed(hidenavigation, SHOW_NAVIGATION_CONTROLS_TIME*1000); // milliseconds
                             } else {
                                 // TODO: The system bars are NOT visible. Make any desired
-                                // adjustments to your UI, such as hiding the action bar or
-                                // other navigational controls.
-
-                                btnEnableSwiping.setText("not vis");
+                                btnEnableSwiping.setVisibility(View.INVISIBLE);
                             }
                         }
                     });
@@ -141,7 +135,7 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
 
         numPages = filelist.size();
         pager.setCurrentItemManual(page);
-        handler.postDelayed(runnable, slideshowDelay);
+        handler.postDelayed(runnable, SLIDE_SHOW_DELAY);
     }
 
     private ArrayList<File> getMediaToCopy(Date lastSyncTime)
