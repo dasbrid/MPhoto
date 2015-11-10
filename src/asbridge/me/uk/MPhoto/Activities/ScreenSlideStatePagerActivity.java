@@ -19,6 +19,8 @@ import asbridge.me.uk.MPhoto.R;
 import java.io.File;
 import java.util.*;
 import android.view.Window;
+import asbridge.me.uk.MPhoto.helper.Utils;
+
 /**
  * Created by David on 04/11/2015.
  * See http://developer.android.com/training/animation/screen-slide.html
@@ -94,6 +96,8 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+            Utils utils = new Utils(this);
+
             // http://developer.android.com/training/system-ui/visibility.html
             View decorView = getWindow().getDecorView();
             decorView.setOnSystemUiVisibilityChangeListener
@@ -128,7 +132,9 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
 
 
 
-        ArrayList<File> filelist = getFilesToCopy("/mnt/sdcard/MatthewsPhotos");
+        ArrayList<File> filelist = utils.GetFiles(); /* getFilesToCopy("/mnt/sdcard/MatthewsPhotos");*/
+
+
         myStatePageAdapter.setFileList(filelist);
         myStatePageAdapter.notifyDataSetChanged();
 
