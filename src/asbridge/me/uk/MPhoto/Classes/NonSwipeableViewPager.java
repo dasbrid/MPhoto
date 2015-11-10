@@ -26,6 +26,11 @@ public class NonSwipeableViewPager extends ViewPager {
             setCurrentItem(pageNumber);
     }
 
+    public boolean IsSlideshowOn()
+    {
+        return !swipable;
+    }
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         if (this.swipable) {

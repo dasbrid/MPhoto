@@ -30,8 +30,10 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
      */
     private int numPages;
 
-    // the time (in seconds) for which the navigation controls are visible after screen interaction.
+    // The time (in seconds) for which the navigation controls are visible after screen interaction.
     private static int SHOW_NAVIGATION_CONTROLS_TIME = 3;
+    // Delay between slides
+    private static final int SLIDE_SHOW_DELAY = 2; // in seconds
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
@@ -41,17 +43,15 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
     private int page = 0;
 
     private Handler handler = new Handler();
-    private static final int SLIDE_SHOW_DELAY = 2; // in seconds
+
 
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-      /* do what you need to do */
             pager.setCurrentItemManual(page++);
             if (page >= numPages)
                 page = 0;
-
-            /* to keep the slideshow going, start te timer again */
+            // to keep the slideshow going, start te timer again
             handler.postDelayed(this, SLIDE_SHOW_DELAY * 1000);
         }
     };
@@ -66,7 +66,6 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(uiOptions);
-
             getActionBar().hide();
         }
     };
@@ -246,6 +245,18 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
     private void PlayPauseBtnHandler()
     {
         pager.togglePlayPause();
+        Button btnEnableSwiping = (Button)findViewById(R.id.btnEnableSwiping);
+        if (pager.IsSlideshowOn())
+            btnEnableSwiping.setText("Pause");
+        else
+            btnEnableSwiping.setText("Play");
+
+        btnEnableSwiping.setVisibility(View.INVISIBLE);
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(uiOptions);
+        getActionBar().hide();
+
     }
 
     @Override
