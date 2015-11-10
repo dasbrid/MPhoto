@@ -8,10 +8,12 @@
         <activity android:name=".Activities.ScreenSlidePagerActivity">
         </activity>
         <activity android:name=".Activities.ScreenSlideStatePagerActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+        </activity>
+        <activity android:name=".Activities.AlbumsGrid">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+        </intent-filter>
         </activity>
     </application>
 </manifest>

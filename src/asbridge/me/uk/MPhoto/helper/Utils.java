@@ -14,6 +14,7 @@ import android.widget.Toast;
 /**
  * Created by David on 10/11/2015.
  */
+// http://www.androidhive.info/2013/09/android-fullscreen-image-slider-with-swipe-and-pinch-zoom-gestures/
 public class Utils {
     private Context _context;
 

@@ -11,14 +11,13 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-import asbridge.me.uk.MPhoto.Classes.MyStatePagerAdapter;
+import asbridge.me.uk.MPhoto.adapter.MyStatePagerAdapter;
 import asbridge.me.uk.MPhoto.Classes.NonSwipeableViewPager;
 import asbridge.me.uk.MPhoto.R;
 
 import java.io.File;
 import java.util.*;
-import android.view.Window;
+
 import asbridge.me.uk.MPhoto.helper.Utils;
 
 /**
@@ -132,7 +131,7 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
 
 
 
-        ArrayList<File> filelist = utils.GetFiles(); /* getFilesToCopy("/mnt/sdcard/MatthewsPhotos");*/
+        ArrayList<File> filelist = utils.GetFiles();
 
 
         myStatePageAdapter.setFileList(filelist);
@@ -212,31 +211,6 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
             } while (cur.moveToNext());
         }
         return filesToCopy;
-    }
-
-    private ArrayList<File> getFilesToCopy(String filepath)
-    {
-        ArrayList<File> filesToCopy = new ArrayList<File>();
-
-        File picturesStorageDir  = new File(filepath);
-        File[] fullFileList = picturesStorageDir.listFiles();
-        if (fullFileList == null)
-        {
-            Toast.makeText(this, "Cannot read list of files", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        Log.v(TAG, "File folder contains " + fullFileList.length + " files");
-
-        Date filedate;
-        for (File theFile : fullFileList) {
-            if (theFile.isFile()) {
-                Log.v(TAG, "Added " + theFile.getName() + " to list");
-                filesToCopy.add(theFile);
-            }
-        }
-
-        return filesToCopy;
-
     }
 
     @Override

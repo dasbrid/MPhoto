@@ -1,4 +1,4 @@
-package asbridge.me.uk.MPhoto.Classes;
+package asbridge.me.uk.MPhoto.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
