@@ -2,6 +2,7 @@ package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.Toast;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewImageAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
@@ -39,7 +40,15 @@ public class AlbumsGrid extends Activity {
         InitilizeGridLayout();
 
         // loading all image paths from SD card
-        images = utils.GetFiles();
+        //images = utils.GetFiles();
+
+        images = utils.GetAllFiles(android.os.Environment.getExternalStorageDirectory()
+                + File.separator + AppConstant.PHOTO_ALBUM);
+
+        Toast.makeText(this, "found " + Integer.toString(images.size()) + " files", Toast.LENGTH_LONG).show();
+
+//        ArrayList<File> folders = utils.GetFolders();
+//        Toast.makeText(this, "found " + Integer.toString(folders.size()) + " folders", Toast.LENGTH_LONG).show();
 
         // Gridview adapter
         adapter = new GridViewImageAdapter(AlbumsGrid.this, images,

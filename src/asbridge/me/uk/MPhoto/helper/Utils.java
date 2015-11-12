@@ -23,13 +23,76 @@ public class Utils {
         this._context = context;
     }
 
-    // Reading file paths from SDCard
+    // get all files in path (including all subfolders)
+    public ArrayList<File> GetAllFiles(String absolutePath)
+    {
+        ArrayList<File> files = new ArrayList<File>();
+        File rootFolder = new File(absolutePath);
+        if (!rootFolder.isDirectory())
+            return files;
+
+        AddFilesToList(files, rootFolder);
+        return files;
+    }
+
+    private void AddFilesToList(ArrayList<File> fileList, File folder) {
+        if (folder.isFile())
+        {
+            fileList.add(folder);
+            return;
+        }
+
+        File[] listFiles = folder.listFiles();
+        if (listFiles == null)
+            return;
+
+        for (File file : listFiles) {
+            AddFilesToList(fileList, file);
+        }
+    }
+
+    // get all the folders (and their subfolders) from a folder
+    public ArrayList<File> GetFolders() {
+        ArrayList<File> folders = new ArrayList<File>();
+        File rootFolder = new File(android.os.Environment.getExternalStorageDirectory()
+                + File.separator + "MatthewsPhotos");
+        AddFoldersToList(folders, rootFolder);
+        return folders;
+    }
+
+    private void AddFoldersToList(ArrayList<File> folderList, File folder) {
+        if (folder.isDirectory()) {
+            // we have been passed a folder.
+            // add it to the list
+            folderList.add(folder);
+            Toast.makeText(_context, folder.getName(), Toast.LENGTH_SHORT).show();
+            // and iterate it's contents
+            // getting list of file paths
+            File[] listFiles = folder.listFiles();
+            if (listFiles == null)
+                return;
+            Toast.makeText(_context, "numfiles=" + Integer.toString(listFiles.length), Toast.LENGTH_SHORT).show();
+            // Check for count
+            // loop through all files
+            for (File file : listFiles) {
+                AddFoldersToList(folderList, file);
+            }
+        }
+    }
+
+    // get files in the root path
     public ArrayList<File> GetFiles() {
+        return GetFilesInFolder(".");
+    }
+
+
+    // Reading file paths from SDCard
+    public ArrayList<File> GetFilesInFolder(String foldername) {
         ArrayList<File> files = new ArrayList<File>();
 
         File directory = new File(
                 android.os.Environment.getExternalStorageDirectory()
-                        + File.separator + AppConstant.PHOTO_ALBUM);
+                        + File.separator + AppConstant.PHOTO_ALBUM + File.separator + foldername);
 
         // check for directory
         if (directory.isDirectory()) {
