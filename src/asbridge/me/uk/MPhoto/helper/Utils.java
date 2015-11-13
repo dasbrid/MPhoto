@@ -23,7 +23,24 @@ public class Utils {
         this._context = context;
     }
 
-    // get all files in path (including all subfolders)
+    // TODO: only return compatible (image) files
+    // TODO: different return if file or empty folder
+    public static File GetFirstImageInFolder(File folder)
+    {
+        if (!folder.isDirectory()) {
+            return null;
+        }
+        File[] listFiles = folder.listFiles();
+        for (File file : listFiles) {
+            if (file.isFile()) {
+                return file;
+            }
+        }
+        return null;
+    }
+
+    // get all files in path (including all files in subfolders)
+    // TODO: only return compatible (image) files
     public ArrayList<File> GetAllFiles(String absolutePath)
     {
         ArrayList<File> files = new ArrayList<File>();
@@ -65,13 +82,11 @@ public class Utils {
             // we have been passed a folder.
             // add it to the list
             folderList.add(folder);
-            Toast.makeText(_context, folder.getName(), Toast.LENGTH_SHORT).show();
             // and iterate it's contents
             // getting list of file paths
             File[] listFiles = folder.listFiles();
             if (listFiles == null)
                 return;
-            Toast.makeText(_context, "numfiles=" + Integer.toString(listFiles.length), Toast.LENGTH_SHORT).show();
             // Check for count
             // loop through all files
             for (File file : listFiles) {

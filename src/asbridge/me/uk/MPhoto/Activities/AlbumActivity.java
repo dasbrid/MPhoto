@@ -1,8 +1,10 @@
 package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.TypedValue;
+import android.widget.GridView;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewImageAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
@@ -11,16 +13,11 @@ import asbridge.me.uk.MPhoto.helper.Utils;
 import java.io.File;
 import java.util.ArrayList;
 
-import android.app.Activity;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.util.TypedValue;
-import android.widget.GridView;
-
 /**
  * Created by David on 10/11/2015.
+ * An Activity for viewing (and later editing/sharing) all the photos in an album
  */
-public class AlbumsGrid extends Activity {
+public class AlbumActivity extends Activity {
     private Utils utils;
     private ArrayList<File> images = new ArrayList<File>();
     private GridViewImageAdapter adapter;
@@ -30,7 +27,7 @@ public class AlbumsGrid extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_albums_grid);
+        setContentView(R.layout.activity_albums);
 
         gridView = (GridView) findViewById(R.id.grid_view);
 
@@ -39,19 +36,14 @@ public class AlbumsGrid extends Activity {
         // Initilizing Grid View
         InitilizeGridLayout();
 
-        // loading all image paths from SD card
-        //images = utils.GetFiles();
+        Bundle parameters = getIntent().getExtras();
+        String albumFolder =parameters.getString("folderAbsolutePath");
 
-        images = utils.GetAllFiles(android.os.Environment.getExternalStorageDirectory()
-                + File.separator + AppConstant.PHOTO_ALBUM);
-
-        Toast.makeText(this, "found " + Integer.toString(images.size()) + " files", Toast.LENGTH_LONG).show();
-
-//        ArrayList<File> folders = utils.GetFolders();
-//        Toast.makeText(this, "found " + Integer.toString(folders.size()) + " folders", Toast.LENGTH_LONG).show();
+        // get all files (in this folder and in subfolders)
+        images = utils.GetAllFiles(albumFolder);
 
         // Gridview adapter
-        adapter = new GridViewImageAdapter(AlbumsGrid.this, images,
+        adapter = new GridViewImageAdapter(AlbumActivity.this, images,
                 columnWidth);
 
         // setting grid view adapter
