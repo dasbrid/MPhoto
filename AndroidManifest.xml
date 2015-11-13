@@ -7,7 +7,7 @@
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
         <activity android:name=".Activities.ScreenSlidePagerActivity">
         </activity>
-        <activity android:name=".Activities.ScreenSlideStatePagerActivity">
+        <activity android:name=".Activities.PhotoSlideshowActivity">
         </activity>
         <activity android:name=".Activities.AlbumActivity">
 

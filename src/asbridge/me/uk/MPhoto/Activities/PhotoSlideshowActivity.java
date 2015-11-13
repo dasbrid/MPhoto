@@ -24,8 +24,8 @@ import asbridge.me.uk.MPhoto.helper.Utils;
  * Created by David on 04/11/2015.
  * See http://developer.android.com/training/animation/screen-slide.html
  */
-public class ScreenSlideStatePagerActivity extends FragmentActivity   implements View.OnClickListener{
-    private static String TAG=ScreenSlideStatePagerActivity.class.getName();
+public class PhotoSlideshowActivity extends FragmentActivity   implements View.OnClickListener{
+    private static String TAG=PhotoSlideshowActivity.class.getName();
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
@@ -119,7 +119,7 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
                         }
                     });
 
-        setContentView(R.layout.activity_screen_slide_pager);
+        setContentView(R.layout.activity_photo_slideshow);
 
         myStatePageAdapter = new MyStatePagerAdapter(getSupportFragmentManager(), this);
         pager = (NonSwipeableViewPager)findViewById(R.id.dynamicpager);
@@ -129,9 +129,10 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
         Button btnEnableSwiping = (Button)findViewById(R.id.btnEnableSwiping);
         btnEnableSwiping.setOnClickListener(this);
 
+            Bundle parameters = getIntent().getExtras();
+            String albumFolder =parameters.getString("folderAbsolutePath");
 
-
-        ArrayList<File> filelist = utils.GetFiles();
+        ArrayList<File> filelist = utils.GetAllFiles(albumFolder);
 
 
         myStatePageAdapter.setFileList(filelist);
@@ -238,7 +239,7 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
         getActionBar().hide();
 
     }
-
+/*
     @Override
     public void onBackPressed() {
         if (mPager.getCurrentItem() == 0) {
@@ -250,5 +251,5 @@ public class ScreenSlideStatePagerActivity extends FragmentActivity   implements
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
     }
-
+*/
 }

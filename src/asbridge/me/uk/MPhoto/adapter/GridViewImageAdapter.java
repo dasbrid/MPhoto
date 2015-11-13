@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import asbridge.me.uk.MPhoto.Activities.ScreenSlideStatePagerActivity;
+import asbridge.me.uk.MPhoto.Activities.PhotoSlideshowActivity;
 
 /**
  * Created by David on 10/11/2015.
@@ -74,20 +74,22 @@ public class GridViewImageAdapter extends BaseAdapter {
 
     class OnImageClickListener implements OnClickListener {
 
-        int _postion;
+        int _position;
 
         // constructor
         public OnImageClickListener(int position) {
-            this._postion = position;
+            this._position = position;
         }
 
         @Override
         public void onClick(View v) {
             // on selecting grid view image
             // launch full screen activity
-            Intent i = new Intent(_activity, ScreenSlideStatePagerActivity.class);
-            i.putExtra("position", _postion);
-            _activity.startActivity(i);
+            File folder = _files.get(_position);
+            Intent intent = new Intent(_activity, PhotoSlideshowActivity.class);
+            intent.putExtra("position", _position);
+            intent.putExtra("folderAbsolutePath", folder.getAbsolutePath());
+            _activity.startActivity(intent);
         }
 
     }
