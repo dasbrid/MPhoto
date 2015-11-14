@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
+import asbridge.me.uk.MPhoto.Activities.PhotoSlideshowActivity;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
@@ -75,19 +77,36 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             //TODO: what if folder is empty (no images) or not actually a folder
             //Bitmap image = decodeFile(imageFile.getAbsolutePath(), imageWidth, imageWidth);
             Bitmap bMap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-/*
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-            imageView.setLayoutParams(new GridView.LayoutParams(imageWidth,
-                    imageWidth));
-            */
             imageView.setImageBitmap(bMap);
             imageView.setOnClickListener(new OnImageClickListener(position));
+
+            Button btnSlideshow = (Button) gridView.findViewById(R.id.btnSlideshow);
+            btnSlideshow.setOnClickListener(new OnButtonClickListener(position));
 
         } else {
             gridView = (View) convertView;
         }
         return gridView;
+    }
+
+    class OnButtonClickListener implements OnClickListener {
+
+        int _position;
+
+        // constructor
+        public OnButtonClickListener(int position) {
+            this._position = position;
+        }
+        @Override
+        public void onClick(View v) {
+            // button clicked, launch slideshow for this folder
+            File folder = _folders.get(_position);
+            Intent intent = new Intent(_context, PhotoSlideshowActivity.class);
+            intent.putExtra("position", _position);
+            intent.putExtra("folderAbsolutePath", folder.getAbsolutePath());
+            _context.startActivity(intent);
+        }
     }
 
     class OnImageClickListener implements OnClickListener {
