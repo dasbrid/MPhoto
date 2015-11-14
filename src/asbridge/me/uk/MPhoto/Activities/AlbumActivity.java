@@ -23,6 +23,7 @@ public class AlbumActivity extends Activity {
     private GridViewImageAdapter adapter;
     private GridView gridView;
     private int columnWidth;
+    private String albumAbsolutePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +39,11 @@ public class AlbumActivity extends Activity {
 
         Bundle parameters = getIntent().getExtras();
         String albumFolder =parameters.getString("folderAbsolutePath");
+        this.albumAbsolutePath = albumFolder;
 
-        // get all files (in this folder and in subfolders)
-        images = utils.GetAllFiles(albumFolder);
 
         // Gridview adapter
-        adapter = new GridViewImageAdapter(AlbumActivity.this, images,
-                columnWidth);
+        adapter = new GridViewImageAdapter(AlbumActivity.this, albumFolder, columnWidth);
 
         // setting grid view adapter
         gridView.setAdapter(adapter);

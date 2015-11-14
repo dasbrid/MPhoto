@@ -1,6 +1,5 @@
 package asbridge.me.uk.MPhoto.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
@@ -72,7 +70,7 @@ public class GridViewAlbumAdapter extends BaseAdapter {
 
             // image is the first image in the folder
             File folder = _folders.get(position);
-            File imageFile = Utils.GetFirstImageInFolder(folder);
+            File imageFile = Utils.getFirstImageInFolder(folder);
 
             //TODO: what if folder is empty (no images) or not actually a folder
             //Bitmap image = decodeFile(imageFile.getAbsolutePath(), imageWidth, imageWidth);

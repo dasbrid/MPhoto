@@ -16,6 +16,7 @@ import android.widget.Toast;
  */
 // http://www.androidhive.info/2013/09/android-fullscreen-image-slider-with-swipe-and-pinch-zoom-gestures/
 public class Utils {
+
     private Context _context;
 
     // constructor
@@ -23,39 +24,66 @@ public class Utils {
         this._context = context;
     }
 
-    // TODO: only return compatible (image) files
-    // TODO: different return if file or empty folder
-    public static File GetFirstImageInFolder(File folder)
+    // TODO: first image may be in a subfolder
+    public static File getFirstImageInFolder(File folder)
     {
         if (!folder.isDirectory()) {
             return null;
         }
         File[] listFiles = folder.listFiles();
+        // first look for a file in this folder
         for (File file : listFiles) {
-            if (file.isFile()) {
+            if (file.isFile() && isImageFile(file)) {
+                return file;
+            }
+        }
+
+        File file;
+        for (File subfolder : listFiles) {
+            if (subfolder.isDirectory()) {
+                file = getFirstImageInFolder(subfolder);
+                if (file != null)
                 return file;
             }
         }
         return null;
     }
 
-    // get all files in path (including all files in subfolders)
+    public static boolean isImageFile(File file)
+    {
+        String filePath = file.getAbsolutePath();
+        // Check supported file extensions
+        String ext = filePath.substring((filePath.lastIndexOf(".") + 1),
+                filePath.length());
+
+        if (AppConstant.FILE_EXTN
+                .contains(ext.toLowerCase(Locale.getDefault())))
+            return true;
+        else
+            return false;
+
+    }
+
+    // get all FILES in path (including all files in subfolders)
     // TODO: only return compatible (image) files
-    public ArrayList<File> GetAllFiles(String absolutePath)
+    public static ArrayList<File> getAllFiles(String absolutePath)
     {
         ArrayList<File> files = new ArrayList<File>();
         File rootFolder = new File(absolutePath);
         if (!rootFolder.isDirectory())
             return files;
 
-        AddFilesToList(files, rootFolder);
+        addFilesToList(files, rootFolder);
         return files;
     }
 
-    private void AddFilesToList(ArrayList<File> fileList, File folder) {
+    // recursion method for getting FILES in a folder
+    private static void addFilesToList(ArrayList<File> fileList, File folder) {
         if (folder.isFile())
         {
-            fileList.add(folder);
+            if (isImageFile(folder)) {
+                fileList.add(folder);
+            }
             return;
         }
 
@@ -64,20 +92,21 @@ public class Utils {
             return;
 
         for (File file : listFiles) {
-            AddFilesToList(fileList, file);
+            addFilesToList(fileList, file);
         }
     }
 
-    // get all the folders (and their subfolders) from a folder
-    public ArrayList<File> GetFolders() {
+    // get all the FOLDERS (albums) (and their subfolders) from a folder
+    public static ArrayList<File> getFolders() {
         ArrayList<File> folders = new ArrayList<File>();
         File rootFolder = new File(android.os.Environment.getExternalStorageDirectory()
                 + File.separator + "MatthewsPhotos");
-        AddFoldersToList(folders, rootFolder);
+        addFoldersToList(folders, rootFolder);
         return folders;
     }
 
-    private void AddFoldersToList(ArrayList<File> folderList, File folder) {
+    // recursion method for getting subFOLDERS in a folder
+    private static void addFoldersToList(ArrayList<File> folderList, File folder) {
         if (folder.isDirectory()) {
             // we have been passed a folder.
             // add it to the list
@@ -90,82 +119,9 @@ public class Utils {
             // Check for count
             // loop through all files
             for (File file : listFiles) {
-                AddFoldersToList(folderList, file);
+                addFoldersToList(folderList, file);
             }
         }
-    }
-
-    // get files in the root path
-    public ArrayList<File> GetFiles() {
-        return GetFilesInFolder(".");
-    }
-
-
-    // Reading file paths from SDCard
-    public ArrayList<File> GetFilesInFolder(String foldername) {
-        ArrayList<File> files = new ArrayList<File>();
-
-        File directory = new File(
-                android.os.Environment.getExternalStorageDirectory()
-                        + File.separator + AppConstant.PHOTO_ALBUM + File.separator + foldername);
-
-        // check for directory
-        if (directory.isDirectory()) {
-            // getting list of file paths
-            File[] listFiles = directory.listFiles();
-
-            // Check for count
-            if (listFiles.length > 0) {
-
-                // loop through all files
-                for (int i = 0; i < listFiles.length; i++) {
-                    File file = listFiles[i];
-
-                    // get file path
-                    String filePath = listFiles[i].getAbsolutePath();
-
-                    // check for supported file extension
-                    if (IsSupportedFile(file)) {
-                        // Add image path to array list
-                        files.add(file);
-                    }
-                }
-            } else {
-                // image directory is empty
-                Toast.makeText(
-                        _context,
-                        AppConstant.PHOTO_ALBUM
-                                + " is empty. Please load some images in it !",
-                        Toast.LENGTH_LONG).show();
-            }
-
-        } else {
-            AlertDialog.Builder alert = new AlertDialog.Builder(_context);
-            alert.setTitle("Error!");
-            alert.setMessage(AppConstant.PHOTO_ALBUM
-                    + " directory path is not valid! Please set the image directory name AppConstant.java class");
-            alert.setPositiveButton("OK", null);
-            alert.show();
-        }
-
-        return files;
-    }
-
-    private  boolean IsSupportedFile(File file) {
-        return IsSupportedFile(file.getAbsolutePath());
-    }
-
-        // Check supported file extensions
-    private  boolean IsSupportedFile(String filePath) {
-        String ext = filePath.substring((filePath.lastIndexOf(".") + 1),
-                filePath.length());
-
-        if (AppConstant.FILE_EXTN
-                .contains(ext.toLowerCase(Locale.getDefault())))
-            return true;
-        else
-            return false;
-
     }
 
     /*

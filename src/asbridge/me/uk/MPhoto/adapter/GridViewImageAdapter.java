@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import asbridge.me.uk.MPhoto.Activities.PhotoSlideshowActivity;
+import asbridge.me.uk.MPhoto.helper.Utils;
 
 /**
  * Created by David on 10/11/2015.
@@ -25,11 +26,13 @@ public class GridViewImageAdapter extends BaseAdapter {
     private Activity _activity;
     private ArrayList<File> _files = new ArrayList<File>();
     private int imageWidth;
+    private String albumAbsolutePath;
 
-    public GridViewImageAdapter(Activity activity, ArrayList<File> files,
-                                int imageWidth) {
+    public GridViewImageAdapter(Activity activity, String albumAbsolutePath, int imageWidth) {
         this._activity = activity;
-        this._files = files;
+        this.albumAbsolutePath = albumAbsolutePath;
+        // get all files (in this folder and in subfolders)
+        this._files = Utils.getAllFiles(albumAbsolutePath);
         this.imageWidth = imageWidth;
     }
 
@@ -85,10 +88,10 @@ public class GridViewImageAdapter extends BaseAdapter {
         public void onClick(View v) {
             // on selecting grid view image
             // launch full screen activity
-            File folder = _files.get(_position);
+//            File folder = _files.get(_position);
             Intent intent = new Intent(_activity, PhotoSlideshowActivity.class);
             intent.putExtra("position", _position);
-            intent.putExtra("folderAbsolutePath", folder.getAbsolutePath());
+            intent.putExtra("folderAbsolutePath", albumAbsolutePath);
             _activity.startActivity(intent);
         }
 

@@ -2,18 +2,13 @@ package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.Toast;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewAlbumAdapter;
-import asbridge.me.uk.MPhoto.adapter.GridViewImageAdapter;
-import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import android.content.res.Resources;
-import android.util.TypedValue;
 import android.widget.GridView;
 
 /**
@@ -37,7 +32,7 @@ public class AlbumsActivity extends Activity {
         utils = new Utils(this);
 
         // get all folders + all sub(and subsub) folders
-        folders = utils.GetFolders();
+        folders = utils.getFolders();
 
         // Gridview adapter
         adapter = new GridViewAlbumAdapter(AlbumsActivity.this, folders,

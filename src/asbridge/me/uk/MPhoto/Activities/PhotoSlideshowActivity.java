@@ -132,7 +132,7 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
             Bundle parameters = getIntent().getExtras();
             String albumFolder =parameters.getString("folderAbsolutePath");
 
-        ArrayList<File> filelist = utils.GetAllFiles(albumFolder);
+        ArrayList<File> filelist = utils.getAllFiles(albumFolder);
 
 
         myStatePageAdapter.setFileList(filelist);
