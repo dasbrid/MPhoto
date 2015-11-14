@@ -82,7 +82,10 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             imageView.setOnClickListener(new OnImageClickListener(position));
 
             Button btnSlideshow = (Button) gridView.findViewById(R.id.btnSlideshow);
-            btnSlideshow.setOnClickListener(new OnButtonClickListener(position));
+            btnSlideshow.setOnClickListener(new OnSlideshowButtonClickListener(position));
+
+            Button btnAlbum = (Button) gridView.findViewById(R.id.btnAlbum);
+            btnAlbum.setOnClickListener(new OnAlbumButtonClickListener(position));
 
         } else {
             gridView = (View) convertView;
@@ -90,12 +93,32 @@ public class GridViewAlbumAdapter extends BaseAdapter {
         return gridView;
     }
 
-    class OnButtonClickListener implements OnClickListener {
+
+    class OnAlbumButtonClickListener implements OnClickListener {
 
         int _position;
 
         // constructor
-        public OnButtonClickListener(int position) {
+        public OnAlbumButtonClickListener(int position) {
+            this._position = position;
+        }
+        @Override
+        public void onClick(View v) {
+            // button clicked, launch slideshow for this folder
+            File folder = _folders.get(_position);
+            Intent intent = new Intent(_context, AlbumActivity.class);
+            intent.putExtra("position", _position);
+            intent.putExtra("folderAbsolutePath", folder.getAbsolutePath());
+            _context.startActivity(intent);
+        }
+    }
+
+    class OnSlideshowButtonClickListener implements OnClickListener {
+
+        int _position;
+
+        // constructor
+        public OnSlideshowButtonClickListener(int position) {
             this._position = position;
         }
         @Override
