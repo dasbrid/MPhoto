@@ -6,16 +6,17 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
+import android.widget.*;
 import asbridge.me.uk.MPhoto.Activities.PhotoSlideshowActivity;
+import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
 /**
@@ -23,13 +24,13 @@ import asbridge.me.uk.MPhoto.helper.Utils;
  */
 public class GridViewImageAdapter extends BaseAdapter {
 
-    private Activity _activity;
+    private Activity _context;
     private ArrayList<File> _files = new ArrayList<File>();
     private int imageWidth;
     private String albumAbsolutePath;
 
     public GridViewImageAdapter(Activity activity, String albumAbsolutePath, int imageWidth) {
-        this._activity = activity;
+        this._context = activity;
         this.albumAbsolutePath = albumAbsolutePath;
         // get all files (in this folder and in subfolders)
         this._files = Utils.getAllFiles(albumAbsolutePath);
@@ -53,6 +54,26 @@ public class GridViewImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) _context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View gridView;
+        if (convertView == null) {
+            gridView = new View(_context);
+            gridView = inflater.inflate( R.layout.image_grid_item , null);
+            ImageView imageView = (ImageView) gridView
+                    .findViewById(R.id.image_grid_item_image);
+
+            Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getAbsolutePath());
+            imageView.setImageBitmap(bMap);
+        } else {
+            gridView = (View) convertView;
+        }
+        return gridView;
+    }
+/*
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(_activity);
@@ -74,7 +95,8 @@ public class GridViewImageAdapter extends BaseAdapter {
 
         return imageView;
     }
-
+*/
+    /*
     class OnImageClickListener implements OnClickListener {
 
         int _position;
@@ -96,7 +118,7 @@ public class GridViewImageAdapter extends BaseAdapter {
         }
 
     }
-
+*/
     /*
      * Resizing image size
      */

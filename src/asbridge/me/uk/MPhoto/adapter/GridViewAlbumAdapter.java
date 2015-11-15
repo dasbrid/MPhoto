@@ -79,7 +79,7 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             Bitmap bMap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
 
             imageView.setImageBitmap(bMap);
-            imageView.setOnClickListener(new OnImageClickListener(position));
+            // no listener on the image          imageView.setOnClickListener(new OnImageClickListener(position));
 
             Button btnSlideshow = (Button) gridView.findViewById(R.id.btnSlideshow);
             btnSlideshow.setOnClickListener(new OnSlideshowButtonClickListener(position));
@@ -131,7 +131,7 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             _context.startActivity(intent);
         }
     }
-
+/*
     class OnImageClickListener implements OnClickListener {
 
         int _position;
@@ -151,10 +151,11 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             _context.startActivity(intent);
         }
     }
-
+*/
     /*
      * Resizing image size
      */
+/*
     public static Bitmap decodeFile(String filePath, int WIDTH, int HIGHT) {
         try {
 
@@ -179,5 +180,5 @@ public class GridViewAlbumAdapter extends BaseAdapter {
         }
         return null;
     }
-
+*/
 }

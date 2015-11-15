@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:padding="5dp"
-              android:orientation="vertical">
 
-    <ImageView
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <asbridge.me.uk.MPhoto.Classes.SquareImageView
             android:id="@+id/grid_item_image"
-            android:layout_gravity="center"
-            android:layout_width="88dp"
-            android:layout_height="88dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-             >
-
-    </ImageView>
-    <TextView
-            android:id="@+id/grid_item_label"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp" >
-    </TextView>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+    />
     <Button android:id="@+id/btnSlideshow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:textSize="8dp"
+            android:layout_gravity="center_horizontal"
             android:text="Slideshow" />
     <Button android:id="@+id/btnAlbum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/btnSlideshow"
+            android:textSize="8dp"
+            android:layout_gravity="center"
             android:text="Edit" />
-</RelativeLayout>
+    <TextView
+            android:id="@+id/grid_item_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="album name"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_gravity="bottom"
+            android:textColor="@android:color/white"
+            android:background="#55000000"
+    />
+</FrameLayout>
