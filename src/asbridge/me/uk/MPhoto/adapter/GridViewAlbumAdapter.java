@@ -61,12 +61,8 @@ public class GridViewAlbumAdapter extends BaseAdapter {
 
         View gridView;
         if (convertView == null) {
-            gridView = new View(_context);
             gridView = inflater.inflate( R.layout.album_grid_item , null);
-            TextView textView = (TextView) gridView
-                    .findViewById(R.id.grid_item_label);
 
-            textView.setText(_folders.get(position).getName());
             ImageView imageView = (ImageView) gridView
                     .findViewById(R.id.grid_item_image);
 
@@ -80,6 +76,13 @@ public class GridViewAlbumAdapter extends BaseAdapter {
 
             imageView.setImageBitmap(bMap);
             // no listener on the image          imageView.setOnClickListener(new OnImageClickListener(position));
+
+            TextView textView = (TextView) gridView
+                    .findViewById(R.id.grid_item_label);
+
+            textView.setText(_folders.get(position).getName()+
+                    "w=" + Integer.toString(bMap.getWidth()) +
+                    ",h=" + Integer.toString(bMap.getHeight()));
 
             Button btnSlideshow = (Button) gridView.findViewById(R.id.btnSlideshow);
             btnSlideshow.setOnClickListener(new OnSlideshowButtonClickListener(position));

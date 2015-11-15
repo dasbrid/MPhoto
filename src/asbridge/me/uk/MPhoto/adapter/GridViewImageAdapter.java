@@ -59,7 +59,6 @@ public class GridViewImageAdapter extends BaseAdapter {
 
         View gridView;
         if (convertView == null) {
-            gridView = new View(_context);
             gridView = inflater.inflate( R.layout.image_grid_item , null);
             ImageView imageView = (ImageView) gridView
                     .findViewById(R.id.image_grid_item_image);
@@ -122,6 +121,7 @@ public class GridViewImageAdapter extends BaseAdapter {
     /*
      * Resizing image size
      */
+    /*
     public static Bitmap decodeFile(String filePath, int WIDTH, int HIGHT) {
         try {
 
@@ -146,5 +146,5 @@ public class GridViewImageAdapter extends BaseAdapter {
         }
         return null;
     }
-
+*/
 }
