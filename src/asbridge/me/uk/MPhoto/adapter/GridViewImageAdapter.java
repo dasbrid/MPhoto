@@ -26,6 +26,7 @@ public class GridViewImageAdapter extends BaseAdapter {
 
     private Activity _context;
     private ArrayList<File> _files = new ArrayList<File>();
+    private boolean[] thumbnailsselection;
     private int imageWidth;
     private String albumAbsolutePath;
 
@@ -34,6 +35,7 @@ public class GridViewImageAdapter extends BaseAdapter {
         this.albumAbsolutePath = albumAbsolutePath;
         // get all files (in this folder and in subfolders)
         this._files = Utils.getAllFiles(albumAbsolutePath);
+        thumbnailsselection = new boolean[getCount()];
         this.imageWidth = imageWidth;
     }
 
@@ -65,10 +67,38 @@ public class GridViewImageAdapter extends BaseAdapter {
 
             Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getAbsolutePath());
             imageView.setImageBitmap(bMap);
+
+            CheckBox checkbox = (CheckBox) gridView.findViewById(R.id.imageCheckBox);
+            checkbox.setId(position);
+            checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
         } else {
             gridView = (View) convertView;
         }
         return gridView;
+    }
+
+    public boolean isImageSelected(int position)
+    {
+        return thumbnailsselection[position];
+    }
+
+    class OnCheckBoxClickListener implements OnClickListener {
+
+        int _position;
+
+        // constructor
+        public OnCheckBoxClickListener(int position) {
+            this._position = position;
+        }
+        @Override
+        public void onClick(View v) {
+            // checkbox clicked
+           if (thumbnailsselection[_position]){
+                thumbnailsselection[_position] = false;
+            } else {
+                thumbnailsselection[_position] = true;
+            }
+        }
     }
 /*
     @Override

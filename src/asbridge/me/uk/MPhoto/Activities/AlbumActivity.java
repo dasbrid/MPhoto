@@ -29,6 +29,7 @@ public class AlbumActivity extends Activity implements View.OnClickListener {
     private int columnWidth;
     private String albumAbsolutePath;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,6 @@ public class AlbumActivity extends Activity implements View.OnClickListener {
 
         // Gridview adapter
         adapter = new GridViewImageAdapter(AlbumActivity.this, albumFolder, columnWidth);
-
         // setting grid view adapter
         gridView.setAdapter(adapter);
 
@@ -76,9 +76,15 @@ public class AlbumActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSelect:
+                int count = 0;
+                for (int i = 0; i < adapter.getCount(); i++) {
+                    if (adapter.isImageSelected(i))
+                        count++;
+
+                }
                 Toast.makeText(getApplicationContext(),
-                        "You've selected Total " + " image(s).",
-                        Toast.LENGTH_LONG).show();
+                        "You've selected Total " + count +" image(s).",
+                        Toast.LENGTH_SHORT).show();
                 break;
         }
     }
