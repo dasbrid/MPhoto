@@ -1,10 +1,14 @@
 package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.Toast;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewImageAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
@@ -17,7 +21,7 @@ import java.util.ArrayList;
  * Created by David on 10/11/2015.
  * An Activity for viewing (and later editing/sharing) all the photos in an album
  */
-public class AlbumActivity extends Activity {
+public class AlbumActivity extends Activity implements View.OnClickListener {
     private Utils utils;
     private ArrayList<File> images = new ArrayList<File>();
     private GridViewImageAdapter adapter;
@@ -28,7 +32,7 @@ public class AlbumActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_albums);
+        setContentView(R.layout.activity_album);
 
         gridView = (GridView) findViewById(R.id.grid_view);
 
@@ -47,6 +51,9 @@ public class AlbumActivity extends Activity {
 
         // setting grid view adapter
         gridView.setAdapter(adapter);
+
+        Button btnEnableSwiping = (Button)findViewById(R.id.btnSelect);
+        btnEnableSwiping.setOnClickListener(this);
     }
 
     private void InitilizeGridLayout() {
@@ -63,5 +70,16 @@ public class AlbumActivity extends Activity {
                 (int) padding);
         gridView.setHorizontalSpacing((int) padding);
         gridView.setVerticalSpacing((int) padding);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnSelect:
+                Toast.makeText(getApplicationContext(),
+                        "You've selected Total " + " image(s).",
+                        Toast.LENGTH_LONG).show();
+                break;
+        }
     }
 }
