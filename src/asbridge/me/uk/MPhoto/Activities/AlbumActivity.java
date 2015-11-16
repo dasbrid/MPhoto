@@ -2,6 +2,7 @@ package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -85,6 +86,12 @@ public class AlbumActivity extends Activity implements View.OnClickListener {
                 Toast.makeText(getApplicationContext(),
                         "You've selected Total " + count +" image(s).",
                         Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnStartSlideshow:
+                // button clicked, launch slideshow for this folder
+                Intent intent = new Intent(this, PhotoSlideshowActivity.class);
+                intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
+                this.startActivity(intent);
                 break;
         }
     }

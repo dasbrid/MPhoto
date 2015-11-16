@@ -80,9 +80,7 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             TextView textView = (TextView) gridView
                     .findViewById(R.id.grid_item_label);
 
-            textView.setText(_folders.get(position).getName()+
-                    "w=" + Integer.toString(bMap.getWidth()) +
-                    ",h=" + Integer.toString(bMap.getHeight()));
+            textView.setText(_folders.get(position).getName());
 
             Button btnSlideshow = (Button) gridView.findViewById(R.id.btnSlideshow);
             btnSlideshow.setOnClickListener(new OnSlideshowButtonClickListener(position));
@@ -110,7 +108,6 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             // button clicked, launch slideshow for this folder
             File folder = _folders.get(_position);
             Intent intent = new Intent(_context, AlbumActivity.class);
-            intent.putExtra("position", _position);
             intent.putExtra("folderAbsolutePath", folder.getAbsolutePath());
             _context.startActivity(intent);
         }
@@ -129,59 +126,8 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             // button clicked, launch slideshow for this folder
             File folder = _folders.get(_position);
             Intent intent = new Intent(_context, PhotoSlideshowActivity.class);
-            intent.putExtra("position", _position);
             intent.putExtra("folderAbsolutePath", folder.getAbsolutePath());
             _context.startActivity(intent);
         }
     }
-/*
-    class OnImageClickListener implements OnClickListener {
-
-        int _position;
-
-        // constructor
-        public OnImageClickListener(int position) {
-            this._position = position;
-        }
-
-        @Override
-        public void onClick(View v) {
-            // on selecting folder launch folder activity
-            File folder = _folders.get(_position);
-            Intent intent = new Intent(_context, AlbumActivity.class);
-            intent.putExtra("position", _position);
-            intent.putExtra("folderAbsolutePath", folder.getAbsolutePath());
-            _context.startActivity(intent);
-        }
-    }
-*/
-    /*
-     * Resizing image size
-     */
-/*
-    public static Bitmap decodeFile(String filePath, int WIDTH, int HIGHT) {
-        try {
-
-            File f = new File(filePath);
-
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-
-            final int REQUIRED_WIDTH = WIDTH;
-            final int REQUIRED_HIGHT = HIGHT;
-            int scale = 1;
-            while (o.outWidth / scale / 2 >= REQUIRED_WIDTH
-                    && o.outHeight / scale / 2 >= REQUIRED_HIGHT)
-                scale *= 2;
-
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-*/
 }
