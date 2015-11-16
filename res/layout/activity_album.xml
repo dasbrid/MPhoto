@@ -3,16 +3,31 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
-    <Button android:id="@+id/btnSelect"
+    <Button android:id="@+id/btnDelete"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="Select"
+            android:text="Delete"
+            android:onClick="btnDeleteClicked"
             android:layout_alignParentBottom="true"
             android:minWidth="200px" />
     <Button android:id="@+id/btnStartSlideshow"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Slideshow"
+            android:onClick="btnStartSlideshowClicked"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/btnSelect"
+            android:layout_toRightOf="@id/btnDelete"
+            android:minWidth="200px" />
+    <Button android:id="@+id/btnSelectAll"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Select All"
+            android:onClick="btnSelectAllClicked"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/btnStartSlideshow"
+            android:minWidth="200px" />
+    <Button android:id="@+id/btnSelectNone"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Select None"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/btnSelectAll"
             android:minWidth="200px" />
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/grid_view"
@@ -21,7 +36,7 @@
               android:background="#000111"
               android:columnWidth="60dp"
               android:numColumns="auto_fit"
-              android:layout_above="@id/btnSelect"
+              android:layout_above="@id/btnDelete"
     >
     </GridView>
 </RelativeLayout>

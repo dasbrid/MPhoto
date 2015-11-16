@@ -22,14 +22,13 @@ import java.util.ArrayList;
  * Created by David on 10/11/2015.
  * An Activity for viewing (and later editing/sharing) all the photos in an album
  */
-public class AlbumActivity extends Activity implements View.OnClickListener {
+public class AlbumActivity extends Activity {
     private Utils utils;
-    private ArrayList<File> images = new ArrayList<File>();
     private GridViewImageAdapter adapter;
     private GridView gridView;
     private int columnWidth;
     private String albumAbsolutePath;
-
+    private ArrayList<File> imageFiles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +40,19 @@ public class AlbumActivity extends Activity implements View.OnClickListener {
         utils = new Utils(this);
 
         // Initilizing Grid View
-        InitilizeGridLayout();
+//        InitilizeGridLayout();
 
         Bundle parameters = getIntent().getExtras();
         String albumFolder =parameters.getString("folderAbsolutePath");
         this.albumAbsolutePath = albumFolder;
 
+        // get all files (in this folder and in subfolders)
+        this.imageFiles = Utils.getAllFiles(albumAbsolutePath);
 
         // Gridview adapter
-        adapter = new GridViewImageAdapter(AlbumActivity.this, albumFolder, columnWidth);
+        adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles); //albumFolder);//, columnWidth);
         // setting grid view adapter
         gridView.setAdapter(adapter);
-
-        Button btnEnableSwiping = (Button)findViewById(R.id.btnSelect);
-        btnEnableSwiping.setOnClickListener(this);
     }
 
     private void InitilizeGridLayout() {
@@ -73,26 +71,58 @@ public class AlbumActivity extends Activity implements View.OnClickListener {
         gridView.setVerticalSpacing((int) padding);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnSelect:
-                int count = 0;
-                for (int i = 0; i < adapter.getCount(); i++) {
-                    if (adapter.isImageSelected(i))
-                        count++;
+    // button delete clicked. Delete selected images
+    public void btnDeleteClicked(View v)
+    {
+        ArrayList<File> selectedFiles = adapter.getSelectedFiles();
 
-                }
-                Toast.makeText(getApplicationContext(),
-                        "You've selected Total " + count +" image(s).",
-                        Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.btnStartSlideshow:
-                // button clicked, launch slideshow for this folder
-                Intent intent = new Intent(this, PhotoSlideshowActivity.class);
-                intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
-                this.startActivity(intent);
-                break;
+        String msg = " delete files ";
+        File fileToDelete;
+/*
+        for (int i = 0; i < selectedFiles.size(); i++) {
+            msg += selectedFiles.get(i).getName() + ",";
+            fileToDelete = selectedFiles.get(i);
+            fileToDelete.delete();
+            this.imageFiles.remove(fileToDelete);
         }
+*/
+        /*
+        for(int i = 0; i < this.imageFiles.size(); i++)
+        {
+            if (adapter.isImageSelected(i))
+            {
+                fileToDelete = this.imageFiles.get(i);
+//                fileToDelete.delete();
+                this.imageFiles.remove(i);
+
+                Toast.makeText(getApplicationContext(),
+                        "delete " + i,
+                        Toast.LENGTH_SHORT).show();
+
+            }
+        }
+        */
+        this.imageFiles.remove(1);
+        adapter.notifyDataSetChanged();
+        gridView.invalidateViews();
+
+        Toast.makeText(getApplicationContext(),
+            msg + this.imageFiles.size()  +" files left",
+            Toast.LENGTH_SHORT).show();
+    }
+
+    // button clicked, launch slideshow for this folder
+    public void btnStartSlideshowClicked(View v)
+    {
+        Intent intent = new Intent(this, PhotoSlideshowActivity.class);
+        intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
+        this.startActivity(intent);
+    }
+
+    public void btnSelectAllClicked(View v)
+    {
+        Toast.makeText(getApplicationContext(),
+                "select all clicked...",
+                Toast.LENGTH_SHORT).show();
     }
 }

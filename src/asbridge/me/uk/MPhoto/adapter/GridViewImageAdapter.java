@@ -25,18 +25,14 @@ import asbridge.me.uk.MPhoto.helper.Utils;
 public class GridViewImageAdapter extends BaseAdapter {
 
     private Activity _context;
-    private ArrayList<File> _files = new ArrayList<File>();
+    private ArrayList<File> _files;
     private boolean[] thumbnailsselection;
-    private int imageWidth;
-    private String albumAbsolutePath;
 
-    public GridViewImageAdapter(Activity activity, String albumAbsolutePath, int imageWidth) {
+
+    public GridViewImageAdapter(Activity activity, ArrayList<File> imageFiles) { //}, String albumAbsolutePath) {
         this._context = activity;
-        this.albumAbsolutePath = albumAbsolutePath;
-        // get all files (in this folder and in subfolders)
-        this._files = Utils.getAllFiles(albumAbsolutePath);
+        this._files = imageFiles; // Utils.getAllFiles(albumAbsolutePath);
         thumbnailsselection = new boolean[getCount()];
-        this.imageWidth = imageWidth;
     }
 
     @Override
@@ -77,6 +73,21 @@ public class GridViewImageAdapter extends BaseAdapter {
         return gridView;
     }
 
+    public ArrayList<File> getSelectedFiles() {
+        ArrayList<File> selectedFiles = new ArrayList<File>();
+        for (int i = 0; i < getCount(); i++) {
+            if (isImageSelected(i)) {
+                selectedFiles.add(_files.get(i));
+            }
+        }
+        return selectedFiles;
+    }
+
+    public File getImageFile(int position)
+    {
+        return _files.get(position);
+    }
+
     public boolean isImageSelected(int position)
     {
         return thumbnailsselection[position];
@@ -100,81 +111,4 @@ public class GridViewImageAdapter extends BaseAdapter {
             }
         }
     }
-/*
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {
-            imageView = new ImageView(_activity);
-        } else {
-            imageView = (ImageView) convertView;
-        }
-
-        // get screen dimensions
-        Bitmap image = decodeFile(_files.get(position).getAbsolutePath(), imageWidth,
-                imageWidth);
-
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setLayoutParams(new GridView.LayoutParams(imageWidth,
-                imageWidth));
-        imageView.setImageBitmap(image);
-
-        // image view click listener
-        imageView.setOnClickListener(new OnImageClickListener(position));
-
-        return imageView;
-    }
-*/
-    /*
-    class OnImageClickListener implements OnClickListener {
-
-        int _position;
-
-        // constructor
-        public OnImageClickListener(int position) {
-            this._position = position;
-        }
-
-        @Override
-        public void onClick(View v) {
-            // on selecting grid view image
-            // launch full screen activity
-//            File folder = _files.get(_position);
-            Intent intent = new Intent(_activity, PhotoSlideshowActivity.class);
-            intent.putExtra("position", _position);
-            intent.putExtra("folderAbsolutePath", albumAbsolutePath);
-            _activity.startActivity(intent);
-        }
-
-    }
-*/
-    /*
-     * Resizing image size
-     */
-    /*
-    public static Bitmap decodeFile(String filePath, int WIDTH, int HIGHT) {
-        try {
-
-            File f = new File(filePath);
-
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-
-            final int REQUIRED_WIDTH = WIDTH;
-            final int REQUIRED_HIGHT = HIGHT;
-            int scale = 1;
-            while (o.outWidth / scale / 2 >= REQUIRED_WIDTH
-                    && o.outHeight / scale / 2 >= REQUIRED_HIGHT)
-                scale *= 2;
-
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-*/
 }
