@@ -2,6 +2,7 @@ package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.Toast;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewAlbumAdapter;
 import asbridge.me.uk.MPhoto.helper.Utils;
@@ -29,11 +30,12 @@ public class AlbumsActivity extends Activity {
 
         gridView = (GridView) findViewById(R.id.grid_view);
 
-        utils = new Utils(this);
-
         // get all folders + all sub(and subsub) folders
-        folders = utils.getFolders();
+        //TODO: use static method
+        folders = Utils.getFolders();
 
+        Toast.makeText(this,android.os.Environment.getExternalStorageDirectory()
+                + File.separator + "MatthewsPhotos",Toast.LENGTH_LONG).show();
         // Gridview adapter
         adapter = new GridViewAlbumAdapter(AlbumsActivity.this, folders,
                 columnWidth);

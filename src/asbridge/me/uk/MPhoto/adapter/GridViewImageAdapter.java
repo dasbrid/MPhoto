@@ -33,13 +33,21 @@ public class GridViewImageAdapter extends BaseAdapter {
 
     private Activity _context;
     private ArrayList<CheckedFile> _files;
-//    private boolean[] thumbnailsselection;
 
 
     public GridViewImageAdapter(Activity activity, ArrayList<CheckedFile> imageFiles) {
         this._context = activity;
         this._files = imageFiles;
-//        thumbnailsselection = new boolean[getCount()];
+    }
+
+    public interface ISelectionChangedEventListener {
+        public void onSelectionChanged();
+    }
+
+    private ISelectionChangedEventListener mEventListener;
+
+    public void setEventListener(ISelectionChangedEventListener mEventListener) {
+        this.mEventListener = mEventListener;
     }
 
     @Override
@@ -60,11 +68,15 @@ public class GridViewImageAdapter extends BaseAdapter {
     public void clearSelection() {
         for (int i = 0 ; i < _files.size(); i++)
             _files.get(i).setChecked(false);
+        mEventListener.onSelectionChanged();
     }
 
     public void selectAll() {
         for (int i = 0 ; i < _files.size(); i++)
             _files.get(i).setChecked(true);
+
+        mEventListener.onSelectionChanged();
+
     }
 
     @Override
@@ -124,6 +136,7 @@ public class GridViewImageAdapter extends BaseAdapter {
             } else {
                _files.get(_position).setChecked(true);
             }
+            mEventListener.onSelectionChanged();
         }
     }
 }

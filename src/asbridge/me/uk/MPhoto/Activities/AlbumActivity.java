@@ -64,6 +64,32 @@ public class AlbumActivity extends Activity {
         adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles); //albumFolder);//, columnWidth);
         // setting grid view adapter
         gridView.setAdapter(adapter);
+
+        adapter.setEventListener(new GridViewImageAdapter.ISelectionChangedEventListener() {
+
+            @Override
+            public void onSelectionChanged() {
+                enableDisableButtons();
+            }
+        });
+
+        enableDisableButtons();
+    }
+
+    private void enableDisableButtons()
+    {
+        int numImages = adapter.getCount();
+        int numSelected = adapter.getSelectedFiles().size();
+
+        Button btnSelectNone = (Button) findViewById(R.id.btnSelectNone);
+        Button btnSelectAll = (Button) findViewById(R.id.btnSelectAll);
+        Button btnDelete = (Button) findViewById(R.id.btnDelete);
+        Button btnShare = (Button) findViewById(R.id.btnShare);
+
+        btnSelectNone.setEnabled(numSelected != 0);
+        btnDelete.setEnabled(numSelected != 0);
+        btnShare.setEnabled(numSelected != 0);
+        btnSelectAll.setEnabled(numImages != numSelected);
     }
 
     private void InitilizeGridLayout() {
