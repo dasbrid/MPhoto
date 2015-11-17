@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -78,7 +82,38 @@ public class AlbumActivity extends Activity {
         gridView.setVerticalSpacing((int) padding);
     }
 
-    // button delete clicked. Delete selected images
+    // button share clicked. Share selected image
+    public void btnShareClicked(View v) {
+        ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();
+        File fileToShare = selectedFiles.get(0).getFile();
+
+        // many files
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND_MULTIPLE);
+        ArrayList<Uri> attachmentUris = new ArrayList<Uri>();
+
+        for (CheckedFile checkedFile : selectedFiles)
+        {
+
+            Uri u = Uri.fromFile(checkedFile.getFile());
+            attachmentUris.add(u);
+        }
+        emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachmentUris);
+        /*
+        // one file
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileToShare));
+        */
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{"stickdave2003@mailinator.com"});
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Photos");
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "I hope you enjoy these photos");
+
+        // One File
+
+        startActivity(Intent.createChooser(emailIntent, "Send email:"));
+    }
+
+     // button delete clicked. Delete selected images
     public void btnDeleteClicked(View v)
     {
         ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();
