@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
+import asbridge.me.uk.MPhoto.Classes.CheckedFile;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewImageAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
@@ -28,7 +29,7 @@ public class AlbumActivity extends Activity {
     private GridView gridView;
     private int columnWidth;
     private String albumAbsolutePath;
-    private ArrayList<File> imageFiles;
+    private ArrayList<CheckedFile> imageFiles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,13 @@ public class AlbumActivity extends Activity {
         this.albumAbsolutePath = albumFolder;
 
         // get all files (in this folder and in subfolders)
-        this.imageFiles = Utils.getAllFiles(albumAbsolutePath);
+        ArrayList<File> files = Utils.getAllFiles(albumAbsolutePath);
+
+        this.imageFiles = new ArrayList<CheckedFile>();
+        for (int i=0;i<files.size();i++)
+        {
+            this.imageFiles.add(new CheckedFile(files.get(i)));
+        }
 
         // Gridview adapter
         adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles); //albumFolder);//, columnWidth);
@@ -74,15 +81,13 @@ public class AlbumActivity extends Activity {
     // button delete clicked. Delete selected images
     public void btnDeleteClicked(View v)
     {
-        ArrayList<File> selectedFiles = adapter.getSelectedFiles();
+        ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();
 
-        String msg = " delete files ";
         File fileToDelete;
         for (int i = 0; i < selectedFiles.size(); i++) {
-            msg += selectedFiles.get(i).getName() + ",";
-            fileToDelete = selectedFiles.get(i);
+            fileToDelete = selectedFiles.get(i).getFile();
 /// DONT DELETE            fileToDelete.delete();
-            this.imageFiles.remove(fileToDelete);
+            this.imageFiles.remove(selectedFiles.get(i));
         }
         adapter.clearSelection();
         adapter.notifyDataSetChanged();

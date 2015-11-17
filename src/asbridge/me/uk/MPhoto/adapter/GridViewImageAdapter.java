@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import asbridge.me.uk.MPhoto.Activities.PhotoSlideshowActivity;
+import asbridge.me.uk.MPhoto.Classes.CheckedFile;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
@@ -24,20 +25,6 @@ import asbridge.me.uk.MPhoto.helper.Utils;
  * Created by David on 10/11/2015.
  */
 public class GridViewImageAdapter extends BaseAdapter {
-/*
-    public class CheckedFile {
-        private File file;
-        private boolean checked;
-
-        public CheckedFile(File file)
-        {
-            this.file = file;
-            this.checked = false;
-        }
-        public File getFile() { return this.file;}
-        public boolean isChecked() { return this.checked; }
-    }
-    */
 
     static class ViewHolder {
         CheckBox checkbox;
@@ -45,14 +32,14 @@ public class GridViewImageAdapter extends BaseAdapter {
     }
 
     private Activity _context;
-    private ArrayList<File> _files;
-    private boolean[] thumbnailsselection;
+    private ArrayList<CheckedFile> _files;
+//    private boolean[] thumbnailsselection;
 
 
-    public GridViewImageAdapter(Activity activity, ArrayList<File> imageFiles) { //}, String albumAbsolutePath) {
+    public GridViewImageAdapter(Activity activity, ArrayList<CheckedFile> imageFiles) {
         this._context = activity;
-        this._files = imageFiles; // Utils.getAllFiles(albumAbsolutePath);
-        thumbnailsselection = new boolean[getCount()];
+        this._files = imageFiles;
+//        thumbnailsselection = new boolean[getCount()];
     }
 
     @Override
@@ -71,13 +58,13 @@ public class GridViewImageAdapter extends BaseAdapter {
     }
 
     public void clearSelection() {
-        for (int i = 0 ; i < thumbnailsselection.length; i++)
-            thumbnailsselection[i] = false;
+        for (int i = 0 ; i < _files.size(); i++)
+            _files.get(i).setChecked(false);
     }
 
     public void selectAll() {
-        for (int i = 0 ; i < thumbnailsselection.length; i++)
-            thumbnailsselection[i] = true;
+        for (int i = 0 ; i < _files.size(); i++)
+            _files.get(i).setChecked(true);
     }
 
     @Override
@@ -96,13 +83,13 @@ public class GridViewImageAdapter extends BaseAdapter {
         }
         holder.checkbox.setChecked(isImageSelected(position));
         holder.checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
-        Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getAbsolutePath());
+        Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getFile().getAbsolutePath());
         holder.image.setImageBitmap(bMap);
         return convertView;
     }
 
-    public ArrayList<File> getSelectedFiles() {
-        ArrayList<File> selectedFiles = new ArrayList<File>();
+    public ArrayList<CheckedFile> getSelectedFiles() {
+        ArrayList<CheckedFile> selectedFiles = new ArrayList<CheckedFile>();
         for (int i = 0; i < getCount(); i++) {
             if (isImageSelected(i)) {
                 selectedFiles.add(_files.get(i));
@@ -111,14 +98,14 @@ public class GridViewImageAdapter extends BaseAdapter {
         return selectedFiles;
     }
 
-    public File getImageFile(int position)
+    public CheckedFile getImageFile(int position)
     {
         return _files.get(position);
     }
 
     public boolean isImageSelected(int position)
     {
-        return thumbnailsselection[position];
+        return _files.get(position).isChecked();
     }
 
     class OnCheckBoxClickListener implements OnClickListener {
@@ -132,10 +119,10 @@ public class GridViewImageAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             // checkbox clicked
-           if (thumbnailsselection[_position]){
-                thumbnailsselection[_position] = false;
+           if (_files.get(_position).isChecked()){
+               _files.get(_position).setChecked(false);
             } else {
-                thumbnailsselection[_position] = true;
+               _files.get(_position).setChecked(true);
             }
         }
     }
