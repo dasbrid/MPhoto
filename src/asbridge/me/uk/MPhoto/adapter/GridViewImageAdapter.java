@@ -70,6 +70,16 @@ public class GridViewImageAdapter extends BaseAdapter {
         return position;
     }
 
+    public void clearSelection() {
+        for (int i = 0 ; i < thumbnailsselection.length; i++)
+            thumbnailsselection[i] = false;
+    }
+
+    public void selectAll() {
+        for (int i = 0 ; i < thumbnailsselection.length; i++)
+            thumbnailsselection[i] = true;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;

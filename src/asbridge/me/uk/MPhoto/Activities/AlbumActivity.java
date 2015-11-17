@@ -81,11 +81,10 @@ public class AlbumActivity extends Activity {
         for (int i = 0; i < selectedFiles.size(); i++) {
             msg += selectedFiles.get(i).getName() + ",";
             fileToDelete = selectedFiles.get(i);
-            fileToDelete.delete();
+/// DONT DELETE            fileToDelete.delete();
             this.imageFiles.remove(fileToDelete);
         }
-
-        //toastImageFiles();
+        adapter.clearSelection();
         adapter.notifyDataSetChanged();
 // NOT NEEDED       gridView.invalidateViews();
     }
@@ -100,8 +99,14 @@ public class AlbumActivity extends Activity {
 
     public void btnSelectAllClicked(View v)
     {
-        Toast.makeText(getApplicationContext(),
-                "select all clicked...",
-                Toast.LENGTH_SHORT).show();
+        adapter.selectAll();
+        adapter.notifyDataSetChanged();
+    }
+
+
+    public void btnSelectNoneClicked(View v)
+    {
+        adapter.clearSelection();
+        adapter.notifyDataSetChanged();
     }
 }

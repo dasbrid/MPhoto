@@ -26,6 +26,7 @@
     <Button android:id="@+id/btnSelectNone"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Select None"
+            android:onClick="btnSelectNoneClicked"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/btnSelectAll"
             android:minWidth="200px" />
