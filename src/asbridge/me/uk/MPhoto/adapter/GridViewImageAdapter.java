@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.TooManyListenersException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +24,25 @@ import asbridge.me.uk.MPhoto.helper.Utils;
  * Created by David on 10/11/2015.
  */
 public class GridViewImageAdapter extends BaseAdapter {
+/*
+    public class CheckedFile {
+        private File file;
+        private boolean checked;
+
+        public CheckedFile(File file)
+        {
+            this.file = file;
+            this.checked = false;
+        }
+        public File getFile() { return this.file;}
+        public boolean isChecked() { return this.checked; }
+    }
+    */
+
+    static class ViewHolder {
+        CheckBox checkbox;
+        ImageView image;
+    }
 
     private Activity _context;
     private ArrayList<File> _files;
@@ -50,27 +70,36 @@ public class GridViewImageAdapter extends BaseAdapter {
         return position;
     }
 
+    private void toastImageFiles()
+    {
+        String msg = "image files:";
+        for(int i = 0; i < this._files.size(); i++)
+            msg+= this._files.get(i).getName() + ";";
+        Toast.makeText(_context,
+                msg,
+                Toast.LENGTH_SHORT).show();
+
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
         LayoutInflater inflater = (LayoutInflater) _context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View gridView;
-        if (convertView == null) {
-            gridView = inflater.inflate( R.layout.image_grid_item , null);
-            ImageView imageView = (ImageView) gridView
-                    .findViewById(R.id.image_grid_item_image);
-
-            Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getAbsolutePath());
-            imageView.setImageBitmap(bMap);
-
-            CheckBox checkbox = (CheckBox) gridView.findViewById(R.id.imageCheckBox);
-            checkbox.setId(position);
-            checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
+        if (convertView == null/* || true*/) {
+            convertView = inflater.inflate(R.layout.image_grid_item, null);
+            holder = new ViewHolder();
+            holder.checkbox = (CheckBox) convertView.findViewById(R.id.imageCheckBox);
+            holder.image = (ImageView) convertView.findViewById(R.id.image_grid_item_image);
+            convertView.setTag(holder);
         } else {
-            gridView = (View) convertView;
+            holder = (ViewHolder) convertView.getTag();
         }
-        return gridView;
+        holder.checkbox.setChecked(isImageSelected(position));
+        holder.checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
+        Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getAbsolutePath());
+        holder.image.setImageBitmap(bMap);
+        return convertView;
     }
 
     public ArrayList<File> getSelectedFiles() {

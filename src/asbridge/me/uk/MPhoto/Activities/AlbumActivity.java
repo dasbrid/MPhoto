@@ -78,31 +78,15 @@ public class AlbumActivity extends Activity {
 
         String msg = " delete files ";
         File fileToDelete;
-/*
+        //toastImageFiles();
         for (int i = 0; i < selectedFiles.size(); i++) {
             msg += selectedFiles.get(i).getName() + ",";
             fileToDelete = selectedFiles.get(i);
             fileToDelete.delete();
             this.imageFiles.remove(fileToDelete);
         }
-*/
-        /*
-        for(int i = 0; i < this.imageFiles.size(); i++)
-        {
-            if (adapter.isImageSelected(i))
-            {
-                fileToDelete = this.imageFiles.get(i);
-//                fileToDelete.delete();
-                this.imageFiles.remove(i);
 
-                Toast.makeText(getApplicationContext(),
-                        "delete " + i,
-                        Toast.LENGTH_SHORT).show();
-
-            }
-        }
-        */
-        this.imageFiles.remove(1);
+        //toastImageFiles();
         adapter.notifyDataSetChanged();
         gridView.invalidateViews();
 
@@ -111,6 +95,16 @@ public class AlbumActivity extends Activity {
             Toast.LENGTH_SHORT).show();
     }
 
+    private void toastImageFiles()
+    {
+        String msg = "image files:";
+        for(int i = 0; i < this.imageFiles.size(); i++)
+            msg+= this.imageFiles.get(i).getName() + ";";
+        Toast.makeText(getApplicationContext(),
+                msg,
+                Toast.LENGTH_SHORT).show();
+
+    }
     // button clicked, launch slideshow for this folder
     public void btnStartSlideshowClicked(View v)
     {
