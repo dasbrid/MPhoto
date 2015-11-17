@@ -78,7 +78,6 @@ public class AlbumActivity extends Activity {
 
         String msg = " delete files ";
         File fileToDelete;
-        //toastImageFiles();
         for (int i = 0; i < selectedFiles.size(); i++) {
             msg += selectedFiles.get(i).getName() + ",";
             fileToDelete = selectedFiles.get(i);
@@ -88,23 +87,9 @@ public class AlbumActivity extends Activity {
 
         //toastImageFiles();
         adapter.notifyDataSetChanged();
-        gridView.invalidateViews();
-
-        Toast.makeText(getApplicationContext(),
-            msg + this.imageFiles.size()  +" files left",
-            Toast.LENGTH_SHORT).show();
+// NOT NEEDED       gridView.invalidateViews();
     }
 
-    private void toastImageFiles()
-    {
-        String msg = "image files:";
-        for(int i = 0; i < this.imageFiles.size(); i++)
-            msg+= this.imageFiles.get(i).getName() + ";";
-        Toast.makeText(getApplicationContext(),
-                msg,
-                Toast.LENGTH_SHORT).show();
-
-    }
     // button clicked, launch slideshow for this folder
     public void btnStartSlideshowClicked(View v)
     {
