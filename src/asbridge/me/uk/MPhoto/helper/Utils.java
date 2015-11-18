@@ -6,7 +6,9 @@ import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -18,6 +20,23 @@ import android.widget.Toast;
 public class Utils {
 
     private Context _context;
+
+    public static String getRootPhotosFolder(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context); //
+        String folder = prefs.getString("rootPhotosFolder", "");
+        return folder;
+    }
+
+
+    public static String getSlideshowDelay(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String folder = prefs.getString("slideshowDelay", "3");
+        return folder;
+    }
 
     // constructor
     public Utils(Context context) {
@@ -97,10 +116,10 @@ public class Utils {
     }
 
     // get all the FOLDERS (albums) (and their subfolders) from a folder
-    public static ArrayList<File> getFolders() {
+    public static ArrayList<File> getFolders(String rootPhotosFolder) {
         ArrayList<File> folders = new ArrayList<File>();
-        File rootFolder = new File(android.os.Environment.getExternalStorageDirectory()
-                + File.separator + "MatthewsPhotos");
+        File rootFolder = new File(rootPhotosFolder);
+                //android.os.Environment.getExternalStorageDirectory()+ File.separator + "MatthewsPhotos");
         addFoldersToList(folders, rootFolder);
         return folders;
     }

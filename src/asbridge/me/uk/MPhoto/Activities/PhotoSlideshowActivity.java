@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import asbridge.me.uk.MPhoto.adapter.MyStatePagerAdapter;
 import asbridge.me.uk.MPhoto.Classes.NonSwipeableViewPager;
 import asbridge.me.uk.MPhoto.R;
@@ -34,7 +35,7 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
     // The time (in seconds) for which the navigation controls are visible after screen interaction.
     private static int SHOW_NAVIGATION_CONTROLS_TIME = 3;
     // Delay between slides
-    private static final int SLIDE_SHOW_DELAY = 2; // in seconds
+    private static int SLIDE_SHOW_DELAY;
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
@@ -52,7 +53,7 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
             pager.setCurrentItemManual(page++);
             if (page >= numPages)
                 page = 0;
-            // to keep the slideshow going, start te timer again
+            // to keep the slideshow going, start the timer again
             handler.postDelayed(this, SLIDE_SHOW_DELAY * 1000);
         }
     };
@@ -95,6 +96,8 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+            SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
+            Toast.makeText(this, "ssd="+SLIDE_SHOW_DELAY, Toast.LENGTH_SHORT).show();
             Utils utils = new Utils(this);
 
             // http://developer.android.com/training/system-ui/visibility.html

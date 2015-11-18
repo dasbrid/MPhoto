@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+            android:key="rootPhotosFolder"
+            android:summary="Full path of the root folder for photo albums"
+            android:title="Root album for photos" />
+    <ListPreference
+            android:key="slideshowDelay"
+            android:title="Slideshow speed"
+            android:summary="Set the speed of the slideshow"
+            android:defaultValue="3"
+            android:entries="@array/slideshowSpeedKeys"
+            android:entryValues="@array/slideshowSpeedValues" />
+</PreferenceScreen>
