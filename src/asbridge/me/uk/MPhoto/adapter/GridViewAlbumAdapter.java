@@ -30,13 +30,11 @@ public class GridViewAlbumAdapter extends BaseAdapter {
 
     private Context _context;
     private ArrayList<File> _folders = new ArrayList<File>();
-    private int imageWidth;
 
-    public GridViewAlbumAdapter(Context context, ArrayList<File> folders,
-                                int imageWidth) {
+
+    public GridViewAlbumAdapter(Context context, ArrayList<File> folders) {
         this._context = context;
         this._folders = folders;
-        this.imageWidth = imageWidth;
     }
 
     @Override
@@ -71,11 +69,9 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             File imageFile = Utils.getFirstImageInFolder(folder);
 
             //TODO: what if folder is empty (no images) or not actually a folder
-            //Bitmap image = decodeFile(imageFile.getAbsolutePath(), imageWidth, imageWidth);
             Bitmap bMap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
 
             imageView.setImageBitmap(bMap);
-            // no listener on the image          imageView.setOnClickListener(new OnImageClickListener(position));
 
             TextView textView = (TextView) gridView
                     .findViewById(R.id.grid_item_label);
@@ -89,7 +85,7 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             btnAlbum.setOnClickListener(new OnAlbumButtonClickListener(position));
 
         } else {
-            gridView = (View) convertView;
+            gridView = convertView;
         }
         return gridView;
     }

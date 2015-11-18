@@ -146,6 +146,7 @@ public class Utils {
     /*
      * getting screen width
      */
+    /*
     public int getScreenWidth() {
         int columnWidth;
         WindowManager wm = (WindowManager) _context
@@ -161,5 +162,6 @@ public class Utils {
         }
         columnWidth = point.x;
         return columnWidth;
-    }
+    }*/
+
 }

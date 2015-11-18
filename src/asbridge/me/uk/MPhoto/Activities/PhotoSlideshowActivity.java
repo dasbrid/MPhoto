@@ -97,7 +97,6 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
         super.onCreate(savedInstanceState);
 
             SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
-            Toast.makeText(this, "ssd="+SLIDE_SHOW_DELAY, Toast.LENGTH_SHORT).show();
             Utils utils = new Utils(this);
 
             // http://developer.android.com/training/system-ui/visibility.html

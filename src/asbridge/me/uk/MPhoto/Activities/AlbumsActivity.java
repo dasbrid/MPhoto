@@ -63,8 +63,7 @@ public class AlbumsActivity extends Activity {
 
         Toast.makeText(this,rootPhotosFolder,Toast.LENGTH_LONG).show();
         // Gridview adapter
-        adapter = new GridViewAlbumAdapter(AlbumsActivity.this, folders,
-                columnWidth);
+        adapter = new GridViewAlbumAdapter(AlbumsActivity.this, folders);
 
         // setting grid view adapter
         gridView.setAdapter(adapter);
