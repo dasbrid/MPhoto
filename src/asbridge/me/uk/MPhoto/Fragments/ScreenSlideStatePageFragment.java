@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import asbridge.me.uk.MPhoto.R;
+import asbridge.me.uk.MPhoto.helper.Utils;
+
+import java.io.File;
 
 /**
  * Created by David on 04/11/2015.
@@ -30,7 +33,7 @@ public class ScreenSlideStatePageFragment extends Fragment {
 
         ImageView iv = (ImageView) rootView.findViewById(R.id.imageView);
 
-        Bitmap myBitmap = BitmapFactory.decodeFile(imagepath);
+        Bitmap myBitmap = Utils.decodeFileToThumbnail(new File(imagepath));// BitmapFactory.decodeFile(imagepath);
         iv.setImageBitmap(myBitmap);
 
         return rootView;

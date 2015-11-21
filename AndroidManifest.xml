@@ -24,5 +24,8 @@
         </activity>
         <activity android:name=".settings.SettingsActivity"
         android:label="Settings"/>
+        <activity android:name=".Activities.FileExplorerActivity">
+
+        </activity>
     </application>
 </manifest>

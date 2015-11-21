@@ -43,6 +43,7 @@ public class AlbumsActivity extends Activity {
                 return false;
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,22 +51,43 @@ public class AlbumsActivity extends Activity {
 
         gridView = (GridView) findViewById(R.id.grid_view);
 
-        // get all folders + all sub(and subsub) folders
-
         String rootPhotosFolder = Utils.getRootPhotosFolder(this);
+
+        if (!Utils.isAlbumColumnWidthSet(this))
+        {
+            Toast.makeText(this,"Album column width not set",Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, SettingsActivity.class));
+            return;
+        }
+
+        int colWidth = Utils.getAlbumColumnWidth(this);
+        if (rootPhotosFolder == null)
+        {
+            Toast.makeText(this,"photos folder null",Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, SettingsActivity.class));
+            return;
+        }
         if (rootPhotosFolder == "")
         {
-            Toast.makeText(this,"root folder not set", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"photos folder is empty string",Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, SettingsActivity.class));
+            return;
         }
-        //rootPhotosFolder = android.os.Environment.getExternalStorageDirectory()                + File.separator + "MatthewsPhotos";
+
+        if (!new File(rootPhotosFolder).isDirectory()) {
+            Toast.makeText(this,"photos root folder is not a folder",Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this, SettingsActivity.class));
+            return;
+        }
+
         folders = Utils.getFolders(rootPhotosFolder);
+        if (folders == null) {
+            Toast.makeText(this,"folders is null",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        Toast.makeText(this,rootPhotosFolder,Toast.LENGTH_LONG).show();
-        // Gridview adapter
         adapter = new GridViewAlbumAdapter(AlbumsActivity.this, folders);
-
-        // setting grid view adapter
+        gridView.setColumnWidth(colWidth);
         gridView.setAdapter(adapter);
     }
 

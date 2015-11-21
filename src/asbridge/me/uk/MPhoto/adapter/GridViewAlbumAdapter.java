@@ -8,10 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoSlideshowActivity;
 import asbridge.me.uk.MPhoto.R;
@@ -20,6 +17,7 @@ import asbridge.me.uk.MPhoto.helper.Utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -61,29 +59,44 @@ public class GridViewAlbumAdapter extends BaseAdapter {
         if (convertView == null) {
             gridView = inflater.inflate( R.layout.album_grid_item , null);
 
+
             ImageView imageView = (ImageView) gridView
                     .findViewById(R.id.grid_item_image);
 
             // image is the first image in the folder
             File folder = _folders.get(position);
-            File imageFile = Utils.getFirstImageInFolder(folder);
-
-            //TODO: what if folder is empty (no images) or not actually a folder
-            Bitmap bMap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-
-            imageView.setImageBitmap(bMap);
 
             TextView textView = (TextView) gridView
                     .findViewById(R.id.grid_item_label);
-
             textView.setText(_folders.get(position).getName());
+
+            File imageFile = Utils.getFirstImageInFolder(folder);
+
+            if (imageFile == null)
+            {
+                Toast.makeText(_context, "imageFile is null",Toast.LENGTH_SHORT).show();
+            }
+            if (imageFile.canRead() == false)
+            {
+                Toast.makeText(_context, "imageFile cannot read",Toast.LENGTH_SHORT).show();
+            }
+            //TODO: what if folder is empty (no images) or not actually a folder
+            Bitmap bMap = Utils.decodeFileToThumbnail(imageFile);
+            //Bitmap bMap = BitmapFactory.decodeFile(imageFile.getAbsolutePath()); // out of memory
+
+            if (bMap == null)
+            {
+                Toast.makeText(_context, "bmap is null",Toast.LENGTH_SHORT).show();
+                return gridView;
+            }
+
+            imageView.setImageBitmap(bMap);
 
             Button btnSlideshow = (Button) gridView.findViewById(R.id.btnSlideshow);
             btnSlideshow.setOnClickListener(new OnSlideshowButtonClickListener(position));
 
             Button btnAlbum = (Button) gridView.findViewById(R.id.btnAlbum);
             btnAlbum.setOnClickListener(new OnAlbumButtonClickListener(position));
-
         } else {
             gridView = convertView;
         }
@@ -126,4 +139,7 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             _context.startActivity(intent);
         }
     }
+
+
+
 }

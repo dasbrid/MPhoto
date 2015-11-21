@@ -20,4 +20,6 @@ public class AppConstant {
     // supported file formats
     public static final List<String> FILE_EXTN = Arrays.asList("jpg", "jpeg",
             "png");
+
+    public static int THUMB_SIZE= 160;
 }

@@ -95,7 +95,8 @@ public class GridViewImageAdapter extends BaseAdapter {
         }
         holder.checkbox.setChecked(isImageSelected(position));
         holder.checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
-        Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getFile().getAbsolutePath());
+        Bitmap bMap = Utils.decodeFileToThumbnail(_files.get(position).getFile());
+        // Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getFile().getAbsolutePath()); out of memory
         holder.image.setImageBitmap(bMap);
         return convertView;
     }

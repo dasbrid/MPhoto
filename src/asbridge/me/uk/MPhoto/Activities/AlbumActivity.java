@@ -19,6 +19,7 @@ import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewImageAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.helper.Utils;
+import asbridge.me.uk.MPhoto.settings.SettingsActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ import java.util.ArrayList;
  * An Activity for viewing (and later editing/sharing) all the photos in an album
  */
 public class AlbumActivity extends Activity {
-    private Utils utils;
     private GridViewImageAdapter adapter;
     private GridView gridView;
     private int columnWidth;
@@ -42,14 +42,38 @@ public class AlbumActivity extends Activity {
 
         gridView = (GridView) findViewById(R.id.grid_view);
 
-        utils = new Utils(this);
-
-        // Initilizing Grid View
-//        InitilizeGridLayout();
-
         Bundle parameters = getIntent().getExtras();
         String albumFolder =parameters.getString("folderAbsolutePath");
         this.albumAbsolutePath = albumFolder;
+
+        if (albumAbsolutePath == null)
+        {
+            Toast.makeText(this,"photos folder null",Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, SettingsActivity.class));
+            return;
+        }
+        if (albumAbsolutePath == "")
+        {
+            Toast.makeText(this,"photos folder is empty string",Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this, SettingsActivity.class));
+            return;
+        }
+
+
+        if (!new File(albumAbsolutePath).isDirectory()) {
+            Toast.makeText(this,"photos root folder is not a folder",Toast.LENGTH_LONG).show();
+            startActivity(new Intent(this, SettingsActivity.class));
+            return;
+        }
+
+        if (!Utils.isAlbumColumnWidthSet(this))
+        {
+            Toast.makeText(this,"Album column width not set",Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, SettingsActivity.class));
+            return;
+        }
+
+        int colWidth = Utils.getAlbumColumnWidth(this);
 
         // get all files (in this folder and in subfolders)
         ArrayList<File> files = Utils.getAllFiles(albumAbsolutePath);
@@ -63,6 +87,7 @@ public class AlbumActivity extends Activity {
         // Gridview adapter
         adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles); //albumFolder);//, columnWidth);
         // setting grid view adapter
+        gridView.setColumnWidth(colWidth);
         gridView.setAdapter(adapter);
 
         adapter.setEventListener(new GridViewImageAdapter.ISelectionChangedEventListener() {
@@ -137,7 +162,6 @@ public class AlbumActivity extends Activity {
         }
         adapter.clearSelection();
         adapter.notifyDataSetChanged();
-// NOT NEEDED       gridView.invalidateViews();
     }
 
     // button clicked, launch slideshow for this folder
@@ -160,23 +184,5 @@ public class AlbumActivity extends Activity {
         adapter.clearSelection();
         adapter.notifyDataSetChanged();
     }
-
-        /*
-    private void InitilizeGridLayout() {
-        Resources r = getResources();
-        float padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                AppConstant.GRID_PADDING, r.getDisplayMetrics());
-
-        columnWidth = (int) ((utils.getScreenWidth() - ((AppConstant.NUM_OF_COLUMNS + 1) * padding)) / AppConstant.NUM_OF_COLUMNS);
-
-        gridView.setNumColumns(AppConstant.NUM_OF_COLUMNS);
-        gridView.setColumnWidth(columnWidth);
-        gridView.setStretchMode(GridView.NO_STRETCH);
-        gridView.setPadding((int) padding, (int) padding, (int) padding,
-                (int) padding);
-        gridView.setHorizontalSpacing((int) padding);
-        gridView.setVerticalSpacing((int) padding);
-    }
-*/
 
 }

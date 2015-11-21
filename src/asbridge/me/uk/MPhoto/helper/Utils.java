@@ -1,12 +1,17 @@
 package asbridge.me.uk.MPhoto.helper;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Scanner;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.preference.PreferenceManager;
 import android.view.Display;
@@ -36,6 +41,25 @@ public class Utils {
                 .getDefaultSharedPreferences(context);
         String folder = prefs.getString("slideshowDelay", "3");
         return folder;
+    }
+
+    public static boolean isAlbumColumnWidthSet(Context context) {
+        String s = getAlbumColumnWidthString(context);
+        if (s==null || s == "")
+            return false;
+        else return isInteger(s);
+    }
+
+    public static int getAlbumColumnWidth(Context context) {
+        return Integer.parseInt(getAlbumColumnWidthString(context));
+    }
+
+    private static String getAlbumColumnWidthString(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String w = prefs.getString("albumColumnWidth", "90");
+        return w;
     }
 
     // constructor
@@ -141,6 +165,88 @@ public class Utils {
                 addFoldersToList(folderList, file);
             }
         }
+    }
+
+    public static int calculateInSampleSize(File f, int reqWidth, int reqHeight) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true; // just do the decode, don't load into memory
+
+        BitmapFactory.decodeFile(f.getAbsolutePath(),options); // decode results into options
+
+        int actualHeight = options.outHeight;
+        int actualWidth = options.outWidth;
+        String imageType = options.outMimeType;
+
+        int inSampleSize = 1;
+
+        if (actualHeight > reqHeight || actualWidth > reqWidth) {
+
+            final int halfHeight = actualHeight / 2;
+            final int halfWidth = actualWidth / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+
+    public static Bitmap decodeFileToThumbnail(File f) {
+        // Decode bitmap with inSampleSize set
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = calculateInSampleSize(f, AppConstant.THUMB_SIZE, AppConstant.THUMB_SIZE);
+
+        return BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+    }
+
+
+
+    public static Bitmap decodeFileToThumbnailfromweb(File f) {
+        Bitmap b = null;
+        try {
+            // Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+
+            FileInputStream fis = new FileInputStream(f);
+            BitmapFactory.decodeStream(fis, null, o);
+            fis.close();
+            int IMAGE_MAX_SIZE = 1000;
+            int scale = 1;
+            if (o.outHeight > IMAGE_MAX_SIZE || o.outWidth > IMAGE_MAX_SIZE) {
+                scale = (int) Math.pow(
+                        2,
+                        (int) Math.round(Math.log(IMAGE_MAX_SIZE
+                                / (double) Math.max(o.outHeight, o.outWidth))
+                                / Math.log(0.5)));
+            }
+
+            // Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            fis = new FileInputStream(f);
+            b = BitmapFactory.decodeStream(fis, null, o2);
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return b;
+    }
+
+    private static boolean isInteger(String s) {
+        int radix = 10;
+        Scanner sc = new Scanner(s.trim());
+        if(!sc.hasNextInt(radix)) return false;
+        // we know it starts with a valid int, now make sure
+        // there's nothing left!
+        sc.nextInt(radix);
+        return !sc.hasNext();
     }
 
     /*

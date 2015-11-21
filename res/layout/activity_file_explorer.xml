@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="External folder"
+            android:id="@+id/textView2"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="extfolder"
+            android:layout_toRightOf="@id/textView2"
+            android:id="@+id/extfolder"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/folder"
+            android:layout_below="@+id/textView2"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Go"
+            android:id="@+id/btnGo"
+            android:layout_centerHorizontal="true"
+            android:onClick="btnGoClicked"
+            android:layout_below="@id/folder"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Albums"
+            android:id="@+id/btnAlbums"
+            android:onClick="btnAlbumsClicked"
+            android:layout_alignParentEnd="true" android:layout_below="@id/folder"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:onClick="btnSettingsClicked"
+            android:id="@+id/btnSettings" android:layout_alignParentStart="true" android:layout_below="@id/folder"/>
+    <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/listView"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/btnGo"
+    />
+
+</RelativeLayout>
