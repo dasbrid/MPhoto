@@ -7,17 +7,19 @@
 
 
 
-    <asbridge.me.uk.MPhoto.Classes.NonSwipeableViewPager
+    <asbridge.me.uk.MPhoto.Classes.PhotoViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/dynamicpager"
+        android:id="@+id/photopager"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-            />
+        android:onClick="btnPhotoClicked"
+    />
 
-    <Button android:id="@+id/btnEnableSwiping"
+    <Button android:id="@+id/btnControlSlideshow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="Play/Pause" />
+            android:layout_alignParentBottom="true"
+            android:onClick="btnControlSlideshowClicked"
+            android:text="Start Slideshow"
+    />
 </RelativeLayout>

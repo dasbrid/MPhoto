@@ -27,5 +27,9 @@
         <activity android:name=".Activities.FileExplorerActivity">
 
         </activity>
+        <activity android:name=".Activities.PhotoActivity"
+                  android:label="Photo View">
+
+    </activity>
     </application>
 </manifest>

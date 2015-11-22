@@ -1,32 +1,30 @@
 package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.ActionBar;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import asbridge.me.uk.MPhoto.adapter.MyStatePagerAdapter;
 import asbridge.me.uk.MPhoto.Classes.NonSwipeableViewPager;
+import asbridge.me.uk.MPhoto.Classes.PhotoViewPager;
 import asbridge.me.uk.MPhoto.R;
+import asbridge.me.uk.MPhoto.adapter.MyStatePagerAdapter;
+import asbridge.me.uk.MPhoto.adapter.PhotoPagerAdapter;
+import asbridge.me.uk.MPhoto.helper.Utils;
 
 import java.io.File;
-import java.util.*;
-
-import asbridge.me.uk.MPhoto.helper.Utils;
+import java.util.ArrayList;
+import java.util.Timer;
 
 /**
  * Created by David on 04/11/2015.
  * See http://developer.android.com/training/animation/screen-slide.html
  */
-public class PhotoSlideshowActivity extends FragmentActivity   implements View.OnClickListener{
-    private static String TAG=PhotoSlideshowActivity.class.getName();
+public class PhotoActivity extends FragmentActivity {
+    private static String TAG=PhotoActivity.class.getName();
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
@@ -40,9 +38,13 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
      */
-    private NonSwipeableViewPager mPager; // check this
+    private PhotoViewPager mPager;
     private Timer timer;
     private int page = 0;
+
+
+    private PhotoPagerAdapter photoPagerAdapter;
+    private PhotoViewPager pager;
 
     private Handler handler = new Handler();
 
@@ -72,8 +74,6 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
         }
     };
 
-    private MyStatePagerAdapter myStatePageAdapter;
-    private NonSwipeableViewPager pager;
 
     @Override
     protected void onResume() {
@@ -97,8 +97,9 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
         super.onCreate(savedInstanceState);
 
             SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
-
+            Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
             // http://developer.android.com/training/system-ui/visibility.html
+            /*
             View decorView = getWindow().getDecorView();
             decorView.setOnSystemUiVisibilityChangeListener
                     (new View.OnSystemUiVisibilityChangeListener() {
@@ -119,32 +120,36 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
                             }
                         }
                     });
+*/
+        setContentView(R.layout.activity_photo);
 
-        setContentView(R.layout.activity_photo_slideshow);
-
-        myStatePageAdapter = new MyStatePagerAdapter(getSupportFragmentManager(), this);
-        pager = (NonSwipeableViewPager)findViewById(R.id.dynamicpager);
-        pager.setAdapter(myStatePageAdapter);
+        photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager(), this);
+        pager = (PhotoViewPager)findViewById(R.id.photopager);
+        pager.setAdapter(photoPagerAdapter);
 
 
-        Button btnEnableSwiping = (Button)findViewById(R.id.btnEnableSwiping);
-        btnEnableSwiping.setOnClickListener(this);
-
-            Bundle parameters = getIntent().getExtras();
-            String albumFolder =parameters.getString("folderAbsolutePath");
+        Bundle parameters = getIntent().getExtras();
+        String albumFolder =parameters.getString("folderAbsolutePath");
 
         ArrayList<File> filelist = Utils.getAllFiles(albumFolder);
 
-
-        myStatePageAdapter.setFileList(filelist);
-        myStatePageAdapter.notifyDataSetChanged();
+        photoPagerAdapter.setFileList(filelist);
+        photoPagerAdapter.notifyDataSetChanged();
 
         numPages = filelist.size();
         pager.setCurrentItemManual(page);
+// Don't start the slideshow        handler.postDelayed(runnable, SLIDE_SHOW_DELAY);
+    }
+
+    public void btnControlSlideshowClicked(View v) {
+        Toast.makeText(this, "control slideshow clicked", Toast.LENGTH_SHORT).show();
         handler.postDelayed(runnable, SLIDE_SHOW_DELAY);
     }
 
-
+    public void btnPhotoClicked(View v) {
+        Toast.makeText(this, "Photo touched", Toast.LENGTH_SHORT).show();
+    }
+/*
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -153,7 +158,9 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
                 break;
         }
     }
+*/
 
+/*
     private void PlayPauseBtnHandler()
     {
         pager.togglePlayPause();
@@ -170,5 +177,5 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
         getActionBar().hide();
 
     }
-
+*/
 }

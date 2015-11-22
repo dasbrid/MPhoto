@@ -155,7 +155,7 @@ public class AlbumActivity extends Activity {
     // button clicked, launch slideshow for this folder
     public void btnStartSlideshowClicked(View v)
     {
-        Intent intent = new Intent(this, PhotoSlideshowActivity.class);
+        Intent intent = new Intent(this, PhotoActivity.class);
         intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
         this.startActivity(intent);
     }

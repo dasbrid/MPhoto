@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
+import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoSlideshowActivity;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.Utils;
@@ -133,7 +134,7 @@ public class GridViewAlbumAdapter extends BaseAdapter {
         public void onClick(View v) {
             // button clicked, launch slideshow for this folder
             File folder = _folders.get(_position);
-            Intent intent = new Intent(_context, PhotoSlideshowActivity.class);
+            Intent intent = new Intent(_context, PhotoActivity.class);
             intent.putExtra("folderAbsolutePath", folder.getAbsolutePath());
             _context.startActivity(intent);
         }
