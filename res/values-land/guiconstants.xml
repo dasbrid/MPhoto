@@ -2,11 +2,11 @@
 <resources>
     <dimen name="albumthumb_button_text_size">32sp</dimen>
     <dimen name="albumthumb_albumname_text_size">16sp</dimen>
-    <color name="albumthumb_background_color">#66222266</color>
+    <color name="albumthumb_background_color">#66666666</color>
 
-    <dimen name="grid_column_width">320dp</dimen>
+    <dimen name="grid_column_width">420dp</dimen>
 
-    <dimen name="thumb_size">320dp</dimen>
+    <dimen name="thumb_size">420dp</dimen>
 
     <integer name="imagecheckbox_scale">2</integer>
 

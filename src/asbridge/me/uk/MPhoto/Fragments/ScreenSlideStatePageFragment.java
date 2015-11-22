@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
@@ -29,9 +30,8 @@ public class ScreenSlideStatePageFragment extends Fragment {
         String imagepath = args.getString("imagepath");
 
         ImageView iv = (ImageView) rootView.findViewById(R.id.imageView);
-
-//        Bitmap myBitmap = Utils.decodeFileToThumbnail(new File(imagepath));
-        Bitmap myBitmap = Utils.decodeFileToSize(new File(imagepath), 600,400);
+        // get the imageview size and scale the image to fit
+        Bitmap myBitmap = Utils.decodeFileToSize(new File(imagepath), 1200,800);
         iv.setImageBitmap(myBitmap);
 
         return rootView;
