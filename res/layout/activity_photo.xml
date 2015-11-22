@@ -15,11 +15,13 @@
         android:onClick="btnPhotoClicked"
     />
 
-    <Button android:id="@+id/btnControlSlideshow"
+    <Button android:id="@+id/btnPhotoStartSlideshow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:onClick="btnControlSlideshowClicked"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
+            android:onClick="btnPhotoStartSlideshowClicked"
             android:text="Start Slideshow"
     />
 </RelativeLayout>

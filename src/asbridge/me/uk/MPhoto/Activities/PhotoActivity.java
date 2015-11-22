@@ -23,12 +23,14 @@ import java.util.Timer;
  * Created by David on 04/11/2015.
  * See http://developer.android.com/training/animation/screen-slide.html
  */
-public class PhotoActivity extends FragmentActivity {
+public class PhotoActivity extends FragmentActivity implements PhotoViewPager.OnTouchedListener {
     private static String TAG=PhotoActivity.class.getName();
     /**
      * The number of pages (wizard steps) to show in this demo.
      */
     private int numPages;
+
+    private boolean slideshowOn;
 
     // The time (in seconds) for which the navigation controls are visible after screen interaction.
     private static int SHOW_NAVIGATION_CONTROLS_TIME = 3;
@@ -42,6 +44,7 @@ public class PhotoActivity extends FragmentActivity {
     private Timer timer;
     private int page = 0;
 
+    private Button btnStartSlideshow;
 
     private PhotoPagerAdapter photoPagerAdapter;
     private PhotoViewPager pager;
@@ -52,11 +55,15 @@ public class PhotoActivity extends FragmentActivity {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
+            if (slideshowOn == false)
+                return;
+            // TODO: don't keep the page here, use a method on the adapter or pager or whatever e.g. showNextPage()
             pager.setCurrentItemManual(page++);
             if (page >= numPages)
                 page = 0;
             // to keep the slideshow going, start the timer again
             handler.postDelayed(this, SLIDE_SHOW_DELAY * 1000);
+
         }
     };
 
@@ -74,6 +81,27 @@ public class PhotoActivity extends FragmentActivity {
         }
     };
 
+    // button clicked - restart the slideshow
+    public void btnPhotoStartSlideshowClicked(View v) {
+        btnStartSlideshow.setVisibility(View.INVISIBLE);
+        startSlideshow();
+    }
+
+    // called back from the pager when touched
+    public void onTouched() {
+        stopSlideshow();
+        btnStartSlideshow.setVisibility(View.VISIBLE);
+    }
+
+    private void stopSlideshow() {
+        slideshowOn = false;
+    }
+
+    private void startSlideshow() {
+
+        slideshowOn = true;
+        handler.postDelayed(runnable, SLIDE_SHOW_DELAY);
+    }
 
     @Override
     protected void onResume() {
@@ -95,9 +123,8 @@ public class PhotoActivity extends FragmentActivity {
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
 
-            SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
-            Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
             // http://developer.android.com/training/system-ui/visibility.html
             /*
             View decorView = getWindow().getDecorView();
@@ -122,10 +149,12 @@ public class PhotoActivity extends FragmentActivity {
                     });
 */
         setContentView(R.layout.activity_photo);
-
+        btnStartSlideshow = (Button) findViewById(R.id.btnPhotoStartSlideshow);
+        btnStartSlideshow.setVisibility(View.INVISIBLE);
         photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager(), this);
         pager = (PhotoViewPager)findViewById(R.id.photopager);
         pager.setAdapter(photoPagerAdapter);
+        pager.setOnTouchedListener(this);
 
 
         Bundle parameters = getIntent().getExtras();
@@ -138,28 +167,22 @@ public class PhotoActivity extends FragmentActivity {
 
         numPages = filelist.size();
         pager.setCurrentItemManual(page);
-// Don't start the slideshow        handler.postDelayed(runnable, SLIDE_SHOW_DELAY);
+        //start the slideshow
+            startSlideshow();
     }
 
-    public void btnControlSlideshowClicked(View v) {
-        Toast.makeText(this, "control slideshow clicked", Toast.LENGTH_SHORT).show();
-        handler.postDelayed(runnable, SLIDE_SHOW_DELAY);
+    @Override
+    public void onStop() {
+        super.onStop();
+        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+        slideshowOn = false;
     }
 
+/*
     public void btnPhotoClicked(View v) {
         Toast.makeText(this, "Photo touched", Toast.LENGTH_SHORT).show();
     }
-/*
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnEnableSwiping:
-                PlayPauseBtnHandler();
-                break;
-        }
-    }
-*/
-
+    */
 /*
     private void PlayPauseBtnHandler()
     {
