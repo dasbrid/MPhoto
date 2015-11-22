@@ -87,7 +87,7 @@ public class AlbumsActivity extends Activity {
         }
 
         adapter = new GridViewAlbumAdapter(AlbumsActivity.this, folders);
-        gridView.setColumnWidth(colWidth);
+//        gridView.setColumnWidth(colWidth);
         gridView.setAdapter(adapter);
     }
 

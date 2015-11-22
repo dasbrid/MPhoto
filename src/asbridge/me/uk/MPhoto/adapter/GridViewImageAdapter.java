@@ -3,6 +3,7 @@ package asbridge.me.uk.MPhoto.adapter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TooManyListenersException;
 
@@ -11,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +31,7 @@ public class GridViewImageAdapter extends BaseAdapter {
     static class ViewHolder {
         CheckBox checkbox;
         ImageView image;
+        TextView txtDebug;
     }
 
     private Activity _context;
@@ -98,6 +101,7 @@ public class GridViewImageAdapter extends BaseAdapter {
         Bitmap bMap = Utils.decodeFileToThumbnail(_files.get(position).getFile());
         // Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getFile().getAbsolutePath()); out of memory
         holder.image.setImageBitmap(bMap);
+
         return convertView;
     }
 

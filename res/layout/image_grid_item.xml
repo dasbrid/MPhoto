@@ -5,14 +5,18 @@
              android:layout_height="match_parent">
 
 
-    <asbridge.me.uk.MPhoto.Classes.SquareImageView
+    <ImageView
             android:id="@+id/image_grid_item_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_width="@dimen/thumb_size"
+            android:layout_height="@dimen/thumb_size"
             android:scaleType="centerCrop"
     />
     <CheckBox android:id="@+id/imageCheckBox"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center" />
+              android:layout_width="@dimen/imagethumb_checkbox_size"
+              android:layout_height="@dimen/imagethumb_checkbox_size"
+              android:alpha="0.5"
+              android:layout_gravity="center"
+    />
+
 </FrameLayout>

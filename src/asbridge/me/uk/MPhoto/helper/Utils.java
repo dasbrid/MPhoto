@@ -12,7 +12,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Point;
+import android.media.ExifInterface;
 import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.WindowManager;
@@ -167,7 +169,15 @@ public class Utils {
         }
     }
 
-    public static int calculateInSampleSize(File f, int reqWidth, int reqHeight) {
+
+    private static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        return 0;
+    }
+
+    private static int calculateInSampleSize(File f, int reqWidth, int reqHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true; // just do the decode, don't load into memory
 
@@ -202,42 +212,29 @@ public class Utils {
         options.inJustDecodeBounds = false;
         options.inSampleSize = calculateInSampleSize(f, AppConstant.THUMB_SIZE, AppConstant.THUMB_SIZE);
 
-        return BitmapFactory.decodeFile(f.getAbsolutePath(), options);
-    }
+        Bitmap scaledBitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
 
 
-
-    public static Bitmap decodeFileToThumbnailfromweb(File f) {
-        Bitmap b = null;
-        try {
-            // Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-
-            FileInputStream fis = new FileInputStream(f);
-            BitmapFactory.decodeStream(fis, null, o);
-            fis.close();
-            int IMAGE_MAX_SIZE = 1000;
-            int scale = 1;
-            if (o.outHeight > IMAGE_MAX_SIZE || o.outWidth > IMAGE_MAX_SIZE) {
-                scale = (int) Math.pow(
-                        2,
-                        (int) Math.round(Math.log(IMAGE_MAX_SIZE
-                                / (double) Math.max(o.outHeight, o.outWidth))
-                                / Math.log(0.5)));
-            }
-
-            // Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            fis = new FileInputStream(f);
-            b = BitmapFactory.decodeStream(fis, null, o2);
-            fis.close();
-        } catch (IOException e) {
+        ExifInterface exif = null;
+        try
+        {
+            exif = new ExifInterface(f.getAbsolutePath());
+        }
+        catch (IOException e)
+        {
+            //Error
             e.printStackTrace();
         }
-        return b;
+        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+        int orientation = orientString != null ? Integer.parseInt(orientString) :  ExifInterface.ORIENTATION_NORMAL;
+        int rotationInDegrees = exifToDegrees(orientation);
+        Matrix matrix = new Matrix();
+        if (orientation != 0f) {matrix.preRotate(rotationInDegrees);}
+        Bitmap adjustedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,  scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+
+        return adjustedBitmap;
     }
+
 
     private static boolean isInteger(String s) {
         int radix = 10;
@@ -249,25 +246,5 @@ public class Utils {
         return !sc.hasNext();
     }
 
-    /*
-     * getting screen width
-     */
-    /*
-    public int getScreenWidth() {
-        int columnWidth;
-        WindowManager wm = (WindowManager) _context
-                .getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-
-        final Point point = new Point();
-        try {
-            display.getSize(point);
-        } catch (java.lang.NoSuchMethodError ignore) { // Older device
-            point.x = display.getWidth();
-            point.y = display.getHeight();
-        }
-        columnWidth = point.x;
-        return columnWidth;
-    }*/
 
 }

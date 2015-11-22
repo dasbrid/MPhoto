@@ -19,7 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import android.view.ViewGroup.LayoutParams;
 /**
  * Created by David on 10/11/2015.
  * FOr displaying a grid of ALBUMS
@@ -28,7 +28,6 @@ public class GridViewAlbumAdapter extends BaseAdapter {
 
     private Context _context;
     private ArrayList<File> _folders = new ArrayList<File>();
-
 
     public GridViewAlbumAdapter(Context context, ArrayList<File> folders) {
         this._context = context;

@@ -140,13 +140,12 @@ public class AlbumActivity extends Activity {
         emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileToShare));
         */
         emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{"stickdave2003@mailinator.com"});
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Photos");
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "I hope you enjoy these photos");
 
         // One File
 
-        startActivity(Intent.createChooser(emailIntent, "Send email:"));
+        startActivity(Intent.createChooser(emailIntent, "Send mail:"));
     }
 
      // button delete clicked. Delete selected images
