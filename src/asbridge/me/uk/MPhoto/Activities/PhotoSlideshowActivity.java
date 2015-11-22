@@ -144,76 +144,6 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
         handler.postDelayed(runnable, SLIDE_SHOW_DELAY);
     }
 
-    private ArrayList<File> getMediaToCopy(Date lastSyncTime)
-    {
-        Log.v(TAG, "Getting media to copy");
-        // which image properties are we querying
-        String[] projection = new String[]{
-                MediaStore.Images.Media._ID,
-                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-                MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media.DATE_TAKEN
-        };
-
-        // Get the base URI for ...
-        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
-        // Make the query.
-        Cursor cur = getContentResolver().query(images,
-                projection, // Which columns to return
-                null,       // Which rows to return (all rows)
-                null,       // Selection arguments (none)
-                null        // Ordering
-        );
-
-        Log.i(TAG, cur.getCount() + " media files found");
-        if (cur.getCount() == 0)
-            return null;
-
-        ArrayList<File> filesToCopy = new ArrayList<File>();
-
-        if (cur.moveToFirst()) {
-            String bucket;
-            String dateTakenString;
-            String data;
-
-            Date dateTaken;
-            Date dateAdded;
-
-            int bucketColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-
-            int dateTakenColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.DATE_TAKEN);
-
-            int dataColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.DATA);
-
-            do {
-                // Get the field values
-                bucket = cur.getString(bucketColumn);
-                dateTakenString = cur.getString(dateTakenColumn);
-                dateTaken = new Date(Long.parseLong(dateTakenString));
-
-                data = cur.getString(dataColumn);
-
-                Log.v(TAG, "Testing media " + data + " taken on " + dateTaken.toString());
-                if (lastSyncTime == null || (dateTaken.compareTo(lastSyncTime) > 0)) {
-                    Log.v(TAG, "Added " + data + " to list");
-                    /*
-                    FileToCopy ftc = new FileToCopy();
-                    ftc.file = new File(data);
-                    ftc.dateTaken = dateTaken;
-                    ftc.bucket = bucket;
-*/
-                    filesToCopy.add(new File(data));
-                }
-
-
-            } while (cur.moveToNext());
-        }
-        return filesToCopy;
-    }
 
     @Override
     public void onClick(View v) {
@@ -240,17 +170,5 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
         getActionBar().hide();
 
     }
-/*
-    @Override
-    public void onBackPressed() {
-        if (mPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
-    }
-*/
+
 }

@@ -1,32 +1,28 @@
 package asbridge.me.uk.MPhoto.helper;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Scanner;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.Point;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.view.Display;
-import android.view.WindowManager;
-import android.widget.Toast;
+import android.provider.MediaStore;
 
 /**
  * Created by David on 10/11/2015.
  */
 // http://www.androidhive.info/2013/09/android-fullscreen-image-slider-with-swipe-and-pinch-zoom-gestures/
 public class Utils {
-
-    private Context _context;
 
     public static String getRootPhotosFolder(Context context)
     {
@@ -43,30 +39,6 @@ public class Utils {
                 .getDefaultSharedPreferences(context);
         String folder = prefs.getString("slideshowDelay", "3");
         return folder;
-    }
-/*
-    public static boolean isAlbumColumnWidthSet(Context context) {
-        String s = getAlbumColumnWidthString(context);
-        if (s==null || s == "")
-            return false;
-        else return isInteger(s);
-    }
-
-    public static int getAlbumColumnWidth(Context context) {
-        return Integer.parseInt(getAlbumColumnWidthString(context));
-    }
-
-    private static String getAlbumColumnWidthString(Context context)
-    {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
-        String w = prefs.getString("albumColumnWidth", "90");
-        return w;
-    }
-*/
-    // constructor
-    public Utils(Context context) {
-        this._context = context;
     }
 
     // TODO: first image may be in a subfolder
@@ -205,12 +177,11 @@ public class Utils {
         return inSampleSize;
     }
 
-
-    public static Bitmap decodeFileToThumbnail(File f) {
+    public static Bitmap decodeFileToSize(File f, int reqWidth, int reqHeight) {
         // Decode bitmap with inSampleSize set
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
-        options.inSampleSize = calculateInSampleSize(f, AppConstant.THUMB_SIZE, AppConstant.THUMB_SIZE);
+        options.inSampleSize = calculateInSampleSize(f, reqWidth, reqHeight);
 
         Bitmap scaledBitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
 
@@ -236,6 +207,11 @@ public class Utils {
     }
 
 
+
+    public static Bitmap decodeFileToThumbnail(File f) {
+        return decodeFileToSize(f,AppConstant.THUMB_SIZE, AppConstant.THUMB_SIZE );
+    }
+
     private static boolean isInteger(String s) {
         int radix = 10;
         Scanner sc = new Scanner(s.trim());
@@ -247,4 +223,65 @@ public class Utils {
     }
 
 
+    private ArrayList<File> getMediaToCopy(Date lastSyncTime, Context context)
+    {
+        // which image properties are we querying
+        String[] projection = new String[]{
+                MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.DATE_TAKEN
+        };
+
+        // Get the base URI for ...
+        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        // Make the query.
+        Cursor cur = context.getContentResolver().query(images,
+                projection, // Which columns to return
+                null,       // Which rows to return (all rows)
+                null,       // Selection arguments (none)
+                null        // Ordering
+        );
+
+        if (cur.getCount() == 0)
+            return null;
+
+        ArrayList<File> filesToCopy = new ArrayList<File>();
+
+        if (cur.moveToFirst()) {
+            String bucket;
+            String dateTakenString;
+            String data;
+
+            Date dateTaken;
+            Date dateAdded;
+
+            int bucketColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+
+            int dateTakenColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATE_TAKEN);
+
+            int dataColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATA);
+
+            do {
+                // Get the field values
+                bucket = cur.getString(bucketColumn);
+                dateTakenString = cur.getString(dateTakenColumn);
+                dateTaken = new Date(Long.parseLong(dateTakenString));
+
+                data = cur.getString(dataColumn);
+
+
+                if (lastSyncTime == null || (dateTaken.compareTo(lastSyncTime) > 0)) {
+                    filesToCopy.add(new File(data));
+                }
+
+
+            } while (cur.moveToNext());
+        }
+        return filesToCopy;
+    }
 }

@@ -1,15 +1,12 @@
 package asbridge.me.uk.MPhoto.Fragments;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
@@ -33,7 +30,8 @@ public class ScreenSlideStatePageFragment extends Fragment {
 
         ImageView iv = (ImageView) rootView.findViewById(R.id.imageView);
 
-        Bitmap myBitmap = Utils.decodeFileToThumbnail(new File(imagepath));// BitmapFactory.decodeFile(imagepath);
+//        Bitmap myBitmap = Utils.decodeFileToThumbnail(new File(imagepath));
+        Bitmap myBitmap = Utils.decodeFileToSize(new File(imagepath), 600,400);
         iv.setImageBitmap(myBitmap);
 
         return rootView;
