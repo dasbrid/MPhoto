@@ -8,7 +8,6 @@
 
     <dimen name="thumb_size">240dp</dimen>
 
-    <dimen name="imagethumb_checkbox_size">128dp</dimen>
-
-
+    <integer name="imagecheckbox_scale">2</integer>
+    
 </resources>

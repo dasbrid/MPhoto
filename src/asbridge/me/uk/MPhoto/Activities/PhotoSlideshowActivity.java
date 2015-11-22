@@ -97,7 +97,6 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
         super.onCreate(savedInstanceState);
 
             SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
-            Utils utils = new Utils(this);
 
             // http://developer.android.com/training/system-ui/visibility.html
             View decorView = getWindow().getDecorView();
@@ -134,7 +133,7 @@ public class PhotoSlideshowActivity extends FragmentActivity   implements View.O
             Bundle parameters = getIntent().getExtras();
             String albumFolder =parameters.getString("folderAbsolutePath");
 
-        ArrayList<File> filelist = utils.getAllFiles(albumFolder);
+        ArrayList<File> filelist = Utils.getAllFiles(albumFolder);
 
 
         myStatePageAdapter.setFileList(filelist);

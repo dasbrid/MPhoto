@@ -23,7 +23,6 @@ public class AlbumsActivity extends Activity {
     private ArrayList<File> folders = new ArrayList<File>();
     private GridViewAlbumAdapter adapter;
     private GridView gridView;
-    private int columnWidth;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) { //
@@ -53,20 +52,6 @@ public class AlbumsActivity extends Activity {
 
         String rootPhotosFolder = Utils.getRootPhotosFolder(this);
 
-        if (!Utils.isAlbumColumnWidthSet(this))
-        {
-            Toast.makeText(this,"Album column width not set",Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, SettingsActivity.class));
-            return;
-        }
-
-        int colWidth = Utils.getAlbumColumnWidth(this);
-        if (rootPhotosFolder == null)
-        {
-            Toast.makeText(this,"photos folder null",Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, SettingsActivity.class));
-            return;
-        }
         if (rootPhotosFolder == "")
         {
             Toast.makeText(this,"photos folder is empty string",Toast.LENGTH_LONG).show();
@@ -87,7 +72,6 @@ public class AlbumsActivity extends Activity {
         }
 
         adapter = new GridViewAlbumAdapter(AlbumsActivity.this, folders);
-//        gridView.setColumnWidth(colWidth);
         gridView.setAdapter(adapter);
     }
 

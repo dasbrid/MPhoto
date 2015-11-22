@@ -44,7 +44,7 @@ public class Utils {
         String folder = prefs.getString("slideshowDelay", "3");
         return folder;
     }
-
+/*
     public static boolean isAlbumColumnWidthSet(Context context) {
         String s = getAlbumColumnWidthString(context);
         if (s==null || s == "")
@@ -63,7 +63,7 @@ public class Utils {
         String w = prefs.getString("albumColumnWidth", "90");
         return w;
     }
-
+*/
     // constructor
     public Utils(Context context) {
         this._context = context;

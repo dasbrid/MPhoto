@@ -31,7 +31,6 @@ import java.util.ArrayList;
 public class AlbumActivity extends Activity {
     private GridViewImageAdapter adapter;
     private GridView gridView;
-    private int columnWidth;
     private String albumAbsolutePath;
     private ArrayList<CheckedFile> imageFiles;
 
@@ -66,15 +65,6 @@ public class AlbumActivity extends Activity {
             return;
         }
 
-        if (!Utils.isAlbumColumnWidthSet(this))
-        {
-            Toast.makeText(this,"Album column width not set",Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, SettingsActivity.class));
-            return;
-        }
-
-        int colWidth = Utils.getAlbumColumnWidth(this);
-
         // get all files (in this folder and in subfolders)
         ArrayList<File> files = Utils.getAllFiles(albumAbsolutePath);
 
@@ -87,7 +77,6 @@ public class AlbumActivity extends Activity {
         // Gridview adapter
         adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles); //albumFolder);//, columnWidth);
         // setting grid view adapter
-        gridView.setColumnWidth(colWidth);
         gridView.setAdapter(adapter);
 
         adapter.setEventListener(new GridViewImageAdapter.ISelectionChangedEventListener() {

@@ -4,10 +4,6 @@
             android:key="rootPhotosFolder"
             android:summary="Full path of the root folder for photo albums"
             android:title="Root album for photos" />
-    <EditTextPreference
-            android:key="albumColumnWidth"
-            android:summary="Specify the size of the columns in alvum view (dp)"
-            android:title="Album Column Width" />
     <ListPreference
             android:key="slideshowDelay"
             android:title="Slideshow speed"
