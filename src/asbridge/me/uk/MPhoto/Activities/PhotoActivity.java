@@ -101,7 +101,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);        // Save the slideshow status
         savedInstanceState.putBoolean("slideshowOn", slideshowOn);
-        savedInstanceState.putInt("currentPage", page);
+        savedInstanceState.putInt("currentPage", pager.getCurrentItem());
     }
 
     @Override
