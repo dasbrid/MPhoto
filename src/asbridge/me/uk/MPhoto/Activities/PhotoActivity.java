@@ -24,23 +24,17 @@ import java.util.Timer;
  * See http://developer.android.com/training/animation/screen-slide.html
  */
 public class PhotoActivity extends FragmentActivity implements PhotoViewPager.OnTouchedListener {
-    private static String TAG=PhotoActivity.class.getName();
-    /**
-     * The number of pages (wizard steps) to show in this demo.
-     */
+
     private int numPages;
 
     private boolean slideshowOn;
+    private boolean slideshowSharedState;
 
     // The time (in seconds) for which the navigation controls are visible after screen interaction.
     private static int SHOW_NAVIGATION_CONTROLS_TIME = 3;
     // Delay between slides
     private static int SLIDE_SHOW_DELAY;
-    /**
-     * The pager widget, which handles animation and allows swiping horizontally to access previous
-     * and next wizard steps.
-     */
-    private PhotoViewPager mPager;
+
     private Timer timer;
     private int page = 0;
 
@@ -51,7 +45,6 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
 
     private Handler handler = new Handler();
 
-
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -61,12 +54,12 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
             pager.setCurrentItemManual(page++);
             if (page >= numPages)
                 page = 0;
+
             // to keep the slideshow going, start the timer again
             handler.postDelayed(this, SLIDE_SHOW_DELAY * 1000);
 
         }
     };
-
 
     // Runnable called by handler x seconds after user interaction
     private Runnable hidenavigation = new  Runnable() {
@@ -107,16 +100,13 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);        // Save the slideshow status
         savedInstanceState.putBoolean("slideshowOn", slideshowOn);
-        // TODO: also save the current page ...
-        // savedInstanceState.putInt(STATE_LEVEL, mCurrentLevel);
+        savedInstanceState.putInt("currentPage", page);
     }
-
-    private boolean savedSlideshow;
 
     @Override
     public void onStop() {
         super.onStop();
-        savedSlideshow = slideshowOn;
+        slideshowSharedState= slideshowOn;
         slideshowOn = false;
     }
 
@@ -124,13 +114,17 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can restore the view hierarchy
         super.onRestoreInstanceState(savedInstanceState);
-        savedSlideshow = savedInstanceState.getBoolean("slideshowOn");
+        slideshowSharedState = savedInstanceState.getBoolean("slideshowOn");
+        page = savedInstanceState.getInt("currentPage");
     }
 
+    // Called after starting or when resuming (no saved instance state)
     @Override
     protected void onResume() {
         super.onResume();  // Always call the superclass method first
-        slideshowOn = savedSlideshow;
+        // get the saved (in memory state of the slideshow)
+        slideshowOn = slideshowSharedState;
+        pager.setCurrentItemManual(page);
         if (slideshowOn) {
             startSlideshow();
             btnStartSlideshow.setVisibility(View.INVISIBLE);
@@ -156,10 +150,12 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         super.onCreate(savedInstanceState);
         SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
 
+        // if we are starting for first time (not restarting)
         if (savedInstanceState == null) {
-            savedSlideshow = true;
+            slideshowSharedState = true;
             slideshowOn = true;
         }
+
             // http://developer.android.com/training/system-ui/visibility.html
             /*
             View decorView = getWindow().getDecorView();
@@ -190,7 +186,6 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         pager.setAdapter(photoPagerAdapter);
         pager.setOnTouchedListener(this);
 
-
         Bundle parameters = getIntent().getExtras();
         String albumFolder =parameters.getString("folderAbsolutePath");
 
@@ -200,7 +195,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         photoPagerAdapter.notifyDataSetChanged();
 
         numPages = filelist.size();
-        pager.setCurrentItemManual(page);
+
     }
 
 
