@@ -77,6 +77,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     // button clicked - restart the slideshow
     public void btnPhotoStartSlideshowClicked(View v) {
         btnStartSlideshow.setVisibility(View.INVISIBLE);
+        page = pager.getCurrentItem();
         startSlideshow();
     }
 
