@@ -98,15 +98,44 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     }
 
     private void startSlideshow() {
-
         slideshowOn = true;
         handler.postDelayed(runnable, SLIDE_SHOW_DELAY);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);        // Save the slideshow status
+        Toast.makeText(this, "onSaveInstanceState", Toast.LENGTH_SHORT).show();
+        savedInstanceState.putBoolean("slideshowOn", slideshowOn);
+        // TODO: also save the current page ...
+        // savedInstanceState.putInt(STATE_LEVEL, mCurrentLevel);
+
+
+    }
+
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+        Toast.makeText(this, "onRestoreInstanceState", Toast.LENGTH_SHORT).show();
+        slideshowOn = savedInstanceState.getBoolean("slideshowOn");
+        Toast.makeText(this, "sso="+(slideshowOn?"true":"false"), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();  // Always call the superclass method first
+        Toast.makeText(this, "onResume sso=" +(slideshowOn?"true":"false"), Toast.LENGTH_SHORT).show();
 
+        if (slideshowOn) {
+            startSlideshow();
+            btnStartSlideshow.setVisibility(View.INVISIBLE);
+        } else {
+            btnStartSlideshow.setVisibility(View.VISIBLE);
+        }
         // Code to make layout fullscreen. In onResume, otherwise when activity comes back it will revert to non-fullscreen
         // http://developer.android.com/training/system-ui/status.html
         // hide the status bar and application bar (top of the screen) with SYSTEM_UI_FLAG_FULLSCREEN
@@ -120,10 +149,13 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         ActionBar actionBar = getActionBar();
         actionBar.hide();
     }
-        @Override
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Toast.makeText(this, "onCreate sis = "+(savedInstanceState==null?"null":"not null"), Toast.LENGTH_SHORT).show();
         SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
+        slideshowOn = true;
 
             // http://developer.android.com/training/system-ui/visibility.html
             /*
@@ -150,7 +182,6 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
 */
         setContentView(R.layout.activity_photo);
         btnStartSlideshow = (Button) findViewById(R.id.btnPhotoStartSlideshow);
-        btnStartSlideshow.setVisibility(View.INVISIBLE);
         photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager(), this);
         pager = (PhotoViewPager)findViewById(R.id.photopager);
         pager.setAdapter(photoPagerAdapter);
@@ -168,7 +199,13 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         numPages = filelist.size();
         pager.setCurrentItemManual(page);
         //start the slideshow
+        if (slideshowOn) {
             startSlideshow();
+            btnStartSlideshow.setVisibility(View.INVISIBLE);
+        } else {
+            btnStartSlideshow.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override

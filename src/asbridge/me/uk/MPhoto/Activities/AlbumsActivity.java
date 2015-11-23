@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewAlbumAdapter;
@@ -24,6 +25,10 @@ public class AlbumsActivity extends Activity {
     private GridViewAlbumAdapter adapter;
     private GridView gridView;
 
+    public void btnSlideshowClicked(View v) {
+        Toast.makeText(this, "slideshow",Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) { //
 // Inflate the menu items to the action bar.
@@ -31,7 +36,7 @@ public class AlbumsActivity extends Activity {
         return true;
     }
 
-    // Called every time user clicks on an action
+    // Called every time user clicks on an menu item
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) { //
