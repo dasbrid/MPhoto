@@ -101,35 +101,36 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         slideshowOn = true;
         handler.postDelayed(runnable, SLIDE_SHOW_DELAY);
     }
-
-
+    
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);        // Save the slideshow status
-        Toast.makeText(this, "onSaveInstanceState", Toast.LENGTH_SHORT).show();
         savedInstanceState.putBoolean("slideshowOn", slideshowOn);
         // TODO: also save the current page ...
         // savedInstanceState.putInt(STATE_LEVEL, mCurrentLevel);
-
-
     }
 
+    private boolean savedSlideshow;
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        savedSlideshow = slideshowOn;
+        slideshowOn = false;
+    }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         // Always call the superclass so it can restore the view hierarchy
         super.onRestoreInstanceState(savedInstanceState);
-        Toast.makeText(this, "onRestoreInstanceState", Toast.LENGTH_SHORT).show();
-        slideshowOn = savedInstanceState.getBoolean("slideshowOn");
-        Toast.makeText(this, "sso="+(slideshowOn?"true":"false"), Toast.LENGTH_SHORT).show();
+        savedSlideshow = savedInstanceState.getBoolean("slideshowOn");
     }
 
     @Override
     protected void onResume() {
         super.onResume();  // Always call the superclass method first
-        Toast.makeText(this, "onResume sso=" +(slideshowOn?"true":"false"), Toast.LENGTH_SHORT).show();
-
+        slideshowOn = savedSlideshow;
         if (slideshowOn) {
             startSlideshow();
             btnStartSlideshow.setVisibility(View.INVISIBLE);
@@ -153,10 +154,12 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toast.makeText(this, "onCreate sis = "+(savedInstanceState==null?"null":"not null"), Toast.LENGTH_SHORT).show();
         SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
-        slideshowOn = true;
 
+        if (savedInstanceState == null) {
+            savedSlideshow = true;
+            slideshowOn = true;
+        }
             // http://developer.android.com/training/system-ui/visibility.html
             /*
             View decorView = getWindow().getDecorView();
@@ -198,22 +201,8 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
 
         numPages = filelist.size();
         pager.setCurrentItemManual(page);
-        //start the slideshow
-        if (slideshowOn) {
-            startSlideshow();
-            btnStartSlideshow.setVisibility(View.INVISIBLE);
-        } else {
-            btnStartSlideshow.setVisibility(View.VISIBLE);
-        }
-
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
-        slideshowOn = false;
-    }
 
 /*
     public void btnPhotoClicked(View v) {
