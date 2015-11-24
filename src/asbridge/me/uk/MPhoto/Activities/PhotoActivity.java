@@ -42,6 +42,8 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     private Timer timer;
     private int page = 0;
 
+    private Button btnPhotoShare;
+    private Button btnPhotoDelete;
     private Button btnStartSlideshow;
 
     private PhotoPagerAdapter photoPagerAdapter;
@@ -81,6 +83,8 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     // button clicked - restart the slideshow
     public void btnPhotoStartSlideshowClicked(View v) {
         btnStartSlideshow.setVisibility(View.INVISIBLE);
+        btnPhotoDelete.setVisibility(View.INVISIBLE);
+        btnPhotoShare.setVisibility(View.INVISIBLE);
         page = pager.getCurrentItem();
         startSlideshow();
     }
@@ -89,6 +93,8 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     public void onTouched() {
         stopSlideshow();
         btnStartSlideshow.setVisibility(View.VISIBLE);
+        btnPhotoDelete.setVisibility(View.INVISIBLE);
+        btnPhotoShare.setVisibility(View.INVISIBLE);
     }
 
     private void stopSlideshow() {
@@ -134,8 +140,12 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         if (slideshowOn) {
             startSlideshow();
             btnStartSlideshow.setVisibility(View.INVISIBLE);
+            btnPhotoDelete.setVisibility(View.INVISIBLE);
+            btnPhotoShare.setVisibility(View.INVISIBLE);
         } else {
             btnStartSlideshow.setVisibility(View.VISIBLE);
+            btnPhotoDelete.setVisibility(View.VISIBLE);
+            btnPhotoShare.setVisibility(View.VISIBLE);
         }
         // Code to make layout fullscreen. In onResume, otherwise when activity comes back it will revert to non-fullscreen
         // http://developer.android.com/training/system-ui/status.html
@@ -189,6 +199,8 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
 */
         setContentView(R.layout.activity_photo);
         btnStartSlideshow = (Button) findViewById(R.id.btnPhotoStartSlideshow);
+        btnPhotoDelete = (Button) findViewById(R.id.btnPhotoDelete);
+        btnPhotoShare = (Button) findViewById(R.id.btnPhotoShare);
         photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager(), this);
         pager = (PhotoViewPager)findViewById(R.id.photopager);
         pager.setAdapter(photoPagerAdapter);
