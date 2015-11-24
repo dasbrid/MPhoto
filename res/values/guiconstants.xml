@@ -2,7 +2,7 @@
 <resources>
     <dimen name="albumthumb_button_text_size">32sp</dimen>
     <dimen name="albumthumb_albumname_text_size">16sp</dimen>
-    <color name="albumthumb_background_color">#66222266</color>
+    <color name="albumthumb_background_color">#666666FF</color>
 
     <dimen name="grid_column_width">320dp</dimen>
 

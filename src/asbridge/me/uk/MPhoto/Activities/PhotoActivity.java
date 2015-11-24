@@ -188,7 +188,8 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         pager.setOnTouchedListener(this);
 
         Bundle parameters = getIntent().getExtras();
-        String albumFolder =parameters.getString("folderAbsolutePath");
+        String albumFolder = parameters.getString("folderAbsolutePath");
+        Integer positionParameter = parameters.getInt("position");
 
         ArrayList<File> filelist = Utils.getAllFiles(albumFolder);
 

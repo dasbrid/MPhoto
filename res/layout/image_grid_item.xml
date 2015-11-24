@@ -17,8 +17,17 @@
               android:layout_height="wrap_content"
               android:scaleX="@integer/imagecheckbox_scale"
               android:scaleY="@integer/imagecheckbox_scale"
-              android:alpha="0.5"
+              android:alpha="0.85"
               android:layout_gravity="center"
+              android:background="@color/albumthumb_background_color"
     />
-
+    <Button android:id="@+id/btnViewPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
+            android:textSize="@dimen/albumthumb_button_text_size"
+            android:layout_gravity="bottom|center"
+            android:background="@color/albumthumb_background_color"
+            android:text="View" />
 </FrameLayout>

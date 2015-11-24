@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
+import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
+import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoSlideshowActivity;
 import asbridge.me.uk.MPhoto.Classes.CheckedFile;
 import asbridge.me.uk.MPhoto.R;
@@ -26,12 +28,12 @@ import asbridge.me.uk.MPhoto.helper.Utils;
 /**
  * Created by David on 10/11/2015.
  */
-public class GridViewImageAdapter extends BaseAdapter {
+public class GridViewImageAdapter extends BaseAdapter  {
 
     static class ViewHolder {
         CheckBox checkbox;
         ImageView image;
-        TextView txtDebug;
+        Button btnViewPhoto;
     }
 
     private Activity _context;
@@ -92,12 +94,14 @@ public class GridViewImageAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.checkbox = (CheckBox) convertView.findViewById(R.id.imageCheckBox);
             holder.image = (ImageView) convertView.findViewById(R.id.image_grid_item_image);
+            holder.btnViewPhoto = (Button) convertView.findViewById(R.id.btnViewPhoto);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.checkbox.setChecked(isImageSelected(position));
         holder.checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
+        holder.btnViewPhoto.setOnClickListener(new OnbtnViewPhotoClickListener(position));
         Bitmap bMap = Utils.decodeFileToThumbnail(_files.get(position).getFile());
         // Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getFile().getAbsolutePath()); out of memory
         holder.image.setImageBitmap(bMap);
@@ -123,6 +127,27 @@ public class GridViewImageAdapter extends BaseAdapter {
     public boolean isImageSelected(int position)
     {
         return _files.get(position).isChecked();
+    }
+
+    class OnbtnViewPhotoClickListener implements OnClickListener {
+
+        int _position;
+        // constructor
+        public OnbtnViewPhotoClickListener(int position) {
+            this._position = position;
+        }
+        // on click listener for view button
+        @Override
+        public void onClick(View v)
+        {
+            if(v.getId() == R.id.btnViewPhoto) {
+                File f = _files.get(_position).getFile();
+                Intent intent = new Intent(_context, PhotoActivity.class);
+                intent.putExtra("folderAbsolutePath", f.getParent());
+                intent.putExtra("position", _position);
+                _context.startActivity(intent);
+            }
+        }
     }
 
     class OnCheckBoxClickListener implements OnClickListener {
