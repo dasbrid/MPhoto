@@ -65,6 +65,10 @@ public class AlbumActivity extends Activity {
             return;
         }
 
+        String albumname = new File (albumAbsolutePath).getName();
+        Toast.makeText(this,"name "+albumname,Toast.LENGTH_SHORT).show();
+        getActionBar().setTitle(albumname);
+
         // get all files (in this folder and in subfolders)
         ArrayList<File> files = Utils.getAllFiles(albumAbsolutePath);
 
