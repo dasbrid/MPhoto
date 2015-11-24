@@ -38,11 +38,12 @@ public class GridViewImageAdapter extends BaseAdapter  {
 
     private Activity _context;
     private ArrayList<CheckedFile> _files;
+    private String _albumFolder;
 
-
-    public GridViewImageAdapter(Activity activity, ArrayList<CheckedFile> imageFiles) {
+    public GridViewImageAdapter(Activity activity, ArrayList<CheckedFile> imageFiles, String albumFolder) {
         this._context = activity;
         this._files = imageFiles;
+        this._albumFolder = albumFolder;
     }
 
     public interface ISelectionChangedEventListener {
@@ -101,7 +102,7 @@ public class GridViewImageAdapter extends BaseAdapter  {
         }
         holder.checkbox.setChecked(isImageSelected(position));
         holder.checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
-        holder.btnViewPhoto.setOnClickListener(new OnbtnViewPhotoClickListener(position));
+        holder.btnViewPhoto.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder));
         Bitmap bMap = Utils.decodeFileToThumbnail(_files.get(position).getFile());
         // Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getFile().getAbsolutePath()); out of memory
         holder.image.setImageBitmap(bMap);
@@ -132,9 +133,11 @@ public class GridViewImageAdapter extends BaseAdapter  {
     class OnbtnViewPhotoClickListener implements OnClickListener {
 
         int _position;
+        String _albumFolder;
         // constructor
-        public OnbtnViewPhotoClickListener(int position) {
+        public OnbtnViewPhotoClickListener(int position, String albumFolder) {
             this._position = position;
+            this._albumFolder = albumFolder;
         }
         // on click listener for view button
         @Override
@@ -143,7 +146,7 @@ public class GridViewImageAdapter extends BaseAdapter  {
             if(v.getId() == R.id.btnViewPhoto) {
                 File f = _files.get(_position).getFile();
                 Intent intent = new Intent(_context, PhotoActivity.class);
-                intent.putExtra("folderAbsolutePath", f.getParent());
+                intent.putExtra("folderAbsolutePath", this._albumFolder);
                 intent.putExtra("position", _position);
                 _context.startActivity(intent);
             }

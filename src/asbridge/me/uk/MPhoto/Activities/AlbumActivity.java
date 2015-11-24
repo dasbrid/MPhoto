@@ -75,7 +75,7 @@ public class AlbumActivity extends Activity {
         }
 
         // Gridview adapter
-        adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles); //albumFolder);//, columnWidth);
+        adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles, albumFolder); //albumFolder);//, columnWidth);
         // setting grid view adapter
         gridView.setAdapter(adapter);
 
