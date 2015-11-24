@@ -126,6 +126,8 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         // get the saved (in memory state of the slideshow)
         slideshowOn = slideshowSharedState;
         pager.setCurrentItemManual(page);
+        Toast.makeText(this,"onResume set page to = "+page, Toast.LENGTH_SHORT).show();
+
         if (slideshowOn) {
             startSlideshow();
             btnStartSlideshow.setVisibility(View.INVISIBLE);
@@ -190,6 +192,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
         Integer positionParameter = parameters.getInt("position");
+        Toast.makeText(this,"position = "+positionParameter == null? "null":positionParameter.toString()+" path="+albumFolder, Toast.LENGTH_SHORT).show();
 
         ArrayList<File> filelist = Utils.getAllFiles(albumFolder);
 
@@ -197,7 +200,6 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         photoPagerAdapter.notifyDataSetChanged();
 
         numPages = filelist.size();
-
     }
 
 
