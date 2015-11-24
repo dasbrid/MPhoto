@@ -1,13 +1,17 @@
 package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.ActionBar;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import asbridge.me.uk.MPhoto.Classes.CheckedFile;
 import asbridge.me.uk.MPhoto.Classes.NonSwipeableViewPager;
 import asbridge.me.uk.MPhoto.Classes.PhotoViewPager;
 import asbridge.me.uk.MPhoto.R;
@@ -126,7 +130,6 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         // get the saved (in memory state of the slideshow)
         slideshowOn = slideshowSharedState;
         pager.setCurrentItemManual(page);
-        Toast.makeText(this,"onResume set page to = "+page, Toast.LENGTH_SHORT).show();
 
         if (slideshowOn) {
             startSlideshow();
@@ -150,6 +153,8 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v("TAG","onCreate");
+
         super.onCreate(savedInstanceState);
         SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
 
@@ -192,7 +197,13 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
         Integer positionParameter = parameters.getInt("position");
-        Toast.makeText(this,"position = "+positionParameter == null? "null":positionParameter.toString()+" path="+albumFolder, Toast.LENGTH_SHORT).show();
+        if (positionParameter != -1)
+        {
+            // we have been passed a specific photo index.
+            // show the photo and slideshow off
+            page = positionParameter;
+            slideshowSharedState = false;
+        }
 
         ArrayList<File> filelist = Utils.getAllFiles(albumFolder);
 
@@ -200,6 +211,36 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         photoPagerAdapter.notifyDataSetChanged();
 
         numPages = filelist.size();
+    }
+
+    // button delete clicked. Delete selected images
+    public void btnDeleteClicked(View v)
+    {
+        // TODO: get the current file
+/// DONT DELETE            fileToDelete.delete();
+        // TODO: show the next file
+    }
+
+    // button share clicked. Share selected image
+    public void btnShareClicked(View v) {
+        // TODO: Get the file and share it
+        /*
+        ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();
+        File fileToShare = selectedFiles.get(0).getFile();
+
+        // many files
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileToShare));
+
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Photo");
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "I hope you enjoy this photo");
+
+        // One File
+
+        startActivity(Intent.createChooser(emailIntent, "Send mail:"));
+        */
     }
 
 

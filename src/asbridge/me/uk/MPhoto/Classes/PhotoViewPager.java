@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+import java.io.File;
+
 /**
  * Created by David on 07/11/2015.
  * For disabling swipe see

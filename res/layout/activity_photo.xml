@@ -24,4 +24,18 @@
             android:onClick="btnPhotoStartSlideshowClicked"
             android:text="Start Slideshow"
     />
+    <Button android:id="@+id/btnDelete"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Delete"
+            android:onClick="btnPhotoDeleteClicked"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/btnStartSlideshow"
+            android:minWidth="200px" />
+    <Button android:id="@+id/btnShare"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Share"
+            android:onClick="btnPhotoShareClicked"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/btnSelectNone"
+            android:minWidth="200px" />
 </RelativeLayout>
