@@ -36,6 +36,6 @@
             android:text="Share"
             android:onClick="btnPhotoShareClicked"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/btnDelete"
+            android:layout_toRightOf="@id/btnPhotoDelete"
             android:minWidth="200px" />
 </RelativeLayout>

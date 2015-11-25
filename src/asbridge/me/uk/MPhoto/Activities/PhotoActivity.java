@@ -93,8 +93,8 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     public void onTouched() {
         stopSlideshow();
         btnStartSlideshow.setVisibility(View.VISIBLE);
-        btnPhotoDelete.setVisibility(View.INVISIBLE);
-        btnPhotoShare.setVisibility(View.INVISIBLE);
+        btnPhotoDelete.setVisibility(View.VISIBLE);
+        btnPhotoShare.setVisibility(View.VISIBLE);
     }
 
     private void stopSlideshow() {
