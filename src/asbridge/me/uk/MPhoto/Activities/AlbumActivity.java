@@ -69,10 +69,13 @@ public class AlbumActivity extends Activity {
         Toast.makeText(this,"name "+albumname,Toast.LENGTH_SHORT).show();
         getActionBar().setTitle(albumname);
 
-        // get all files (in this folder and in subfolders)
-        //ArrayList<File> files = Utils.getAllFiles(albumAbsolutePath);
-
-        ArrayList<File> files = Utils.getMediaInBucket(this, albumname);
+        ArrayList<File> files;
+        if (Utils.getFromMediaPreference(this)) {
+            // get all files (in this folder and in subfolders)
+            files = Utils.getMediaInBucket(this, albumname);
+        } else {
+            files = Utils.getAllFiles(albumAbsolutePath);
+        }
 
         this.imageFiles = new ArrayList<CheckedFile>();
         for (int i=0;i<files.size();i++)

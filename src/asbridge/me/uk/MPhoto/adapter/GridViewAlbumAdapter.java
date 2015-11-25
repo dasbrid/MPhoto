@@ -12,6 +12,7 @@ import android.widget.*;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoSlideshowActivity;
+import asbridge.me.uk.MPhoto.Classes.Album;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
@@ -28,21 +29,29 @@ import android.view.ViewGroup.LayoutParams;
 public class GridViewAlbumAdapter extends BaseAdapter {
 
     private Context _context;
-    private ArrayList<File> _folders = new ArrayList<File>();
+//    private ArrayList<File> _folders = new ArrayList<File>();
+    private ArrayList<Album> _albums = new ArrayList<Album>();
 
+    /*
     public GridViewAlbumAdapter(Context context, ArrayList<File> folders) {
         this._context = context;
         this._folders = folders;
     }
+*/
+
+    public GridViewAlbumAdapter(Context context, ArrayList<Album> albums) {
+        this._context = context;
+        this._albums = albums;
+    }
 
     @Override
     public int getCount() {
-        return this._folders.size();
+        return this._albums.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return this._folders.get(position);
+        return this._albums.get(position);
     }
 
     @Override
@@ -63,15 +72,20 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             ImageView imageView = (ImageView) gridView
                     .findViewById(R.id.grid_item_image);
 
+            Album album = _albums.get(position);
+  /*
             // image is the first image in the folder
             File folder = _folders.get(position);
-
+*/
             TextView textView = (TextView) gridView
                     .findViewById(R.id.grid_item_label);
-            textView.setText(_folders.get(position).getName());
+            textView.setText(album.getName());
+//            textView.setText(_folders.get(position).getName());
 
-            File imageFile = Utils.getFirstImageInFolder(folder);
 
+            File imageFile;
+            // imageFile = Utils.getFirstImageInFolder(folder);
+            imageFile = album.getFirstFile();
             if (imageFile == null)
             {
                 Toast.makeText(_context, "imageFile is null",Toast.LENGTH_SHORT).show();
@@ -82,8 +96,6 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             }
             //TODO: what if folder is empty (no images) or not actually a folder
             Bitmap bMap = Utils.decodeFileToThumbnail(imageFile);
-            //Bitmap bMap = BitmapFactory.decodeFile(imageFile.getAbsolutePath()); // out of memory
-
             if (bMap == null)
             {
                 Toast.makeText(_context, "bmap is null",Toast.LENGTH_SHORT).show();
@@ -115,9 +127,10 @@ public class GridViewAlbumAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             // button clicked, launch slideshow for this folder
-            File folder = _folders.get(_position);
+//            File folder = _folders.get(_position);
+            Album album = _albums.get(_position);
             Intent intent = new Intent(_context, AlbumActivity.class);
-            intent.putExtra("folderAbsolutePath", folder.getAbsolutePath());
+            intent.putExtra("folderAbsolutePath", album.getFolder().getAbsolutePath()); //folder.getAbsolutePath());
             _context.startActivity(intent);
         }
     }
@@ -133,9 +146,10 @@ public class GridViewAlbumAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             // button clicked, launch slideshow for this folder
-            File folder = _folders.get(_position);
+            //File folder = _folders.get(_position);
+            Album album = _albums.get(_position);
             Intent intent = new Intent(_context, PhotoActivity.class);
-            intent.putExtra("folderAbsolutePath", folder.getAbsolutePath());
+            intent.putExtra("folderAbsolutePath", album.getFolder().getAbsolutePath()); //folder.getAbsolutePath());
             intent.putExtra("position", -1);
             _context.startActivity(intent);
         }

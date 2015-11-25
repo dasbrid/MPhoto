@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
+import asbridge.me.uk.MPhoto.Classes.Album;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewAlbumAdapter;
 import asbridge.me.uk.MPhoto.helper.Utils;
@@ -55,29 +56,50 @@ public class AlbumsActivity extends Activity {
 
         gridView = (GridView) findViewById(R.id.grid_view);
 
-        String rootPhotosFolder = Utils.getRootPhotosFolder(this);
+        boolean fromMediaPreference = Utils.getFromMediaPreference(this);
 
-        if (rootPhotosFolder == "")
-        {
-            Toast.makeText(this,"photos folder is empty string",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this, SettingsActivity.class));
-            return;
+        ArrayList<Album> albums;
+        if (fromMediaPreference) {
+            albums = Utils.getAlbumsFromMedia(this);
+            Toast.makeText(this,"albums "+albums.size(),Toast.LENGTH_SHORT).show();
+
+        } else {
+            String rootPhotosFolder = Utils.getRootPhotosFolder(this);
+
+            if (rootPhotosFolder == "")
+            {
+                Toast.makeText(this,"photos folder is empty string",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, SettingsActivity.class));
+                return;
+            }
+
+            if (!new File(rootPhotosFolder).isDirectory()) {
+                Toast.makeText(this,"photos root folder is not a folder",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, SettingsActivity.class));
+                return;
+            }
+            albums = Utils.getAlbumsFromFolders(rootPhotosFolder);
+            Toast.makeText(this,"folders "+albums.size(),Toast.LENGTH_SHORT).show();
+
         }
 
-        if (!new File(rootPhotosFolder).isDirectory()) {
-            Toast.makeText(this,"photos root folder is not a folder",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this, SettingsActivity.class));
-            return;
+        /*
+        folders = new ArrayList<File>();
+        for(Album a : albums) {
+            folders.add(a.getFolder().getParentFile());
         }
-        Utils.getBucketList(this);
-        folders = Utils.getFolders(rootPhotosFolder);
-        if (folders == null) {
+
+//        folders = Utils.getFolders(rootPhotosFolder);
+*/
+        if (albums  == null) {
             Toast.makeText(this,"folders is null",Toast.LENGTH_SHORT).show();
             return;
         }
 
-        adapter = new GridViewAlbumAdapter(AlbumsActivity.this, folders);
+        //adapter = new GridViewAlbumAdapter(AlbumsActivity.this, folders);
+        adapter = new GridViewAlbumAdapter(AlbumsActivity.this, albums);
         gridView.setAdapter(adapter);
+
     }
 
 }

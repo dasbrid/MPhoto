@@ -11,4 +11,10 @@
             android:defaultValue="3"
             android:entries="@array/slideshowSpeedKeys"
             android:entryValues="@array/slideshowSpeedValues" />
+    <CheckBoxPreference
+            android:key="fromMedia"
+            android:title="Load photos from media"
+            android:summary="Choose whether to load from media or folders"
+            android:defaultValue="false"
+    />
 </PreferenceScreen>

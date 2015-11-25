@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.widget.Toast;
+import asbridge.me.uk.MPhoto.Classes.Album;
 
 /**
  * Created by David on 10/11/2015.
@@ -33,6 +34,13 @@ public class Utils {
         return folder;
     }
 
+    public static boolean getFromMediaPreference(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context); //
+        boolean fromMedia = prefs.getBoolean("fromMedia", false);
+        return fromMedia;
+    }
 
     public static String getSlideshowDelay(Context context)
     {
@@ -114,11 +122,38 @@ public class Utils {
         }
     }
 
+    public static ArrayList<Album> getAlbumsFromFolders(String rootPhotosFolder)
+    {
+        ArrayList<Album> albums = new ArrayList<Album>();
+        File rootFolder = new File(rootPhotosFolder);
+        addAlbumsToList(albums, rootFolder);
+        return albums;
+    }
+
+    // recursion method for getting subFOLDERS in a folder
+    private static void addAlbumsToList(ArrayList<Album> albumList, File folder) {
+        if (folder.isDirectory()) {
+            // we have been passed a folder.
+            // add it to the list
+            File firstfile = getFirstImageInFolder(folder);
+            Album a = new Album(folder.getName(), firstfile, folder);
+            albumList.add(a);
+            // and iterate it's contents
+            // getting list of file paths
+            File[] listFiles = folder.listFiles();
+            if (listFiles == null)
+                return;
+            // loop through all files
+            for (File file : listFiles) {
+                addAlbumsToList(albumList, file);
+            }
+        }
+    }
+
     // get all the FOLDERS (albums) (and their subfolders) from a folder
     public static ArrayList<File> getFolders(String rootPhotosFolder) {
         ArrayList<File> folders = new ArrayList<File>();
         File rootFolder = new File(rootPhotosFolder);
-                //android.os.Environment.getExternalStorageDirectory()+ File.separator + "MatthewsPhotos");
         addFoldersToList(folders, rootFolder);
         return folders;
     }
@@ -293,7 +328,9 @@ public class Utils {
         return files;
     }
 
-    public static void getBucketList(Context context) {
+    public static ArrayList<Album> getAlbumsFromMedia(Context context) {
+
+        ArrayList<Album> albums = new ArrayList<>();
 
         String[] PROJECTION_BUCKET = {
                 MediaStore.Images.Media.BUCKET_ID,
@@ -314,7 +351,7 @@ public class Utils {
                 BUCKET_ORDER_BY);
 
         if (cur.moveToFirst()) {
-            String bucket;
+            String bucketname;
             String date;
             String data;
             long bucketId;
@@ -325,21 +362,22 @@ public class Utils {
 
             do {
                 // Get the field values
-                bucket = cur.getString(bucketColumn);
+                bucketname = cur.getString(bucketColumn);
                 date = cur.getString(dateColumn);
                 data = cur.getString(dataColumn);
                 bucketId = cur.getInt(bucketIdColumn);
 
-                if (bucket != null && bucket.length() > 0) {
+                if (bucketname != null && bucketname.length() > 0) {
                     // Do something with the values.
-                    String msg = " bucket=" + bucket
-                            + "  date_taken=" + date
-                            + "  _data=" + data
-                            + " bucket_id=" + bucketId;
-                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    File f = new File(data);
+
+                    Album album = new Album(bucketname, f, f.getParentFile());
+                    albums.add(album);
                 }
             } while (cur.moveToNext());
         }
         cur.close();
+
+        return albums;
     }
 }
