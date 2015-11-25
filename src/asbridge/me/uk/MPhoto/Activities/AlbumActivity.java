@@ -70,7 +70,9 @@ public class AlbumActivity extends Activity {
         getActionBar().setTitle(albumname);
 
         // get all files (in this folder and in subfolders)
-        ArrayList<File> files = Utils.getAllFiles(albumAbsolutePath);
+        //ArrayList<File> files = Utils.getAllFiles(albumAbsolutePath);
+
+        ArrayList<File> files = Utils.getMediaInBucket(this, albumname);
 
         this.imageFiles = new ArrayList<CheckedFile>();
         for (int i=0;i<files.size();i++)

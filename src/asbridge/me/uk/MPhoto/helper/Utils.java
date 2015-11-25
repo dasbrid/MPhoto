@@ -17,6 +17,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
 /**
  * Created by David on 10/11/2015.
@@ -223,7 +224,7 @@ public class Utils {
     }
 
 
-    private ArrayList<File> getMediaToCopy(Date lastSyncTime, Context context)
+    public static ArrayList<File> getMediaInBucket(Context context, String bucketDisplayName )
     {
         // which image properties are we querying
         String[] projection = new String[]{
@@ -236,18 +237,29 @@ public class Utils {
         // Get the base URI for ...
         Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
+        String[] selectionArgs = null;
+        String selectionClause = null;
+        String OrderBy = MediaStore.Images.Media.DATE_TAKEN + " DESC";
+        if (bucketDisplayName != null) {
+            // get media in specific bucket
+            selectionArgs = new String[1];
+            selectionArgs[0] = bucketDisplayName;
+            selectionClause = MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " = ?";
+        }
+
         // Make the query.
-        Cursor cur = context.getContentResolver().query(images,
+        Cursor cur = context.getContentResolver().query(
+                images,     // URI
                 projection, // Which columns to return
-                null,       // Which rows to return (all rows)
-                null,       // Selection arguments (none)
+                selectionClause,       // WHERE clause  (null = all rows)
+                selectionArgs,       // Selection arguments (null = none)
                 null        // Ordering
         );
 
         if (cur.getCount() == 0)
             return null;
 
-        ArrayList<File> filesToCopy = new ArrayList<File>();
+        ArrayList<File> files = new ArrayList<File>();
 
         if (cur.moveToFirst()) {
             String bucket;
@@ -274,14 +286,60 @@ public class Utils {
 
                 data = cur.getString(dataColumn);
 
-
-                if (lastSyncTime == null || (dateTaken.compareTo(lastSyncTime) > 0)) {
-                    filesToCopy.add(new File(data));
-                }
-
+                files.add(new File(data));
 
             } while (cur.moveToNext());
         }
-        return filesToCopy;
+        return files;
+    }
+
+    public static void getBucketList(Context context) {
+
+        String[] PROJECTION_BUCKET = {
+                MediaStore.Images.Media.BUCKET_ID,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.Media.DATE_TAKEN,
+                MediaStore.Images.Media.DATA };
+
+        String BUCKET_GROUP_BY = "1) GROUP BY 1,(2"; // this is really WHERE (1) GROUP BY 1,(2)
+        String BUCKET_ORDER_BY = "MAX(datetaken) DESC";
+
+        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        Cursor cur = context.getContentResolver().query(
+                images,
+                PROJECTION_BUCKET,
+                BUCKET_GROUP_BY,
+                null,
+                BUCKET_ORDER_BY);
+
+        if (cur.moveToFirst()) {
+            String bucket;
+            String date;
+            String data;
+            long bucketId;
+            int bucketColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+            int dateColumn = cur.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN);
+            int dataColumn = cur.getColumnIndex(MediaStore.Images.Media.DATA);
+            int bucketIdColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
+
+            do {
+                // Get the field values
+                bucket = cur.getString(bucketColumn);
+                date = cur.getString(dateColumn);
+                data = cur.getString(dataColumn);
+                bucketId = cur.getInt(bucketIdColumn);
+
+                if (bucket != null && bucket.length() > 0) {
+                    // Do something with the values.
+                    String msg = " bucket=" + bucket
+                            + "  date_taken=" + date
+                            + "  _data=" + data
+                            + " bucket_id=" + bucketId;
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                }
+            } while (cur.moveToNext());
+        }
+        cur.close();
     }
 }

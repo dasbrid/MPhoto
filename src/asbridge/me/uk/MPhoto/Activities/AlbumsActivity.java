@@ -69,7 +69,7 @@ public class AlbumsActivity extends Activity {
             startActivity(new Intent(this, SettingsActivity.class));
             return;
         }
-
+        Utils.getBucketList(this);
         folders = Utils.getFolders(rootPhotosFolder);
         if (folders == null) {
             Toast.makeText(this,"folders is null",Toast.LENGTH_SHORT).show();
