@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,6 +43,10 @@ public class GridViewAlbumAdapter extends BaseAdapter {
     public GridViewAlbumAdapter(Context context, ArrayList<Album> albums) {
         this._context = context;
         this._albums = albums;
+        for (Album a : albums)
+        {
+            Log.d("DAVE","   album "+a.getName()+":"+a.getFolder());
+        }
     }
 
     @Override
@@ -69,49 +74,45 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             gridView = inflater.inflate( R.layout.album_grid_item , null);
 
 
-            ImageView imageView = (ImageView) gridView
-                    .findViewById(R.id.grid_item_image);
 
-            Album album = _albums.get(position);
-  /*
-            // image is the first image in the folder
-            File folder = _folders.get(position);
-*/
-            TextView textView = (TextView) gridView
-                    .findViewById(R.id.grid_item_label);
-            textView.setText(album.getName());
-//            textView.setText(_folders.get(position).getName());
-
-
-            File imageFile;
-            // imageFile = Utils.getFirstImageInFolder(folder);
-            imageFile = album.getFirstFile();
-            if (imageFile == null)
-            {
-                Toast.makeText(_context, "imageFile is null",Toast.LENGTH_SHORT).show();
-            }
-            if (imageFile.canRead() == false)
-            {
-                Toast.makeText(_context, "imageFile cannot read",Toast.LENGTH_SHORT).show();
-            }
-            //TODO: what if folder is empty (no images) or not actually a folder
-            Bitmap bMap = Utils.decodeFileToThumbnail(imageFile);
-            if (bMap == null)
-            {
-                Toast.makeText(_context, "bmap is null",Toast.LENGTH_SHORT).show();
-                return gridView;
-            }
-
-            imageView.setImageBitmap(bMap);
-
-            Button btnSlideshow = (Button) gridView.findViewById(R.id.btnSlideshow);
-            btnSlideshow.setOnClickListener(new OnSlideshowButtonClickListener(position));
-
-            Button btnAlbum = (Button) gridView.findViewById(R.id.btnAlbum);
-            btnAlbum.setOnClickListener(new OnAlbumButtonClickListener(position));
         } else {
             gridView = convertView;
         }
+
+        ImageView imageView = (ImageView) gridView
+                .findViewById(R.id.grid_item_image);
+
+        Album album = _albums.get(position);
+        Log.d("DAVE","album ("+position+")="+album.getName());
+        TextView textView = (TextView) gridView
+                .findViewById(R.id.grid_item_label);
+        textView.setText(album.getName());
+
+        File imageFile;
+        imageFile = album.getFirstFile();
+        if (imageFile == null)
+        {
+            Toast.makeText(_context, "imageFile is null",Toast.LENGTH_SHORT).show();
+        }
+        if (imageFile.canRead() == false)
+        {
+            Toast.makeText(_context, "imageFile cannot read",Toast.LENGTH_SHORT).show();
+        }
+        //TODO: what if folder is empty (no images) or not actually a folder
+        Bitmap bMap = Utils.decodeFileToThumbnail(imageFile);
+        if (bMap == null)
+        {
+            Toast.makeText(_context, "bmap is null",Toast.LENGTH_SHORT).show();
+            return gridView;
+        }
+
+        imageView.setImageBitmap(bMap);
+
+        Button btnSlideshow = (Button) gridView.findViewById(R.id.btnSlideshow);
+        btnSlideshow.setOnClickListener(new OnSlideshowButtonClickListener(position));
+
+        Button btnAlbum = (Button) gridView.findViewById(R.id.btnAlbum);
+        btnAlbum.setOnClickListener(new OnAlbumButtonClickListener(position));
         return gridView;
     }
 

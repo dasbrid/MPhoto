@@ -104,7 +104,6 @@ public class GridViewImageAdapter extends BaseAdapter  {
         holder.checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
         holder.btnViewPhoto.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder));
         Bitmap bMap = Utils.decodeFileToThumbnail(_files.get(position).getFile());
-        // Bitmap bMap = BitmapFactory.decodeFile(_files.get(position).getFile().getAbsolutePath()); out of memory
         holder.image.setImageBitmap(bMap);
 
         return convertView;

@@ -66,7 +66,6 @@ public class AlbumActivity extends Activity {
         }
 
         String albumname = new File (albumAbsolutePath).getName();
-        Toast.makeText(this,"name "+albumname,Toast.LENGTH_SHORT).show();
         getActionBar().setTitle(albumname);
 
         ArrayList<File> files;

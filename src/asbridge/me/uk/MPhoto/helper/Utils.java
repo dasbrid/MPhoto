@@ -17,6 +17,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 import asbridge.me.uk.MPhoto.Classes.Album;
 
@@ -130,13 +131,45 @@ public class Utils {
         return albums;
     }
 
+    public static int addAlbumsToList(ArrayList<Album> albumList, File folder) {
+        int numfiles = 0;
+        File[] listFiles = folder.listFiles();
+        if (listFiles == null)
+            return numfiles;
+        // loop through all files
+        for (File file : listFiles) {
+            if (file.isFile()) {
+                numfiles++;
+            }
+            if (file.isDirectory()) {
+                numfiles=numfiles+addAlbumsToList(albumList, file);
+            }
+        }
+        if (numfiles > 0) {
+            File firstfile = getFirstImageInFolder(folder);
+            Album a = new Album(folder.getName(), firstfile, folder);
+            albumList.add(a);
+        }
+        return numfiles;
+    }
+/*
+    public static ArrayList<Album> getAlbumsFromFolders(String rootPhotosFolder)
+    {
+        ArrayList<Album> albums = new ArrayList<Album>();
+        File rootFolder = new File(rootPhotosFolder);
+        addAlbumsToList(albums, rootFolder);
+        return albums;
+    }
+
     // recursion method for getting subFOLDERS in a folder
     private static void addAlbumsToList(ArrayList<Album> albumList, File folder) {
+        //Toast.makeText(context, "processing "+folder.getName(), Toast.LENGTH_SHORT).show();
         if (folder.isDirectory()) {
             // we have been passed a folder.
             // add it to the list
             File firstfile = getFirstImageInFolder(folder);
             Album a = new Album(folder.getName(), firstfile, folder);
+            Log.d("DAVE", "adding folder "+folder.getName()+", firstfile "+firstfile.getName());
             albumList.add(a);
             // and iterate it's contents
             // getting list of file paths
@@ -176,7 +209,7 @@ public class Utils {
             }
         }
     }
-
+    */
 
     private static int exifToDegrees(int exifOrientation) {
         if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
