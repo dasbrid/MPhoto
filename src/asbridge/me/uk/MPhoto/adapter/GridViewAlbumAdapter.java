@@ -29,16 +29,17 @@ import android.view.ViewGroup.LayoutParams;
  */
 public class GridViewAlbumAdapter extends BaseAdapter {
 
+    static class AlbumViewHolder {
+        TextView gridItemLabel;
+        ImageView image;
+        Button btnSlideshow;
+        Button btnAlbum;
+    }
+
+
     private Context _context;
 //    private ArrayList<File> _folders = new ArrayList<File>();
     private ArrayList<Album> _albums = new ArrayList<Album>();
-
-    /*
-    public GridViewAlbumAdapter(Context context, ArrayList<File> folders) {
-        this._context = context;
-        this._folders = folders;
-    }
-*/
 
     public GridViewAlbumAdapter(Context context, ArrayList<Album> albums) {
         this._context = context;
@@ -68,25 +69,28 @@ public class GridViewAlbumAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) _context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View gridView;
+        AlbumViewHolder holder;
+        //View gridView;
         if (convertView == null) {
-            gridView = inflater.inflate( R.layout.album_grid_item , null);
-
-
-
+            convertView = inflater.inflate( R.layout.album_grid_item , null);
+            holder = new AlbumViewHolder();
+            holder.btnAlbum = (Button) convertView.findViewById(R.id.btnAlbum);
+            holder.image = (ImageView) convertView.findViewById(R.id.grid_item_image);
+            holder.btnSlideshow = (Button) convertView.findViewById(R.id.btnSlideshow);
+            holder.gridItemLabel = (TextView) convertView.findViewById(R.id.grid_item_label);
+            convertView.setTag(holder);
         } else {
-            gridView = convertView;
+            //gridView = convertView;
+            holder = (AlbumViewHolder) convertView.getTag();
         }
 
-        ImageView imageView = (ImageView) gridView
-                .findViewById(R.id.grid_item_image);
+//        ImageView imageView = (ImageView) gridView.findViewById(R.id.grid_item_image);
 
         Album album = _albums.get(position);
         Log.d("DAVE","album ("+position+")="+album.getName());
-        TextView textView = (TextView) gridView
-                .findViewById(R.id.grid_item_label);
-        textView.setText(album.getName());
+
+        //TextView textView = (TextView) gridView.findViewById(R.id.grid_item_label);
+        holder.gridItemLabel.setText(album.getName());
 
         File imageFile;
         imageFile = album.getFirstFile();
@@ -103,17 +107,17 @@ public class GridViewAlbumAdapter extends BaseAdapter {
         if (bMap == null)
         {
             Toast.makeText(_context, "bmap is null",Toast.LENGTH_SHORT).show();
-            return gridView;
+            return convertView;
         }
 
-        imageView.setImageBitmap(bMap);
+        holder.image.setImageBitmap(bMap);
 
-        Button btnSlideshow = (Button) gridView.findViewById(R.id.btnSlideshow);
-        btnSlideshow.setOnClickListener(new OnSlideshowButtonClickListener(position));
+        //Button btnSlideshow = (Button) gridView.findViewById(R.id.btnSlideshow);
+        holder.btnSlideshow.setOnClickListener(new OnSlideshowButtonClickListener(position));
 
-        Button btnAlbum = (Button) gridView.findViewById(R.id.btnAlbum);
-        btnAlbum.setOnClickListener(new OnAlbumButtonClickListener(position));
-        return gridView;
+        //Button btnAlbum = (Button) gridView.findViewById(R.id.btnAlbum);
+        holder.btnAlbum.setOnClickListener(new OnAlbumButtonClickListener(position));
+        return convertView;
     }
 
 
