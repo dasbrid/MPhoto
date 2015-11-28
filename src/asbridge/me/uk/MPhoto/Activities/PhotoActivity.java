@@ -1,21 +1,15 @@
 package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.ActionBar;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import asbridge.me.uk.MPhoto.Classes.CheckedFile;
-import asbridge.me.uk.MPhoto.Classes.NonSwipeableViewPager;
 import asbridge.me.uk.MPhoto.Classes.PhotoViewPager;
 import asbridge.me.uk.MPhoto.R;
-import asbridge.me.uk.MPhoto.adapter.MyStatePagerAdapter;
 import asbridge.me.uk.MPhoto.adapter.PhotoPagerAdapter;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
@@ -30,7 +24,7 @@ import java.util.Timer;
 public class PhotoActivity extends FragmentActivity implements PhotoViewPager.OnTouchedListener {
 
     private int numPages;
-
+    private ArrayList<File> filelist;
     private boolean slideshowOn;
     private boolean slideshowSharedState;
 
@@ -71,8 +65,10 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     private Runnable hidenavigation = new  Runnable() {
         @Override
         public void run() {
+            /*
             Button btnEnableSwiping = (Button)findViewById(R.id.btnEnableSwiping);
             btnEnableSwiping.setVisibility(View.INVISIBLE);
+            */
             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(uiOptions);
@@ -201,8 +197,11 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         btnStartSlideshow = (Button) findViewById(R.id.btnPhotoStartSlideshow);
         btnPhotoDelete = (Button) findViewById(R.id.btnPhotoDelete);
         btnPhotoShare = (Button) findViewById(R.id.btnPhotoShare);
-        photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager(), this);
+
+        photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager());
+
         pager = (PhotoViewPager)findViewById(R.id.photopager);
+
         pager.setAdapter(photoPagerAdapter);
         pager.setOnTouchedListener(this);
 
@@ -217,7 +216,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
             slideshowSharedState = false;
         }
 
-        ArrayList<File> filelist = Utils.getAllFiles(albumFolder);
+        filelist = Utils.getAllFiles(albumFolder);
 
         photoPagerAdapter.setFileList(filelist);
         photoPagerAdapter.notifyDataSetChanged();
@@ -226,15 +225,22 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     }
 
     // button delete clicked. Delete selected images
-    public void btnDeleteClicked(View v)
+    public void btnPhotoDeleteClicked(View v)
     {
-        // TODO: get the current file
-/// DONT DELETE            fileToDelete.delete();
+        int currentPage = pager.getCurrentItem();
+        File currentFile = this.filelist.get(currentPage);
+
+
+        this.filelist.remove(currentFile);
+        Toast.makeText(this, "page="+currentPage+", file = "+currentFile.getName()+",count="+photoPagerAdapter.getCount(), Toast.LENGTH_LONG).show();
+        pager.invalidate();
+        photoPagerAdapter.notifyDataSetChanged();
+/// DONT DELETE            currentFile.delete();
         // TODO: show the next file
     }
 
     // button share clicked. Share selected image
-    public void btnShareClicked(View v) {
+    public void btnPhotoShareClicked(View v) {
         // TODO: Get the file and share it
         /*
         ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();

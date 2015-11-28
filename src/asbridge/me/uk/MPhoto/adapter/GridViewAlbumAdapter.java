@@ -3,7 +3,6 @@ package asbridge.me.uk.MPhoto.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +11,13 @@ import android.view.ViewGroup;
 import android.widget.*;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
-import asbridge.me.uk.MPhoto.Activities.PhotoSlideshowActivity;
 import asbridge.me.uk.MPhoto.Classes.Album;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import android.view.ViewGroup.LayoutParams;
+
 /**
  * Created by David on 10/11/2015.
  * FOr displaying a grid of ALBUMS

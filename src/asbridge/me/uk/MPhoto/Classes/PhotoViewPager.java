@@ -3,8 +3,10 @@ package asbridge.me.uk.MPhoto.Classes;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
+import asbridge.me.uk.MPhoto.adapter.PhotoPagerAdapter;
 
 import java.io.File;
 
@@ -31,6 +33,14 @@ public class PhotoViewPager extends ViewPager {
 
     public void setCurrentItemManual(int pageNumber) {
             setCurrentItem(pageNumber);
+    }
+
+    public void getCurrentFile()
+    {
+        int currentIndex = getCurrentItem();
+        PhotoPagerAdapter adapter = (PhotoPagerAdapter) getAdapter();
+        File currentFile = adapter.getFileAtPosition(currentIndex);
+        Log.d("DAVE","file = "+currentFile.getName());
     }
 
     public void setOnTouchedListener(OnTouchedListener otl) {
