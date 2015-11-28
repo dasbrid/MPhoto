@@ -33,18 +33,52 @@ public class AlbumActivity extends Activity {
     private GridView gridView;
     private String albumAbsolutePath;
     private ArrayList<CheckedFile> imageFiles;
+    private String albumname;
+    private boolean modified;
+
+    // Called after starting or when resuming (no saved instance state)
+    @Override
+    protected void onResume() {
+        super.onResume();  // Always call the superclass method first
+        if (modified) {
+            this.imageFiles.clear();
+            ArrayList<File> files;
+            if (Utils.getFromMediaPreference(this)) {
+                // get all files (in this folder and in subfolders)
+                files = Utils.getMediaInBucket(this, this.albumname);
+            } else {
+                files = Utils.getAllFiles(albumAbsolutePath);
+            }
+            for (int i = 0; i < files.size(); i++) {
+                this.imageFiles.add(new CheckedFile(files.get(i)));
+            }
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (requestCode == 100)
+        {
+            if (resultCode == RESULT_OK) {
+                // The activity ended sucessfully
+                // The Intent's data Uri identifies which contact was selected.
+                modified = resultData.getBooleanExtra("modified", false);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
-
+        Toast.makeText(this,"onCreate",Toast.LENGTH_LONG).show();
         gridView = (GridView) findViewById(R.id.grid_view);
 
         Bundle parameters = getIntent().getExtras();
         String albumFolder =parameters.getString("folderAbsolutePath");
         this.albumAbsolutePath = albumFolder;
-
+        modified = false;
         if (albumAbsolutePath == null)
         {
             Toast.makeText(this,"photos folder null",Toast.LENGTH_SHORT).show();
@@ -58,14 +92,13 @@ public class AlbumActivity extends Activity {
             return;
         }
 
-
         if (!new File(albumAbsolutePath).isDirectory()) {
             Toast.makeText(this,"photos root folder is not a folder",Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, SettingsActivity.class));
             return;
         }
 
-        String albumname = new File (albumAbsolutePath).getName();
+        this.albumname = new File (albumAbsolutePath).getName();
         getActionBar().setTitle(albumname);
 
         ArrayList<File> files;
@@ -131,16 +164,9 @@ public class AlbumActivity extends Activity {
             attachmentUris.add(u);
         }
         emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachmentUris);
-        /*
-        // one file
-        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileToShare));
-        */
         emailIntent.setType("text/plain");
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Photos");
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "I hope you enjoy these photos");
-
-        // One File
 
         startActivity(Intent.createChooser(emailIntent, "Send mail:"));
     }
@@ -153,7 +179,9 @@ public class AlbumActivity extends Activity {
         File fileToDelete;
         for (int i = 0; i < selectedFiles.size(); i++) {
             fileToDelete = selectedFiles.get(i).getFile();
-/// DONT DELETE            fileToDelete.delete();
+            // Only actually delete if deletion enabled
+            if (AppConstant.ALLOW_DELETE)
+                fileToDelete.delete();
             this.imageFiles.remove(selectedFiles.get(i));
         }
         adapter.clearSelection();
@@ -165,7 +193,8 @@ public class AlbumActivity extends Activity {
     {
         Intent intent = new Intent(this, PhotoActivity.class);
         intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
-        this.startActivity(intent);
+        intent.putExtra("position", -1);
+        this.startActivityForResult(intent,100);
     }
 
     public void btnSelectAllClicked(View v)

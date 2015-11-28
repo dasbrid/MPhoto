@@ -1,16 +1,19 @@
 package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 import asbridge.me.uk.MPhoto.Classes.PhotoViewPager;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.PhotoPagerAdapter;
+import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
 import java.io.File;
@@ -27,6 +30,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     private ArrayList<File> filelist;
     private boolean slideshowOn;
     private boolean slideshowSharedState;
+    private boolean modified;
 
     // The time (in seconds) for which the navigation controls are visible after screen interaction.
     private static int SHOW_NAVIGATION_CONTROLS_TIME = 3;
@@ -125,6 +129,14 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         page = savedInstanceState.getInt("currentPage");
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("modified",modified);
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
+    }
+
     // Called after starting or when resuming (no saved instance state)
     @Override
     protected void onResume() {
@@ -170,29 +182,6 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
             slideshowOn = true;
         }
 
-            // http://developer.android.com/training/system-ui/visibility.html
-            /*
-            View decorView = getWindow().getDecorView();
-            decorView.setOnSystemUiVisibilityChangeListener
-                    (new View.OnSystemUiVisibilityChangeListener() {
-                        @Override
-                        public void onSystemUiVisibilityChange(int visibility) {
-                            // Note that system bars will only be "visible" if none of the
-                            // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
-                            Button btnEnableSwiping = (Button)findViewById(R.id.btnEnableSwiping);
-                            if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                                // Navigation is here, show our custom navigation buttons
-                                btnEnableSwiping.setVisibility(View.VISIBLE);
-                                // start timer to hide navigation after x seconds
-                                Handler vishandler = new Handler();
-                                vishandler.postDelayed(hidenavigation, SHOW_NAVIGATION_CONTROLS_TIME*1000); // milliseconds
-                            } else {
-                                // TODO: The system bars are NOT visible. Make any desired
-                                btnEnableSwiping.setVisibility(View.INVISIBLE);
-                            }
-                        }
-                    });
-*/
         setContentView(R.layout.activity_photo);
         btnStartSlideshow = (Button) findViewById(R.id.btnPhotoStartSlideshow);
         btnPhotoDelete = (Button) findViewById(R.id.btnPhotoDelete);
@@ -208,19 +197,23 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
         Integer positionParameter = parameters.getInt("position");
+
         if (positionParameter != -1)
         {
             // we have been passed a specific photo index.
             // show the photo and slideshow off
             page = positionParameter;
             slideshowSharedState = false;
+        } else {
+            page = 0;
+            slideshowSharedState = true;
         }
 
         filelist = Utils.getAllFiles(albumFolder);
 
         photoPagerAdapter.setFileList(filelist);
         photoPagerAdapter.notifyDataSetChanged();
-
+        modified = false;
         numPages = filelist.size();
     }
 
@@ -230,59 +223,27 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         int currentPage = pager.getCurrentItem();
         File currentFile = this.filelist.get(currentPage);
 
-
         this.filelist.remove(currentFile);
-        Toast.makeText(this, "page="+currentPage+", file = "+currentFile.getName()+",count="+photoPagerAdapter.getCount(), Toast.LENGTH_LONG).show();
         pager.invalidate();
         photoPagerAdapter.notifyDataSetChanged();
-/// DONT DELETE            currentFile.delete();
-        // TODO: show the next file
+        modified = true;
+        // Only actually delete if deletion enabled
+        if (AppConstant.ALLOW_DELETE)
+            currentFile.delete();
     }
 
     // button share clicked. Share selected image
     public void btnPhotoShareClicked(View v) {
-        // TODO: Get the file and share it
-        /*
-        ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();
-        File fileToShare = selectedFiles.get(0).getFile();
-
-        // many files
+        int currentPage = pager.getCurrentItem();
+        File currentFile = this.filelist.get(currentPage);
         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 
-        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileToShare));
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(currentFile));
 
         emailIntent.setType("text/plain");
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Photo");
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "I hope you enjoy this photo");
 
-        // One File
-
         startActivity(Intent.createChooser(emailIntent, "Send mail:"));
-        */
     }
-
-
-/*
-    public void btnPhotoClicked(View v) {
-        Toast.makeText(this, "Photo touched", Toast.LENGTH_SHORT).show();
-    }
-    */
-/*
-    private void PlayPauseBtnHandler()
-    {
-        pager.togglePlayPause();
-        Button btnEnableSwiping = (Button)findViewById(R.id.btnEnableSwiping);
-        if (pager.IsSlideshowOn())
-            btnEnableSwiping.setText("Pause");
-        else
-            btnEnableSwiping.setText("Play");
-
-        btnEnableSwiping.setVisibility(View.INVISIBLE);
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(uiOptions);
-        getActionBar().hide();
-
-    }
-*/
 }

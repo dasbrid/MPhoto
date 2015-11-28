@@ -1,5 +1,6 @@
 package asbridge.me.uk.MPhoto.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  * Created by David on 10/11/2015.
- * FOr displaying a grid of ALBUMS
+ * For displaying a grid of ALBUMS
  */
 public class GridViewAlbumAdapter extends BaseAdapter {
 
@@ -39,10 +40,6 @@ public class GridViewAlbumAdapter extends BaseAdapter {
     public GridViewAlbumAdapter(Context context, ArrayList<Album> albums) {
         this._context = context;
         this._albums = albums;
-        for (Album a : albums)
-        {
-            Log.d("DAVE","   album "+a.getName()+":"+a.getFolder());
-        }
     }
 
     @Override
@@ -82,7 +79,6 @@ public class GridViewAlbumAdapter extends BaseAdapter {
 //        ImageView imageView = (ImageView) gridView.findViewById(R.id.grid_item_image);
 
         Album album = _albums.get(position);
-        Log.d("DAVE","album ("+position+")="+album.getName());
 
         //TextView textView = (TextView) gridView.findViewById(R.id.grid_item_label);
         holder.gridItemLabel.setText(album.getName());
@@ -120,17 +116,14 @@ public class GridViewAlbumAdapter extends BaseAdapter {
 
         int _position;
 
-        // constructor
         public OnAlbumButtonClickListener(int position) {
             this._position = position;
         }
         @Override
         public void onClick(View v) {
-            // button clicked, launch slideshow for this folder
-//            File folder = _folders.get(_position);
             Album album = _albums.get(_position);
             Intent intent = new Intent(_context, AlbumActivity.class);
-            intent.putExtra("folderAbsolutePath", album.getFolder().getAbsolutePath()); //folder.getAbsolutePath());
+            intent.putExtra("folderAbsolutePath", album.getFolder().getAbsolutePath());
             _context.startActivity(intent);
         }
     }
@@ -139,14 +132,12 @@ public class GridViewAlbumAdapter extends BaseAdapter {
 
         int _position;
 
-        // constructor
         public OnSlideshowButtonClickListener(int position) {
             this._position = position;
         }
         @Override
         public void onClick(View v) {
             // button clicked, launch slideshow for this folder
-            //File folder = _folders.get(_position);
             Album album = _albums.get(_position);
             Intent intent = new Intent(_context, PhotoActivity.class);
             intent.putExtra("folderAbsolutePath", album.getFolder().getAbsolutePath()); //folder.getAbsolutePath());

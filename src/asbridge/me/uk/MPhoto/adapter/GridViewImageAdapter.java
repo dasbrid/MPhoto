@@ -139,7 +139,7 @@ public class GridViewImageAdapter extends BaseAdapter  {
                 Intent intent = new Intent(_context, PhotoActivity.class);
                 intent.putExtra("folderAbsolutePath", this._albumFolder);
                 intent.putExtra("position", _position);
-                _context.startActivity(intent);
+                _context.startActivityForResult(intent,100);
             }
         }
     }

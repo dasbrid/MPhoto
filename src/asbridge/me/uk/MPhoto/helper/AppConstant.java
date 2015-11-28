@@ -21,5 +21,9 @@ public class AppConstant {
     public static final List<String> FILE_EXTN = Arrays.asList("jpg", "jpeg",
             "png");
 
+    // size (pixels) of images used for thumbnails
+    // NOT the size on the screen (specified in guiconstants)
     public static int THUMB_SIZE= 160;
+
+    public static boolean ALLOW_DELETE = true;
 }
