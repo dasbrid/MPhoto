@@ -23,17 +23,62 @@ import android.view.MenuItem;
  * Activity for showing all the albums
  */
 public class AlbumsActivity extends Activity {
-    private ArrayList<File> folders = new ArrayList<File>();
+    private ArrayList<Album> albums = new ArrayList<Album>();
     private GridViewAlbumAdapter adapter;
     private GridView gridView;
+    // stores whether we are currently loading from media or folders
+    // used to detect change in this setting on resume
+    private boolean fromMediaPreference;
+    // Called after starting or when resuming (no saved instance state)
+    @Override
+    protected void onResume() {
+        super.onResume();  // Always call the superclass method first
 
-    public void btnSlideshowClicked(View v) {
-        Toast.makeText(this, "slideshow",Toast.LENGTH_SHORT).show();
+        // If preferences have changed (or Creating activity)
+        if (Utils.getFromMediaPreference(this) == fromMediaPreference)
+            return; // no change in preference
+
+        // change in preference ... reload the albums
+        fromMediaPreference = Utils.getFromMediaPreference(this); // change the stored preference
+        ArrayList<Album> listOfAlbums = new ArrayList<Album>();
+        if (fromMediaPreference) {
+            listOfAlbums = Utils.getAlbumsFromMedia(this);
+        } else {
+            String rootPhotosFolder = Utils.getRootPhotosFolder(this);
+
+            if (rootPhotosFolder == "")
+            {
+                Toast.makeText(this,"photos folder is empty string",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, SettingsActivity.class));
+                return;
+            }
+
+            if (!new File(rootPhotosFolder).isDirectory()) {
+                Toast.makeText(this,"photos root folder is not a folder",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, SettingsActivity.class));
+                return;
+            }
+
+            listOfAlbums = Utils.getAlbumsFromFolders(rootPhotosFolder);
+
+        }
+
+        if (listOfAlbums  == null) {
+            Toast.makeText(this,"folders is null",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        albums.clear();
+        for (Album a : listOfAlbums) {
+            albums.add(a);
+        }
+
+        adapter.notifyDataSetChanged();
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) { //
-// Inflate the menu items to the action bar.
         getMenuInflater().inflate(R.menu.menu_albums, menu); //
         return true;
     }
@@ -54,40 +99,12 @@ public class AlbumsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_albums);
-
+        Toast.makeText(this,"onCreate",Toast.LENGTH_LONG).show();
         gridView = (GridView) findViewById(R.id.grid_view);
 
-        boolean fromMediaPreference = Utils.getFromMediaPreference(this);
+        // next line will trigger reading of files in onCreate
+        fromMediaPreference = !Utils.getFromMediaPreference(this);
 
-        ArrayList<Album> albums;
-        if (fromMediaPreference) {
-            albums = Utils.getAlbumsFromMedia(this);
-        } else {
-            String rootPhotosFolder = Utils.getRootPhotosFolder(this);
-
-            if (rootPhotosFolder == "")
-            {
-                Toast.makeText(this,"photos folder is empty string",Toast.LENGTH_LONG).show();
-                startActivity(new Intent(this, SettingsActivity.class));
-                return;
-            }
-
-            if (!new File(rootPhotosFolder).isDirectory()) {
-                Toast.makeText(this,"photos root folder is not a folder",Toast.LENGTH_LONG).show();
-                startActivity(new Intent(this, SettingsActivity.class));
-                return;
-            }
-
-            albums = Utils.getAlbumsFromFolders(rootPhotosFolder);
-
-        }
-
-        if (albums  == null) {
-            Toast.makeText(this,"folders is null",Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        //adapter = new GridViewAlbumAdapter(AlbumsActivity.this, folders);
         adapter = new GridViewAlbumAdapter(AlbumsActivity.this, albums);
         gridView.setAdapter(adapter);
 

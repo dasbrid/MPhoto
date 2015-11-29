@@ -3,13 +3,17 @@ package asbridge.me.uk.MPhoto.Activities;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import asbridge.me.uk.MPhoto.Classes.PhotoViewPager;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.PhotoPagerAdapter;
@@ -208,8 +212,6 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
             page = 0;
             slideshowSharedState = true;
         }
-
-//        filelist = Utils.getAllFiles(albumFolder);
 
         if (Utils.getFromMediaPreference(this)) {
             // get all files (in this folder and in subfolders)

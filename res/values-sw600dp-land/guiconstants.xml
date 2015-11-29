@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="albumthumb_button_text_size">32sp</dimen>
+    <dimen name="albumthumb_albumname_text_size">22sp</dimen>
+    <color name="albumthumb_background_color">#66666666</color>
+    <color name="albumsgrid_background_color">#99FFFF11</color>
+
+    <dimen name="grid_column_width">320dp</dimen>
+
+    <dimen name="thumb_size">320dp</dimen>
+
+    <integer name="imagecheckbox_scale">2</integer>
+
+</resources>
