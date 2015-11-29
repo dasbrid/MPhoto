@@ -3,9 +3,7 @@ package asbridge.me.uk.MPhoto.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.View;
 import android.widget.Toast;
 import asbridge.me.uk.MPhoto.Classes.Album;
 import asbridge.me.uk.MPhoto.R;
@@ -29,6 +27,7 @@ public class AlbumsActivity extends Activity {
     // stores whether we are currently loading from media or folders
     // used to detect change in this setting on resume
     private boolean fromMediaPreference;
+
     // Called after starting or when resuming (no saved instance state)
     @Override
     protected void onResume() {
@@ -42,7 +41,8 @@ public class AlbumsActivity extends Activity {
         fromMediaPreference = Utils.getFromMediaPreference(this); // change the stored preference
         ArrayList<Album> listOfAlbums = new ArrayList<Album>();
         if (fromMediaPreference) {
-            listOfAlbums = Utils.getAlbumsFromMedia(this);
+            // listOfAlbums = Utils.getAlbumsFromMedia(this);
+            listOfAlbums = Utils.getAlbumsFromMediaGroupedByMonth(this);
         } else {
             String rootPhotosFolder = Utils.getRootPhotosFolder(this);
 

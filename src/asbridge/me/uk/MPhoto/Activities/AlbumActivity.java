@@ -34,6 +34,9 @@ public class AlbumActivity extends Activity {
     private String albumAbsolutePath;
     private ArrayList<CheckedFile> imageFiles;
     private String albumname;
+    private int albumMonth;
+    private int albumYear;
+
     private boolean modified;
 
     // Called after starting or when resuming (no saved instance state)
@@ -76,7 +79,10 @@ public class AlbumActivity extends Activity {
         gridView = (GridView) findViewById(R.id.grid_view);
 
         Bundle parameters = getIntent().getExtras();
-        String albumFolder =parameters.getString("folderAbsolutePath");
+        String albumFolder = parameters.getString("folderAbsolutePath");
+        this.albumname = parameters.getString("albumName");
+        this.albumMonth = parameters.getInt("month");
+        this.albumYear = parameters.getInt("year");
         this.albumAbsolutePath = albumFolder;
         modified = false;
         if (albumAbsolutePath == null)
@@ -98,13 +104,15 @@ public class AlbumActivity extends Activity {
             return;
         }
 
-        this.albumname = new File (albumAbsolutePath).getName();
-        getActionBar().setTitle(albumname);
+        //this.albumname = new File (albumAbsolutePath).getName();
+        String albumTitle;
+        getActionBar().setTitle(albumname); // + albumMonth + " " + albumYear);
 
         ArrayList<File> files;
         if (Utils.getFromMediaPreference(this)) {
             // get all files (in this folder and in subfolders)
-            files = Utils.getMediaInBucket(this, albumname);
+            // files = Utils.getMediaInBucket(this, albumname);
+            files = Utils.getMediaInMonth(this, albumMonth, albumYear);
         } else {
             files = Utils.getAllFiles(albumAbsolutePath);
         }

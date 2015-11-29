@@ -2,10 +2,7 @@ package asbridge.me.uk.MPhoto.helper;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -152,64 +149,6 @@ public class Utils {
         }
         return numfiles;
     }
-/*
-    public static ArrayList<Album> getAlbumsFromFolders(String rootPhotosFolder)
-    {
-        ArrayList<Album> albums = new ArrayList<Album>();
-        File rootFolder = new File(rootPhotosFolder);
-        addAlbumsToList(albums, rootFolder);
-        return albums;
-    }
-
-    // recursion method for getting subFOLDERS in a folder
-    private static void addAlbumsToList(ArrayList<Album> albumList, File folder) {
-        //Toast.makeText(context, "processing "+folder.getName(), Toast.LENGTH_SHORT).show();
-        if (folder.isDirectory()) {
-            // we have been passed a folder.
-            // add it to the list
-            File firstfile = getFirstImageInFolder(folder);
-            Album a = new Album(folder.getName(), firstfile, folder);
-            Log.d("DAVE", "adding folder "+folder.getName()+", firstfile "+firstfile.getName());
-            albumList.add(a);
-            // and iterate it's contents
-            // getting list of file paths
-            File[] listFiles = folder.listFiles();
-            if (listFiles == null)
-                return;
-            // loop through all files
-            for (File file : listFiles) {
-                addAlbumsToList(albumList, file);
-            }
-        }
-    }
-
-    // get all the FOLDERS (albums) (and their subfolders) from a folder
-    public static ArrayList<File> getFolders(String rootPhotosFolder) {
-        ArrayList<File> folders = new ArrayList<File>();
-        File rootFolder = new File(rootPhotosFolder);
-        addFoldersToList(folders, rootFolder);
-        return folders;
-    }
-
-    // recursion method for getting subFOLDERS in a folder
-    private static void addFoldersToList(ArrayList<File> folderList, File folder) {
-        if (folder.isDirectory()) {
-            // we have been passed a folder.
-            // add it to the list
-            folderList.add(folder);
-            // and iterate it's contents
-            // getting list of file paths
-            File[] listFiles = folder.listFiles();
-            if (listFiles == null)
-                return;
-            // Check for count
-            // loop through all files
-            for (File file : listFiles) {
-                addFoldersToList(folderList, file);
-            }
-        }
-    }
-    */
 
     private static int exifToDegrees(int exifOrientation) {
         if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
@@ -291,7 +230,7 @@ public class Utils {
         return !sc.hasNext();
     }
 
-
+    // Get all the media in specified bucket
     public static ArrayList<File> getMediaInBucket(Context context, String bucketDisplayName )
     {
         // which image properties are we querying
@@ -413,4 +352,162 @@ public class Utils {
 
         return albums;
     }
+
+
+    public static ArrayList<Album> getAlbumsFromMediaGroupedByMonth(Context context) {
+
+        ArrayList<Album> albums = new ArrayList<>();
+
+        String[] PROJECTION_BUCKET = {
+                MediaStore.Images.Media.BUCKET_ID,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.Media.DATE_TAKEN,
+                MediaStore.Images.Media.DATA };
+
+        String BUCKET_GROUP_BY = null; // no group by "1) GROUP BY 1,(2"; // this is really WHERE (1) GROUP BY 1,(2)
+        String BUCKET_ORDER_BY = "datetaken DESC"; // oldest photo first
+
+        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        int numimages = 0;
+        int numimagesWithDate = 0;
+
+        Cursor cur = context.getContentResolver().query(
+                images,
+                PROJECTION_BUCKET,
+                BUCKET_GROUP_BY,
+                null,
+                BUCKET_ORDER_BY);
+
+        if (cur.moveToFirst()) {
+            String bucketname;
+            String date;
+            String data;
+            long bucketId;
+            int bucketColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+            int dateColumn = cur.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN);
+            int dataColumn = cur.getColumnIndex(MediaStore.Images.Media.DATA);
+            int bucketIdColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
+
+            int currentMonth = -1;
+            int currentYear = -1;
+
+
+            do {
+                // Get the field values
+                bucketname = cur.getString(bucketColumn);
+                date = cur.getString(dateColumn);
+                data = cur.getString(dataColumn);
+                bucketId = cur.getInt(bucketIdColumn);
+
+                numimages++;
+
+                if (date != null) {
+                    long milliseconds = Long.parseLong(date); // since 1/1/1970
+                    Calendar cl = Calendar.getInstance();
+                    cl.setTimeInMillis(milliseconds);
+                    int month = cl.get(Calendar.MONTH);
+                    int year = cl.get(Calendar.YEAR);
+
+                    numimagesWithDate++;
+
+                    if (bucketname != null && bucketname.length() > 0) {
+
+                        if (month != currentMonth || year != currentYear) {
+                            currentMonth = month;
+                            currentYear = year;
+
+                            File f = new File(data);
+                            String albumdate = cl.getDisplayName(Calendar.MONTH, Calendar.LONG , Locale.US) + " " + year;
+                            Album album = new Album(albumdate, year, month, f, f.getParentFile());
+                            albums.add(album);
+                        }
+                    }
+                }
+            } while (cur.moveToNext());
+        }
+        cur.close();
+        Log.d("DAVE", "found " +numimages+" images in " + albums.size()+" albums. Of which "+numimagesWithDate+" images with date");
+        return albums;
+    }
+
+    public static ArrayList<File> getMediaInMonth(Context context, int month, int year) {
+
+        long minDate;
+        long maxDate;
+
+        Calendar c = Calendar.getInstance();
+        c.set(year, month, 1, 0, 0, 0);
+        minDate = c.getTimeInMillis();
+        c.set(year, month+1, 1, 0, 0, 0);
+        maxDate = c.getTimeInMillis();
+
+        Log.d("DAVE", "getting files for " + month + "/" + year + " between " + Long.toString(minDate) + " and " + Long.toString(maxDate));
+
+        // which image properties are we querying
+        String[] projection = new String[]{
+                MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.Media.DATA,
+                MediaStore.Images.Media.DATE_TAKEN
+        };
+
+        // Get the base URI for ...
+        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        String[] selectionArgs = null;
+        String selectionClause = null;
+        String OrderBy = MediaStore.Images.Media.DATE_TAKEN + " DESC";
+        // get media in specified month
+        selectionArgs = new String[2];
+        selectionArgs[0] = Long.toString(minDate); // min date
+        selectionArgs[1] = Long.toString(maxDate); // max date
+        selectionClause = MediaStore.Images.Media.DATE_TAKEN + ">=? and "+MediaStore.MediaColumns.DATE_ADDED +"<=?";
+
+        // Make the query.
+        Cursor cur = context.getContentResolver().query(
+                images,     // URI
+                projection, // Which columns to return
+                selectionClause,       // WHERE clause  (null = all rows)
+                selectionArgs,       // Selection arguments (null = none)
+                null        // Ordering
+        );
+
+        if (cur.getCount() == 0)
+            return null;
+
+        ArrayList<File> files = new ArrayList<File>();
+
+        if (cur.moveToFirst()) {
+            String bucket;
+            String dateTakenString;
+            String data;
+
+            Date dateTaken;
+            Date dateAdded;
+
+            int bucketColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+
+            int dateTakenColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATE_TAKEN);
+
+            int dataColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATA);
+
+            do {
+                // Get the field values
+                bucket = cur.getString(bucketColumn);
+                dateTakenString = cur.getString(dateTakenColumn);
+                dateTaken = new Date(Long.parseLong(dateTakenString));
+                Log.d("DATE", dateTaken.toString());
+                data = cur.getString(dataColumn);
+
+                files.add(new File(data));
+
+            } while (cur.moveToNext());
+        }
+        return files;
+    }
+
+
 }

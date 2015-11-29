@@ -9,14 +9,30 @@ public class Album {
     private File albumFolder;
     private String albumName;
     private File firstFile;
+    private int year;
+    private int month;
 
     public Album(String name, File firstFile, File folder)
     {
-        this.albumFolder = folder;
         this.albumName = name;
         this.firstFile = firstFile;
+        this.albumFolder = folder;
+        this.month = -1;
+        this.year = -1;
     }
 
+
+    public Album(String name, int year, int month, File firstFile, File folder)
+    {
+        this.albumName = name;
+        this.firstFile = firstFile;
+        this.albumFolder = folder;
+        this.month = month;
+        this.year = year;
+    }
+
+    public int getMonth() { return this.month;}
+    public int getYear() { return this.year;}
     public File getFolder() { return this.albumFolder;}
     public File getFirstFile() { return this.firstFile;}
     public String getName() { return this.albumName; }
