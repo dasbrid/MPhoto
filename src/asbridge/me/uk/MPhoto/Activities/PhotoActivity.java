@@ -209,7 +209,15 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
             slideshowSharedState = true;
         }
 
-        filelist = Utils.getAllFiles(albumFolder);
+//        filelist = Utils.getAllFiles(albumFolder);
+
+        if (Utils.getFromMediaPreference(this)) {
+            // get all files (in this folder and in subfolders)
+            String albumname = new File (albumFolder).getName();
+            filelist = Utils.getMediaInBucket(this, albumname);
+        } else {
+            filelist = Utils.getAllFiles(albumFolder);
+        }
 
         photoPagerAdapter.setFileList(filelist);
         photoPagerAdapter.notifyDataSetChanged();
