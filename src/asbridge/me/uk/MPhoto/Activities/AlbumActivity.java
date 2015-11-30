@@ -1,21 +1,15 @@
 package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.*;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 import asbridge.me.uk.MPhoto.Classes.CheckedFile;
-import asbridge.me.uk.MPhoto.Classes.DeleteFilesDialog;
+import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewImageAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
@@ -29,7 +23,7 @@ import java.util.ArrayList;
  * Created by David on 10/11/2015.
  * An Activity for viewing (and later editing/sharing) all the photos in an album
  */
-public class AlbumActivity extends Activity {
+public class AlbumActivity extends Activity implements DeleteConfirmDialog.DeleteDialogOKListener{
     private GridViewImageAdapter adapter;
     private GridView gridView;
     private String albumAbsolutePath;
@@ -183,16 +177,34 @@ public class AlbumActivity extends Activity {
         startActivity(Intent.createChooser(emailIntent, "Send mail:"));
     }
 
+    // Delete dialog button clicked (callback)
+    public void onDeleteDialogOK() {
+        Toast.makeText(this, "Delete files", Toast.LENGTH_LONG).show();
+        ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();
+        File fileToDelete;
+        for (int i = 0; i < selectedFiles.size(); i++) {
+            fileToDelete = selectedFiles.get(i).getFile();
+            // Only actually delete if deletion enabled
+            if (AppConstant.ALLOW_DELETE) {
+                // DON'T DELETE   fileToDelete.delete();
+            }
+            imageFiles.remove(selectedFiles.get(i));
+        }
+        adapter.clearSelection();
+        adapter.notifyDataSetChanged();
+    }
+
      // button delete clicked. Delete selected images
     public void btnDeleteClicked(View v)
     {
-        ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();
-
-        // ask for confirmation. pass the necessary references to do the deletion in the dialog
-        DeleteFilesDialog dialog = new DeleteFilesDialog(selectedFiles, imageFiles,  adapter);
+        // show confirm dialog. OK will call back to OnDeleteDialogOK
         FragmentManager fm = getFragmentManager();
-        dialog.show(fm,"DLG_DELETE_TAG");
-
+        DeleteConfirmDialog deleteDialog = new DeleteConfirmDialog();
+        Bundle args = new Bundle();
+        args.putString("title", "Delete Pictures");
+        args.putString("message", "Are you sure you want to delete the selected pictures?");
+        deleteDialog.setArguments(args);
+        deleteDialog.show(fm, "fragment_delete_dialog");
     }
 
     // button clicked, launch slideshow for this folder

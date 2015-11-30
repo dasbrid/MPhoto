@@ -2,18 +2,18 @@ package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+//import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.Classes.PhotoViewPager;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.PhotoPagerAdapter;
@@ -28,7 +28,7 @@ import java.util.Timer;
  * Created by David on 04/11/2015.
  * See http://developer.android.com/training/animation/screen-slide.html
  */
-public class PhotoActivity extends FragmentActivity implements PhotoViewPager.OnTouchedListener {
+public class PhotoActivity extends FragmentActivity implements PhotoViewPager.OnTouchedListener, DeleteConfirmDialog.DeleteDialogOKListener {
 
     private int numPages;
     private ArrayList<File> filelist;
@@ -234,9 +234,22 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         numPages = filelist.size();
     }
 
-    // button delete clicked. Delete selected images
+    // button delete clicked.
     public void btnPhotoDeleteClicked(View v)
     {
+        // show confirm dialog
+        FragmentManager fm = getFragmentManager();
+        DeleteConfirmDialog deleteDialog = new DeleteConfirmDialog();
+        Bundle args = new Bundle();
+        args.putString("title", "Delete Picture");
+        args.putString("message", "Are you sure you want to delete this picture?");
+        deleteDialog.setArguments(args);
+        deleteDialog.show(fm, "fragment_delete_dialog");
+    }
+
+    // Delete dialog button clicked (callback)
+    public void onDeleteDialogOK() {
+        Toast.makeText(this, "Delete", Toast.LENGTH_LONG).show();
         int currentPage = pager.getCurrentItem();
         File currentFile = this.filelist.get(currentPage);
 
