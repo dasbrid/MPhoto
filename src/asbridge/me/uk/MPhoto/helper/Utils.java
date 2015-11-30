@@ -48,6 +48,15 @@ public class Utils {
         return folder;
     }
 
+
+    public static String getphotoDatePreference(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        String photoDate = prefs.getString("photoDate", "DateTaken");
+        return photoDate;
+    }
+
     // TODO: first image may be in a subfolder
     public static File getFirstImageInFolder(File folder)
     {
@@ -441,7 +450,7 @@ public class Utils {
         c.set(year, month+1, 1, 0, 0, 0);
         maxDate = c.getTimeInMillis();
 
-        Log.d("DAVE", "getting files for " + month + "/" + year + " between " + Long.toString(minDate) + " and " + Long.toString(maxDate));
+
 
         // which image properties are we querying
         String[] projection = new String[]{
@@ -461,7 +470,14 @@ public class Utils {
         selectionArgs = new String[2];
         selectionArgs[0] = Long.toString(minDate); // min date
         selectionArgs[1] = Long.toString(maxDate); // max date
-        selectionClause = MediaStore.Images.Media.DATE_TAKEN + ">=? and "+MediaStore.MediaColumns.DATE_ADDED +"<=?";
+
+        String photoDatePreference;
+        if (Utils.getphotoDatePreference(context)== "DateTaken")
+            photoDatePreference = MediaStore.Images.Media.DATE_TAKEN;
+        else
+            photoDatePreference = MediaStore.Images.Media.DATE_ADDED;
+
+        selectionClause = photoDatePreference + ">=? and "+ photoDatePreference +"<=?";
 
         // Make the query.
         Cursor cur = context.getContentResolver().query(
@@ -474,7 +490,7 @@ public class Utils {
 
         if (cur.getCount() == 0)
             return null;
-
+        Log.d("DAVE", "got " + cur.getCount() + " files for " + month + "/" + year + " between " + Long.toString(minDate) + " and " + Long.toString(maxDate));
         ArrayList<File> files = new ArrayList<File>();
 
         if (cur.moveToFirst()) {

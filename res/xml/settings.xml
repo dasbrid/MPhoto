@@ -17,4 +17,11 @@
             android:summary="Choose whether to load from media or folders"
             android:defaultValue="false"
     />
+    <ListPreference
+            android:key="photoDate"
+            android:title="Date for Photos"
+            android:summary="Use the date taken, or the date added to the device"
+            android:defaultValue="DateTaken"
+            android:entries="@array/photoDateKeys"
+            android:entryValues="@array/photoDateValues"/>
 </PreferenceScreen>
