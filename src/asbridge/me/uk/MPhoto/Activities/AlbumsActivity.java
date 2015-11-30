@@ -27,14 +27,16 @@ public class AlbumsActivity extends Activity {
     // stores whether we are currently loading from media or folders
     // used to detect change in this setting on resume
     private boolean fromMediaPreference;
-
+    private String  photoDatePreference;
     // Called after starting or when resuming (no saved instance state)
     @Override
     protected void onResume() {
         super.onResume();  // Always call the superclass method first
 
         // If preferences have changed (or Creating activity)
-        if (Utils.getFromMediaPreference(this) == fromMediaPreference)
+        if (Utils.getFromMediaPreference(this) == fromMediaPreference
+                && photoDatePreference != null
+                && Utils.getphotoDatePreference(this) == photoDatePreference)
             return; // no change in preference
 
         // change in preference ... reload the albums
@@ -104,6 +106,7 @@ public class AlbumsActivity extends Activity {
 
         // next line will trigger reading of files in onCreate
         fromMediaPreference = !Utils.getFromMediaPreference(this);
+        photoDatePreference = null;
 
         adapter = new GridViewAlbumAdapter(AlbumsActivity.this, albums);
         gridView.setAdapter(adapter);

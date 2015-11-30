@@ -202,6 +202,9 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         String albumFolder = parameters.getString("folderAbsolutePath");
         Integer positionParameter = parameters.getInt("position");
 
+        int albumMonth = parameters.getInt("month");
+        int albumYear = parameters.getInt("year");
+
         if (positionParameter != -1)
         {
             // we have been passed a specific photo index.
@@ -215,8 +218,12 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
 
         if (Utils.getFromMediaPreference(this)) {
             // get all files (in this folder and in subfolders)
+            /*
             String albumname = new File (albumFolder).getName();
             filelist = Utils.getMediaInBucket(this, albumname);
+            */
+            Log.d("DAVE", "displaying photos for " + albumMonth +"/" + albumYear);
+            filelist = Utils.getMediaInMonth(this,albumMonth, albumYear);
         } else {
             filelist = Utils.getAllFiles(albumFolder);
         }

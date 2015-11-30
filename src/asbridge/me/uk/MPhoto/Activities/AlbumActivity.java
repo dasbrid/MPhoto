@@ -75,7 +75,6 @@ public class AlbumActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
-        Toast.makeText(this,"onCreate",Toast.LENGTH_LONG).show();
         gridView = (GridView) findViewById(R.id.grid_view);
 
         Bundle parameters = getIntent().getExtras();
@@ -106,7 +105,7 @@ public class AlbumActivity extends Activity {
 
         //this.albumname = new File (albumAbsolutePath).getName();
         String albumTitle;
-        getActionBar().setTitle(albumname); // + albumMonth + " " + albumYear);
+        getActionBar().setTitle(albumname);
 
         ArrayList<File> files;
         if (Utils.getFromMediaPreference(this)) {
@@ -118,13 +117,17 @@ public class AlbumActivity extends Activity {
         }
 
         this.imageFiles = new ArrayList<CheckedFile>();
-        for (int i=0;i<files.size();i++)
-        {
-            this.imageFiles.add(new CheckedFile(files.get(i)));
+        if (files != null) {
+            for (int i = 0; i < files.size(); i++) {
+                this.imageFiles.add(new CheckedFile(files.get(i)));
+            }
+        } else {
+            Toast.makeText(this, "No files found", Toast.LENGTH_SHORT).show();
+            Button btnStartSlideshow = (Button)findViewById(R.id.btnStartSlideshow);
+            btnStartSlideshow.setEnabled(false);
         }
-
         // Gridview adapter
-        adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles, albumFolder); //albumFolder);//, columnWidth);
+        adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles, albumFolder, albumMonth, albumYear);
         // setting grid view adapter
         gridView.setAdapter(adapter);
 
@@ -202,6 +205,8 @@ public class AlbumActivity extends Activity {
         Intent intent = new Intent(this, PhotoActivity.class);
         intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
         intent.putExtra("position", -1);
+        intent.putExtra("month", this.albumMonth);
+        intent.putExtra("year", this.albumYear);
         this.startActivityForResult(intent,100);
     }
 

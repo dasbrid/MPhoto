@@ -31,11 +31,15 @@ public class GridViewImageAdapter extends BaseAdapter  {
     private Activity _context;
     private ArrayList<CheckedFile> _files;
     private String _albumFolder;
+    private int albumMonth;
+    private int albumYear;
 
-    public GridViewImageAdapter(Activity activity, ArrayList<CheckedFile> imageFiles, String albumFolder) {
+    public GridViewImageAdapter(Activity activity, ArrayList<CheckedFile> imageFiles, String albumFolder, int albumMonth, int albumYear) {
         this._context = activity;
         this._files = imageFiles;
         this._albumFolder = albumFolder;
+        this.albumMonth = albumMonth;
+        this.albumYear = albumYear;
     }
 
     public interface ISelectionChangedEventListener {
@@ -94,7 +98,7 @@ public class GridViewImageAdapter extends BaseAdapter  {
         }
         holder.checkbox.setChecked(isImageSelected(position));
         holder.checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
-        holder.btnViewPhoto.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder));
+        holder.btnViewPhoto.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder, albumMonth, albumYear));
         Bitmap bMap = Utils.decodeFileToThumbnail(_files.get(position).getFile());
         holder.image.setImageBitmap(bMap);
 
@@ -125,10 +129,14 @@ public class GridViewImageAdapter extends BaseAdapter  {
 
         int _position;
         String _albumFolder;
+        int albumMonth;
+        int albumYear;
         // constructor
-        public OnbtnViewPhotoClickListener(int position, String albumFolder) {
+        public OnbtnViewPhotoClickListener(int position, String albumFolder, int albumMonth, int albumYear ) {
             this._position = position;
             this._albumFolder = albumFolder;
+            this.albumMonth = albumMonth;
+            this.albumYear = albumYear;
         }
         // on click listener for view button
         @Override
@@ -139,6 +147,8 @@ public class GridViewImageAdapter extends BaseAdapter  {
                 Intent intent = new Intent(_context, PhotoActivity.class);
                 intent.putExtra("folderAbsolutePath", this._albumFolder);
                 intent.putExtra("position", _position);
+                intent.putExtra("month", albumMonth);
+                intent.putExtra("year", albumYear);
                 _context.startActivityForResult(intent,100);
             }
         }

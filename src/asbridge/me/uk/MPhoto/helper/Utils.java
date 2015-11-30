@@ -367,14 +367,25 @@ public class Utils {
 
         ArrayList<Album> albums = new ArrayList<>();
 
+        String photoDatePreference;
+        String storedpref;
+        storedpref = Utils.getphotoDatePreference(context);
+        Log.d("DAVE", storedpref);
+        if (Utils.getphotoDatePreference(context).equals("DateTaken"))
+            photoDatePreference = MediaStore.Images.Media.DATE_TAKEN;
+        else
+            photoDatePreference = MediaStore.Images.Media.DATE_ADDED;
+
         String[] PROJECTION_BUCKET = {
                 MediaStore.Images.Media.BUCKET_ID,
                 MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-                MediaStore.Images.Media.DATE_TAKEN,
+                photoDatePreference,
                 MediaStore.Images.Media.DATA };
 
-        String BUCKET_GROUP_BY = null; // no group by "1) GROUP BY 1,(2"; // this is really WHERE (1) GROUP BY 1,(2)
-        String BUCKET_ORDER_BY = "datetaken DESC"; // oldest photo first
+        String BUCKET_GROUP_BY = null; // no group by
+
+
+        String BUCKET_ORDER_BY = photoDatePreference + " DESC"; // oldest photo first
 
         Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         int numimages = 0;
@@ -393,7 +404,7 @@ public class Utils {
             String data;
             long bucketId;
             int bucketColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-            int dateColumn = cur.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN);
+            int dateColumn = cur.getColumnIndex(photoDatePreference);
             int dataColumn = cur.getColumnIndex(MediaStore.Images.Media.DATA);
             int bucketIdColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
 
@@ -435,7 +446,7 @@ public class Utils {
             } while (cur.moveToNext());
         }
         cur.close();
-        Log.d("DAVE", "found " +numimages+" images in " + albums.size()+" albums. Of which "+numimagesWithDate+" images with date");
+        Log.d("DAVE", "using "+ photoDatePreference + " found " +numimages+" images in " + albums.size()+" albums. Of which "+numimagesWithDate+" images with date");
         return albums;
     }
 
@@ -472,7 +483,7 @@ public class Utils {
         selectionArgs[1] = Long.toString(maxDate); // max date
 
         String photoDatePreference;
-        if (Utils.getphotoDatePreference(context)== "DateTaken")
+        if (Utils.getphotoDatePreference(context).equals("DateTaken"))
             photoDatePreference = MediaStore.Images.Media.DATE_TAKEN;
         else
             photoDatePreference = MediaStore.Images.Media.DATE_ADDED;
@@ -490,7 +501,7 @@ public class Utils {
 
         if (cur.getCount() == 0)
             return null;
-        Log.d("DAVE", "got " + cur.getCount() + " files for " + month + "/" + year + " between " + Long.toString(minDate) + " and " + Long.toString(maxDate));
+        Log.d("DAVE", "search by " + photoDatePreference + "got " + cur.getCount() + " files for " + month + "/" + year + " between " + Long.toString(minDate) + " and " + Long.toString(maxDate));
         ArrayList<File> files = new ArrayList<File>();
 
         if (cur.moveToFirst()) {
