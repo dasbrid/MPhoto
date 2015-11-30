@@ -1,6 +1,6 @@
 package asbridge.me.uk.MPhoto.Activities;
 
-import android.app.Activity;
+import android.app.*;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 import asbridge.me.uk.MPhoto.Classes.CheckedFile;
+import asbridge.me.uk.MPhoto.Classes.DeleteFilesDialog;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewImageAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
@@ -187,16 +188,11 @@ public class AlbumActivity extends Activity {
     {
         ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();
 
-        File fileToDelete;
-        for (int i = 0; i < selectedFiles.size(); i++) {
-            fileToDelete = selectedFiles.get(i).getFile();
-            // Only actually delete if deletion enabled
-            if (AppConstant.ALLOW_DELETE)
-                fileToDelete.delete();
-            this.imageFiles.remove(selectedFiles.get(i));
-        }
-        adapter.clearSelection();
-        adapter.notifyDataSetChanged();
+        // ask for confirmation. pass the necessary references to do the deletion in the dialog
+        DeleteFilesDialog dialog = new DeleteFilesDialog(selectedFiles, imageFiles,  adapter);
+        FragmentManager fm = getFragmentManager();
+        dialog.show(fm,"DLG_DELETE_TAG");
+
     }
 
     // button clicked, launch slideshow for this folder
