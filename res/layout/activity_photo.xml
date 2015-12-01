@@ -9,11 +9,11 @@
 
 
     <asbridge.me.uk.MPhoto.Classes.PhotoViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/photopager"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:onClick="btnPhotoClicked"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/photopager"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:onClick="btnPhotoClicked"
     />
 
     <Button android:id="@+id/btnPhotoStartSlideshow"
@@ -39,4 +39,11 @@
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/btnPhotoDelete"
             android:minWidth="200px" />
+    <ToggleButton android:id="@+id/btnshuffleOn"
+                  android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:textOn="Shuffle On"
+                  android:textOff="Shuffle Off"
+                  android:layout_alignParentBottom="true"
+                  android:layout_toRightOf="@id/btnPhotoShare"
+    />
 </RelativeLayout>

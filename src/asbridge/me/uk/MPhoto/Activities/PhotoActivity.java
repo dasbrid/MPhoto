@@ -12,7 +12,9 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.Classes.PhotoViewPager;
 import asbridge.me.uk.MPhoto.R;
@@ -22,18 +24,22 @@ import asbridge.me.uk.MPhoto.helper.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 
 /**
  * Created by David on 04/11/2015.
  * See http://developer.android.com/training/animation/screen-slide.html
  */
-public class PhotoActivity extends FragmentActivity implements PhotoViewPager.OnTouchedListener, DeleteConfirmDialog.DeleteDialogOKListener {
+public class PhotoActivity extends FragmentActivity implements PhotoViewPager.OnTouchedListener, DeleteConfirmDialog.DeleteDialogOKListener,
+        ToggleButton.OnCheckedChangeListener {
 
     private int numPages;
     private ArrayList<File> filelist;
     private boolean slideshowOn;
     private boolean slideshowSharedState;
+    private boolean shuffleOn;
+    private boolean shuffleSharedState;
     private boolean modified;
 
     // The time (in seconds) for which the navigation controls are visible after screen interaction.
@@ -47,6 +53,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     private Button btnPhotoShare;
     private Button btnPhotoDelete;
     private Button btnStartSlideshow;
+    private ToggleButton btnShuffleOn;
 
     private PhotoPagerAdapter photoPagerAdapter;
     private PhotoViewPager pager;
@@ -58,10 +65,20 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         public void run() {
             if (slideshowOn == false)
                 return;
-            // TODO: don't keep the page here, use a method on the adapter or pager or whatever e.g. showNextPage()
-            pager.setCurrentItemManual(page++);
-            if (page >= numPages)
-                page = 0;
+            if (shuffleOn && filelist.size() > 1) {
+                int newpage = page;
+                Random r = new Random();
+                while (newpage == page) {
+                    newpage = r.nextInt(filelist.size());
+                }
+                page = newpage;
+            } else {
+                page++;
+                if (page >= numPages)
+                    page = 0;
+            }
+
+            pager.setCurrentItemManual(page);
 
             // to keep the slideshow going, start the timer again
             handler.postDelayed(this, SLIDE_SHOW_DELAY * 1000);
@@ -115,6 +132,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);        // Save the slideshow status
         savedInstanceState.putBoolean("slideshowOn", slideshowOn);
+        savedInstanceState.putBoolean("shuffleOn", shuffleOn);
         savedInstanceState.putInt("currentPage", pager.getCurrentItem());
     }
 
@@ -130,6 +148,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         // Always call the superclass so it can restore the view hierarchy
         super.onRestoreInstanceState(savedInstanceState);
         slideshowSharedState = savedInstanceState.getBoolean("slideshowOn");
+        shuffleOn = savedInstanceState.getBoolean("shuffleOn");
         page = savedInstanceState.getInt("currentPage");
     }
 
@@ -147,17 +166,22 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         super.onResume();  // Always call the superclass method first
         // get the saved (in memory state of the slideshow)
         slideshowOn = slideshowSharedState;
+        shuffleOn = shuffleSharedState;
         pager.setCurrentItemManual(page);
+
+        btnShuffleOn.setChecked(shuffleOn);
 
         if (slideshowOn) {
             startSlideshow();
             btnStartSlideshow.setVisibility(View.INVISIBLE);
             btnPhotoDelete.setVisibility(View.INVISIBLE);
             btnPhotoShare.setVisibility(View.INVISIBLE);
+            btnShuffleOn.setVisibility(View.INVISIBLE);
         } else {
             btnStartSlideshow.setVisibility(View.VISIBLE);
             btnPhotoDelete.setVisibility(View.VISIBLE);
             btnPhotoShare.setVisibility(View.VISIBLE);
+            btnShuffleOn.setVisibility(View.VISIBLE);
         }
         // Code to make layout fullscreen. In onResume, otherwise when activity comes back it will revert to non-fullscreen
         // http://developer.android.com/training/system-ui/status.html
@@ -173,6 +197,11 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         actionBar.hide();
     }
 
+
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        shuffleOn = isChecked;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.v("TAG","onCreate");
@@ -184,12 +213,15 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         if (savedInstanceState == null) {
             slideshowSharedState = true;
             slideshowOn = true;
+            shuffleOn = false;
         }
 
         setContentView(R.layout.activity_photo);
         btnStartSlideshow = (Button) findViewById(R.id.btnPhotoStartSlideshow);
         btnPhotoDelete = (Button) findViewById(R.id.btnPhotoDelete);
         btnPhotoShare = (Button) findViewById(R.id.btnPhotoShare);
+        btnShuffleOn = (ToggleButton) findViewById(R.id.btnshuffleOn);
+        btnShuffleOn.setOnCheckedChangeListener(this);
 
         photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager());
 

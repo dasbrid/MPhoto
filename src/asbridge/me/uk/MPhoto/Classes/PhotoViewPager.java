@@ -32,6 +32,7 @@ public class PhotoViewPager extends ViewPager {
     }
 
     public void setCurrentItemManual(int pageNumber) {
+        if (pageNumber != getCurrentItem())
             setCurrentItem(pageNumber);
     }
 
