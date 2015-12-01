@@ -258,7 +258,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
             }
             else if (albumMonth == -1 && albumYear != -1) {
                 // Year but no month ... Get all for this year
-                //                filelist = Utils.getMediaInYear(this, albumYear);
+                filelist = Utils.getMediaInYear(this, albumYear);
             } else if (albumMonth == -2 && albumYear == -2) {
                 // Get RECENT files
                 filelist = Utils.getRecentMedia(this);
