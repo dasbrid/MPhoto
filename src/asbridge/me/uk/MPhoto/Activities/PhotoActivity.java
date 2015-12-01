@@ -251,13 +251,20 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         }
 
         if (Utils.getFromMediaPreference(this)) {
-            // get all files (in this folder and in subfolders)
-            /*
-            String albumname = new File (albumFolder).getName();
-            filelist = Utils.getMediaInBucket(this, albumname);
-            */
             Log.d("DAVE", "displaying photos for " + albumMonth +"/" + albumYear);
-            filelist = Utils.getMediaInMonth(this,albumMonth, albumYear);
+            if (albumYear == 0 && albumMonth == 0) {
+                // ALL files
+                filelist = Utils.getMediaInDateRange(this, -1, -1);
+            }
+            else if (albumMonth == -1 && albumYear != -1) {
+                // Year but no month ... Get all for this year
+                //                filelist = Utils.getMediaInYear(this, albumYear);
+            } else if (albumMonth == -2 && albumYear == -2) {
+                // Get RECENT files
+                filelist = Utils.getRecentMedia(this);
+            } else {
+                filelist = Utils.getMediaInMonth(this, albumMonth, albumYear);
+            }
         } else {
             filelist = Utils.getAllFiles(albumFolder);
         }

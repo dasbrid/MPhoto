@@ -4,6 +4,7 @@ import android.app.*;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -79,34 +80,46 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
         this.albumYear = parameters.getInt("year");
         this.albumAbsolutePath = albumFolder;
         modified = false;
-        if (albumAbsolutePath == null)
-        {
-            Toast.makeText(this,"photos folder null",Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, SettingsActivity.class));
-            return;
-        }
-        if (albumAbsolutePath == "")
-        {
-            Toast.makeText(this,"photos folder is empty string",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this, SettingsActivity.class));
-            return;
+
+        if (!Utils.getFromMediaPreference(this)) {
+            if (albumAbsolutePath == null) {
+                Toast.makeText(this, "photos folder null", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, SettingsActivity.class));
+                return;
+            }
+            if (albumAbsolutePath == "") {
+                Toast.makeText(this, "photos folder is empty string", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, SettingsActivity.class));
+                return;
+            }
+
+            if (!new File(albumAbsolutePath).isDirectory()) {
+                Toast.makeText(this, "photos root folder is not a folder", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(this, SettingsActivity.class));
+                return;
+            }
         }
 
-        if (!new File(albumAbsolutePath).isDirectory()) {
-            Toast.makeText(this,"photos root folder is not a folder",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this, SettingsActivity.class));
-            return;
-        }
-
-        //this.albumname = new File (albumAbsolutePath).getName();
-        String albumTitle;
         getActionBar().setTitle(albumname);
 
         ArrayList<File> files;
         if (Utils.getFromMediaPreference(this)) {
-            // get all files (in this folder and in subfolders)
             // files = Utils.getMediaInBucket(this, albumname);
-            files = Utils.getMediaInMonth(this, albumMonth, albumYear);
+            Log.d("DAVE", "displaying album for " + albumMonth +"/" + albumYear);
+            if (albumYear == 0 && albumMonth == 0) {
+                // ALL files
+                files = Utils.getMediaInDateRange(this, -1, -1);
+            }
+            else if (albumMonth == -1 && albumYear != -1) {
+                // Year but no month ... Get all for this year
+                files = Utils.getMediaInYear(this, albumYear);
+            } else if (albumMonth == -2 && albumYear == -2) {
+                // Get RECENT files
+                files = Utils.getRecentMedia(this);
+            } else {
+                // Year and month specified ... get for this month
+                files = Utils.getMediaInMonth(this, albumMonth, albumYear);
+            }
         } else {
             files = Utils.getAllFiles(albumAbsolutePath);
         }

@@ -362,8 +362,15 @@ public class Utils {
         return albums;
     }
 
-
     public static ArrayList<Album> getAlbumsFromMediaGroupedByMonth(Context context) {
+        return getAlbumsFromMediaGrouped(context, true);
+    }
+
+    public static ArrayList<Album> getAlbumsFromMediaGroupedByYear(Context context) {
+        return getAlbumsFromMediaGrouped(context, false);
+    }
+
+    public static ArrayList<Album> getAlbumsFromMediaGrouped(Context context, boolean groupbyMonth) {
 
         ArrayList<Album> albums = new ArrayList<>();
 
@@ -431,14 +438,26 @@ public class Utils {
                     numimagesWithDate++;
 
                     if (bucketname != null && bucketname.length() > 0) {
-
-                        if (month != currentMonth || year != currentYear) {
+                        boolean newGroup = false;
+                        if (groupbyMonth == false) {
+                            newGroup = (year != currentYear);
+                        } else {
+                            newGroup = (month != currentMonth || year != currentYear);
+                        }
+                        if (newGroup) {
                             currentMonth = month;
                             currentYear = year;
-
+                            String albumdate;
                             File f = new File(data);
-                            String albumdate = cl.getDisplayName(Calendar.MONTH, Calendar.LONG , Locale.US) + " " + year;
-                            Album album = new Album(albumdate, year, month, f, f.getParentFile());
+                            int albumMonth;
+                            if (groupbyMonth) {
+                                albumdate = cl.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + " " + year;
+                                albumMonth = month;
+                            } else {
+                                albumdate = Integer.toString(year);
+                                albumMonth = -1;
+                            }
+                            Album album = new Album(albumdate, year, albumMonth, f, f.getParentFile());
                             albums.add(album);
                         }
                     }
@@ -451,17 +470,47 @@ public class Utils {
     }
 
     public static ArrayList<File> getMediaInMonth(Context context, int month, int year) {
-
         long minDate;
         long maxDate;
 
         Calendar c = Calendar.getInstance();
-        c.set(year, month, 1, 0, 0, 0);
+        c.set(year, month, 1);
         minDate = c.getTimeInMillis();
-        c.set(year, month+1, 1, 0, 0, 0);
+        c.add(Calendar.MONTH, 1);
         maxDate = c.getTimeInMillis();
 
+        return getMediaInDateRange(context, minDate, maxDate);
+    }
 
+    public static ArrayList<File> getMediaInYear(Context context, int year) {
+        long minDate;
+        long maxDate;
+
+        Calendar c = Calendar.getInstance();
+        c.set(year, 0, 1, 0, 0, 0);
+        minDate = c.getTimeInMillis();
+        c.set(year+1, 0, 1, 0, 0, 0);
+        maxDate = c.getTimeInMillis();
+        return getMediaInDateRange(context, minDate, maxDate);
+    }
+
+    public static ArrayList<File> getAllMedia(Context context, int year) {
+        return getMediaInDateRange(context, -1, -1);
+    }
+
+
+    public static ArrayList<File> getRecentMedia(Context context) {
+        long minDate;
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.YEAR, -1);
+        minDate = c.getTimeInMillis();
+        return getMediaInDateRange(context, minDate, -1);
+    }
+
+    public static ArrayList<File> getMediaInDateRange(Context context, long minDate, long maxDate) {
+
+        Log.d("DAVE", "searching between " + Long.toString(minDate) + " and " + Long.toString(maxDate));
 
         // which image properties are we querying
         String[] projection = new String[]{
@@ -477,10 +526,6 @@ public class Utils {
         String[] selectionArgs = null;
         String selectionClause = null;
         String OrderBy = MediaStore.Images.Media.DATE_TAKEN + " DESC";
-        // get media in specified month
-        selectionArgs = new String[2];
-        selectionArgs[0] = Long.toString(minDate); // min date
-        selectionArgs[1] = Long.toString(maxDate); // max date
 
         String photoDatePreference;
         if (Utils.getphotoDatePreference(context).equals("DateTaken"))
@@ -488,7 +533,21 @@ public class Utils {
         else
             photoDatePreference = MediaStore.Images.Media.DATE_ADDED;
 
-        selectionClause = photoDatePreference + ">=? and "+ photoDatePreference +"<=?";
+        if (minDate != -1 && maxDate != -1) {
+            // get media in specified time range
+            selectionArgs = new String[2];
+            selectionArgs[0] = Long.toString(minDate); // min date
+            selectionArgs[1] = Long.toString(maxDate); // max date
+            selectionClause = photoDatePreference + ">=? and " + photoDatePreference + "<=?";
+        }
+
+        if (minDate != -1 && maxDate == -1) {
+            // get media in from specified start time
+            selectionArgs = new String[1];
+            selectionArgs[0] = Long.toString(minDate); // min date
+            selectionClause = photoDatePreference + ">=?";
+            Log.d("DAVE", "recent files:"+selectionClause);
+        }
 
         // Make the query.
         Cursor cur = context.getContentResolver().query(
@@ -496,12 +555,12 @@ public class Utils {
                 projection, // Which columns to return
                 selectionClause,       // WHERE clause  (null = all rows)
                 selectionArgs,       // Selection arguments (null = none)
-                null        // Ordering
+                photoDatePreference + " desc"        // Ordering
         );
 
         if (cur.getCount() == 0)
             return null;
-        Log.d("DAVE", "search by " + photoDatePreference + "got " + cur.getCount() + " files for " + month + "/" + year + " between " + Long.toString(minDate) + " and " + Long.toString(maxDate));
+
         ArrayList<File> files = new ArrayList<File>();
 
         if (cur.moveToFirst()) {
@@ -534,6 +593,34 @@ public class Utils {
             } while (cur.moveToNext());
         }
         return files;
+    }
+
+    public static ArrayList<Album> getLotsOfAlbumsFromMedia(Context context) {
+        ArrayList<Album> albums = new ArrayList<>();
+
+        // get everything grouped by months
+        ArrayList<Album> monthAlbums = new ArrayList<>();
+        monthAlbums = getAlbumsFromMediaGroupedByMonth(context);
+
+        // get everything grouped by years, (note the month is -1)
+        ArrayList<Album> yearAlbums = new ArrayList<>();
+        yearAlbums = getAlbumsFromMediaGroupedByYear(context);
+
+        // the first file in the first album, a 'random' choice as the thumbnail for some esoteric albums
+        File firstFile = monthAlbums.get(0).getFirstFile();
+
+        // create a dummy album for all photos (note the year is 0)
+        Album allPhotos = new Album("All Photos",0, 0, firstFile, null);
+
+        // create an album of recent pictures (note the month and year are -2)
+        Album recentPhotos = new Album("Recent Photos",-2, -2, firstFile, null);
+
+        // add the albums to the list
+        albums.add(allPhotos);
+        albums.add(recentPhotos);
+        albums.addAll(yearAlbums);
+        albums.addAll(monthAlbums);
+        return albums;
     }
 
 
