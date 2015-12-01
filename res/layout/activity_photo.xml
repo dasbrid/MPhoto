@@ -20,8 +20,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"
             android:onClick="btnPhotoStartSlideshowClicked"
             android:text="Start Slideshow"
     />
@@ -40,10 +38,10 @@
             android:layout_toRightOf="@id/btnPhotoDelete"
             android:minWidth="200px" />
     <ToggleButton android:id="@+id/btnshuffleOn"
-                  android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:textOn="Shuffle On"
-                  android:textOff="Shuffle Off"
-                  android:layout_alignParentBottom="true"
-                  android:layout_toRightOf="@id/btnPhotoShare"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textOn="Shuffle On"
+            android:textOff="Shuffle Off"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/btnPhotoShare"
     />
 </RelativeLayout>

@@ -106,6 +106,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         btnStartSlideshow.setVisibility(View.INVISIBLE);
         btnPhotoDelete.setVisibility(View.INVISIBLE);
         btnPhotoShare.setVisibility(View.INVISIBLE);
+        btnShuffleOn.setVisibility(View.INVISIBLE);
         page = pager.getCurrentItem();
         startSlideshow();
     }
@@ -116,6 +117,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         btnStartSlideshow.setVisibility(View.VISIBLE);
         btnPhotoDelete.setVisibility(View.VISIBLE);
         btnPhotoShare.setVisibility(View.VISIBLE);
+        btnShuffleOn.setVisibility(View.VISIBLE);
     }
 
     private void stopSlideshow() {
