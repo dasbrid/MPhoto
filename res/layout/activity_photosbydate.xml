@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <Spinner android:id="@+id/spinnerMonth"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+    />
+    <NumberPicker android:id="@+id/numberpickerYear"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_toRightOf="@id/spinnerMonth"
+    />
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Photos"
+            android:id="@+id/btnShowAlbum"
+            android:onClick="btnShowAlbumClicked"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/numberpickerYear"
+    />
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Slideshow"
+            android:id="@+id/btnShowSlideshow"
+            android:onClick="btnShowSlideshowClicked"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="36dp"
+            android:layout_below="@id/btnShowAlbum"
+    />
+</RelativeLayout>

@@ -4,13 +4,6 @@
             android:key="rootPhotosFolder"
             android:summary="Full path of the root folder for photo albums"
             android:title="Root album for photos" />
-    <ListPreference
-            android:key="slideshowDelay"
-            android:title="Slideshow speed"
-            android:summary="Set the speed of the slideshow"
-            android:defaultValue="3"
-            android:entries="@array/slideshowSpeedKeys"
-            android:entryValues="@array/slideshowSpeedValues" />
     <CheckBoxPreference
             android:key="fromMedia"
             android:title="Load photos from media"

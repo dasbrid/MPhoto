@@ -287,6 +287,11 @@ public class PhotoActivity extends FragmentActivity
             filelist = Utils.getAllFiles(albumFolder);
         }
 
+        if (filelist == null)
+        {
+            filelist = new ArrayList<File>();
+            Toast.makeText(this,"No pictures found", Toast.LENGTH_LONG).show();
+        }
         photoPagerAdapter.setFileList(filelist);
         photoPagerAdapter.notifyDataSetChanged();
         modified = false;
