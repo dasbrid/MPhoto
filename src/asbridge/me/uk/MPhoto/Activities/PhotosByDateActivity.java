@@ -3,16 +3,19 @@ package asbridge.me.uk.MPhoto.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.*;
 import asbridge.me.uk.MPhoto.R;
+import asbridge.me.uk.MPhoto.adapter.TabsAdapter;
 
 import java.util.Calendar;
 
 /**
  * Created by David on 02/12/2015.
  */
-public class PhotosByDateActivity extends Activity {
+public class PhotosByDateActivity extends FragmentActivity {
 
     private static final String[] MONTHS = new String[] { "January", "February",
             "March", "April", "May", "June", "July", "August", "September",
@@ -35,6 +38,9 @@ public class PhotosByDateActivity extends Activity {
         npYear.setMinValue(2011);
         npYear.setMaxValue(2016);
 
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final TabsAdapter tabsAdapter = new TabsAdapter(getSupportFragmentManager(), 2 /*number of tabs*/);
+        viewPager.setAdapter(tabsAdapter);
     }
 
     public void btnShowSlideshowClicked(View v) {
