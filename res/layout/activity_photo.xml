@@ -9,19 +9,19 @@
 
 
     <asbridge.me.uk.MPhoto.Classes.PhotoViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/photopager"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:onClick="btnPhotoClicked"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/photopager"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:onClick="btnPhotoClicked"
     />
 
     <Button android:id="@+id/btnPhotoStartSlideshow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"
+            android:paddingRight="2dp"
+            android:paddingLeft="2dp"
             android:onClick="btnPhotoStartSlideshowClicked"
             android:text="Start Slideshow"
     />
@@ -31,19 +31,24 @@
             android:onClick="btnPhotoDeleteClicked"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/btnPhotoStartSlideshow"
-            android:minWidth="200px" />
+            android:paddingRight="2dp"
+            android:paddingLeft="2dp" />
     <Button android:id="@+id/btnPhotoShare"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Share"
             android:onClick="btnPhotoShareClicked"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/btnPhotoDelete"
-            android:minWidth="200px" />
+            android:paddingRight="2dp"
+            android:paddingLeft="2dp" />
     <ToggleButton android:id="@+id/btnshuffleOn"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:textOn="Shuffle On"
-            android:textOff="Shuffle Off"
+            android:textOn="Turn shuffle off"
+            android:textOff="Turn shuffle on"
+            android:disabledAlpha="1"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/btnPhotoShare"
-            />
+            android:paddingRight="2dp"
+            android:paddingLeft="2dp"
+    />
 </RelativeLayout>

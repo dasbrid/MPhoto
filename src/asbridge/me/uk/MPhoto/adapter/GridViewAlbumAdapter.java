@@ -143,7 +143,7 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             // button clicked, launch slideshow for this folder
             Album album = _albums.get(_position);
             Intent intent = new Intent(_context, PhotoActivity.class);
-            intent.putExtra("folderAbsolutePath", album.getFolder() == null ? null :album.getFolder().getAbsolutePath()); //folder.getAbsolutePath());
+            intent.putExtra("folderAbsolutePath", album.getFolder() == null ? null :album.getFolder().getAbsolutePath());
             intent.putExtra("position", -1);
             intent.putExtra("month", album.getMonth());
             intent.putExtra("year", album.getYear());

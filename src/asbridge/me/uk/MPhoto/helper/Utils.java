@@ -469,11 +469,13 @@ public class Utils {
         return albums;
     }
 
+    // Get media in a given month (of a given year)
     public static ArrayList<File> getMediaInMonth(Context context, int month, int year) {
         long minDate;
         long maxDate;
 
         Calendar c = Calendar.getInstance();
+        c.clear(); // set all fields (HH:MM:SS) to 0
         c.set(year, month, 1);
         minDate = c.getTimeInMillis();
         c.add(Calendar.MONTH, 1);
@@ -482,6 +484,8 @@ public class Utils {
         return getMediaInDateRange(context, minDate, maxDate);
     }
 
+    // Get all media in specified year
+    // Calculates min and max dates and gets data inbetween
     public static ArrayList<File> getMediaInYear(Context context, int year) {
         long minDate;
         long maxDate;
@@ -494,11 +498,12 @@ public class Utils {
         return getMediaInDateRange(context, minDate, maxDate);
     }
 
+    // Just get all the media. No dates specified
     public static ArrayList<File> getAllMedia(Context context, int year) {
         return getMediaInDateRange(context, -1, -1);
     }
 
-
+    // Get all media since a certain tima ago (e.g. one year)
     public static ArrayList<File> getRecentMedia(Context context) {
         long minDate;
 
@@ -508,6 +513,10 @@ public class Utils {
         return getMediaInDateRange(context, minDate, -1);
     }
 
+    // Get Media between two dates (using Query) from content provider
+    // Used by other methods
+    // If maxdate is -1 then no max date is used (up to present date)
+    // If minDate and maxdate are both -1 then no clause is used and we get all media
     public static ArrayList<File> getMediaInDateRange(Context context, long minDate, long maxDate) {
 
         Log.d("DAVE", "searching between " + Long.toString(minDate) + " and " + Long.toString(maxDate));
@@ -595,6 +604,9 @@ public class Utils {
         return files;
     }
 
+    ///////////////////////////////////////////////////////////////////
+    // Get all the different types of albums from the media store
+    ///////////////////////////////////////////////////////////////////
     public static ArrayList<Album> getLotsOfAlbumsFromMedia(Context context) {
         ArrayList<Album> albums = new ArrayList<>();
 
@@ -622,5 +634,6 @@ public class Utils {
         albums.addAll(monthAlbums);
         return albums;
     }
+
 
 }
