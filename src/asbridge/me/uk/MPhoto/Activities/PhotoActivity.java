@@ -108,9 +108,9 @@ public class PhotoActivity extends FragmentActivity
         }
     };
 
+    // callback from the slideshow speed dialog after OK clicked
     public void slideshowSpeedChanged(int newSpeed)
     {
-        Toast.makeText(this, "speed = " + newSpeed,Toast.LENGTH_SHORT).show();
         Utils.setSlideshowDelay(this,newSpeed);
     }
 

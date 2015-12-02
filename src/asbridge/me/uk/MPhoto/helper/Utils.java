@@ -53,8 +53,8 @@ public class Utils {
     {
         SharedPreferences sharedPref = context.getSharedPreferences("Asbridge.Me.Uk.MPhoto",Context.MODE_PRIVATE);
 
-        String ssd = sharedPref.getString("slideshowDelay", "3");
-        return Integer.parseInt(ssd);
+        int ssd = sharedPref.getInt("slideshowDelay", 3);
+        return ssd;
     }
 
     public static void setSlideshowDelay(Context context, int ssd)
