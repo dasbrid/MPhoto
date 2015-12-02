@@ -44,7 +44,7 @@ public class AlbumsActivity extends Activity {
         ArrayList<Album> listOfAlbums = new ArrayList<Album>();
         if (fromMediaPreference) {
             // listOfAlbums = Utils.getAlbumsFromMedia(this);
-            listOfAlbums = Utils.getLotsOfAlbumsFromMedia(this);
+            listOfAlbums = Utils.getLotsOfAlbumsFromMedia(this); //getAlbumsFromMediaGroupedByMonth(this);
         } else {
             String rootPhotosFolder = Utils.getRootPhotosFolder(this);
 

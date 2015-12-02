@@ -2,20 +2,20 @@ package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
-//import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.Classes.PhotoViewPager;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.PhotoPagerAdapter;
@@ -31,8 +31,7 @@ import java.util.Timer;
  * Created by David on 04/11/2015.
  * See http://developer.android.com/training/animation/screen-slide.html
  */
-public class PhotoActivity extends FragmentActivity implements PhotoViewPager.OnTouchedListener, DeleteConfirmDialog.DeleteDialogOKListener,
-        ToggleButton.OnCheckedChangeListener {
+public class PhotoActivity extends FragmentActivity implements PhotoViewPager.OnTouchedListener, ToggleButton.OnCheckedChangeListener {
 
     private int numPages;
     private ArrayList<File> filelist;
@@ -54,6 +53,8 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     private Button btnPhotoDelete;
     private Button btnStartSlideshow;
     private ToggleButton btnShuffleOn;
+
+
 
     private PhotoPagerAdapter photoPagerAdapter;
     private PhotoViewPager pager;
@@ -199,7 +200,6 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         actionBar.hide();
     }
 
-
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         shuffleOn = isChecked;
     }
@@ -251,6 +251,11 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         }
 
         if (Utils.getFromMediaPreference(this)) {
+            // get all files (in this folder and in subfolders)
+            /*
+            String albumname = new File (albumFolder).getName();
+            filelist = Utils.getMediaInBucket(this, albumname);
+            */
             Log.d("DAVE", "displaying photos for " + albumMonth +"/" + albumYear);
             if (albumYear == 0 && albumMonth == 0) {
                 // ALL files
@@ -258,7 +263,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
             }
             else if (albumMonth == -1 && albumYear != -1) {
                 // Year but no month ... Get all for this year
-                filelist = Utils.getMediaInYear(this, albumYear);
+                //                filelist = Utils.getMediaInYear(this, albumYear);
             } else if (albumMonth == -2 && albumYear == -2) {
                 // Get RECENT files
                 filelist = Utils.getRecentMedia(this);
@@ -275,22 +280,9 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         numPages = filelist.size();
     }
 
-    // button delete clicked.
+    // button delete clicked. Delete selected images
     public void btnPhotoDeleteClicked(View v)
     {
-        // show confirm dialog
-        FragmentManager fm = getFragmentManager();
-        DeleteConfirmDialog deleteDialog = new DeleteConfirmDialog();
-        Bundle args = new Bundle();
-        args.putString("title", "Delete Picture");
-        args.putString("message", "Are you sure you want to delete this picture?");
-        deleteDialog.setArguments(args);
-        deleteDialog.show(fm, "fragment_delete_dialog");
-    }
-
-    // Delete dialog button clicked (callback)
-    public void onDeleteDialogOK() {
-        Toast.makeText(this, "Delete", Toast.LENGTH_LONG).show();
         int currentPage = pager.getCurrentItem();
         File currentFile = this.filelist.get(currentPage);
 
