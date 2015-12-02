@@ -20,8 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:paddingRight="2dp"
-            android:paddingLeft="2dp"
+            android:padding="@dimen/photo_button_padding"
             android:onClick="btnPhotoStartSlideshowClicked"
             android:text="Start Slideshow"
     />
@@ -31,16 +30,16 @@
             android:onClick="btnPhotoDeleteClicked"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/btnPhotoStartSlideshow"
-            android:paddingRight="2dp"
-            android:paddingLeft="2dp" />
+            android:padding="@dimen/photo_button_padding"
+    />
     <Button android:id="@+id/btnPhotoShare"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Share"
             android:onClick="btnPhotoShareClicked"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/btnPhotoDelete"
-            android:paddingRight="2dp"
-            android:paddingLeft="2dp" />
+            android:padding="@dimen/photo_button_padding"
+    />
     <ToggleButton android:id="@+id/btnshuffleOn"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:textOn="Turn shuffle off"
@@ -48,7 +47,14 @@
             android:disabledAlpha="1"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@id/btnPhotoShare"
-            android:paddingRight="2dp"
-            android:paddingLeft="2dp"
+            android:padding="@dimen/photo_button_padding"
+    />
+    <Button android:id="@+id/btnSlideShowSpeed"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Slideshow Speed"
+            android:onClick="btnSlideShowSpeedClicked"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@id/btnshuffleOn"
+            android:padding="@dimen/photo_button_padding"
     />
 </RelativeLayout>

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -39,7 +40,7 @@ public class Utils {
         boolean fromMedia = prefs.getBoolean("fromMedia", false);
         return fromMedia;
     }
-
+/*
     public static String getSlideshowDelay(Context context)
     {
         SharedPreferences prefs = PreferenceManager
@@ -47,7 +48,22 @@ public class Utils {
         String folder = prefs.getString("slideshowDelay", "3");
         return folder;
     }
+*/
+    public static int getSlideshowDelay(Context context)
+    {
+        SharedPreferences sharedPref = context.getSharedPreferences("Asbridge.Me.Uk.MPhoto",Context.MODE_PRIVATE);
 
+        String ssd = sharedPref.getString("slideshowDelay", "3");
+        return Integer.parseInt(ssd);
+    }
+
+    public static void setSlideshowDelay(Context context, int ssd)
+    {
+        SharedPreferences sharedPref = context.getSharedPreferences("Asbridge.Me.Uk.MPhoto",Context.MODE_PRIVATE);
+        SharedPreferences.Editor settingsEditor = sharedPref.edit();
+        settingsEditor.putInt("slideshowDelay", ssd);
+        settingsEditor.commit();
+    }
 
     public static String getphotoDatePreference(Context context)
     {

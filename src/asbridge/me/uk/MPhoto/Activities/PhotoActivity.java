@@ -17,6 +17,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.Classes.PhotoViewPager;
+import asbridge.me.uk.MPhoto.Classes.SlideshowSpeedDialog;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.PhotoPagerAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
@@ -31,7 +32,11 @@ import java.util.Timer;
  * Created by David on 04/11/2015.
  * See http://developer.android.com/training/animation/screen-slide.html
  */
-public class PhotoActivity extends FragmentActivity implements PhotoViewPager.OnTouchedListener, DeleteConfirmDialog.DeleteDialogOKListener,
+public class PhotoActivity extends FragmentActivity
+        implements
+        PhotoViewPager.OnTouchedListener,
+        DeleteConfirmDialog.DeleteDialogOKListener,
+        SlideshowSpeedDialog.SlideshowSpeedChangedListener,
         ToggleButton.OnCheckedChangeListener {
 
     private int numPages;
@@ -45,7 +50,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     // The time (in seconds) for which the navigation controls are visible after screen interaction.
     private static int SHOW_NAVIGATION_CONTROLS_TIME = 3;
     // Delay between slides
-    private static int SLIDE_SHOW_DELAY;
+    //private static int SLIDE_SHOW_DELAY;
 
     private Timer timer;
     private int page = 0;
@@ -53,6 +58,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     private Button btnPhotoShare;
     private Button btnPhotoDelete;
     private Button btnStartSlideshow;
+    private Button btnSlideshowSpeed;
     private ToggleButton btnShuffleOn;
 
     private PhotoPagerAdapter photoPagerAdapter;
@@ -81,7 +87,8 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
             pager.setCurrentItemManual(page);
 
             // to keep the slideshow going, start the timer again
-            handler.postDelayed(this, SLIDE_SHOW_DELAY * 1000);
+            int ssd = Utils.getSlideshowDelay(getApplicationContext());
+            handler.postDelayed(this, ssd * 1000);
 
         }
     };
@@ -101,12 +108,19 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         }
     };
 
+    public void slideshowSpeedChanged(int newSpeed)
+    {
+        Toast.makeText(this, "speed = " + newSpeed,Toast.LENGTH_SHORT).show();
+        Utils.setSlideshowDelay(this,newSpeed);
+    }
+
     // button clicked - restart the slideshow
     public void btnPhotoStartSlideshowClicked(View v) {
         btnStartSlideshow.setVisibility(View.INVISIBLE);
         btnPhotoDelete.setVisibility(View.INVISIBLE);
         btnPhotoShare.setVisibility(View.INVISIBLE);
         btnShuffleOn.setVisibility(View.INVISIBLE);
+        btnSlideshowSpeed.setVisibility(View.INVISIBLE);
         page = pager.getCurrentItem();
         startSlideshow();
     }
@@ -118,6 +132,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         btnPhotoDelete.setVisibility(View.VISIBLE);
         btnPhotoShare.setVisibility(View.VISIBLE);
         btnShuffleOn.setVisibility(View.VISIBLE);
+        btnSlideshowSpeed.setVisibility(View.VISIBLE);
     }
 
     private void stopSlideshow() {
@@ -126,7 +141,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
 
     private void startSlideshow() {
         slideshowOn = true;
-        handler.postDelayed(runnable, SLIDE_SHOW_DELAY);
+        handler.postDelayed(runnable, Utils.getSlideshowDelay(this));
     }
     
     @Override
@@ -179,11 +194,13 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
             btnPhotoDelete.setVisibility(View.INVISIBLE);
             btnPhotoShare.setVisibility(View.INVISIBLE);
             btnShuffleOn.setVisibility(View.INVISIBLE);
+            btnSlideshowSpeed.setVisibility(View.INVISIBLE);
         } else {
             btnStartSlideshow.setVisibility(View.VISIBLE);
             btnPhotoDelete.setVisibility(View.VISIBLE);
             btnPhotoShare.setVisibility(View.VISIBLE);
             btnShuffleOn.setVisibility(View.VISIBLE);
+            btnSlideshowSpeed.setVisibility(View.VISIBLE);
         }
         // Code to make layout fullscreen. In onResume, otherwise when activity comes back it will revert to non-fullscreen
         // http://developer.android.com/training/system-ui/status.html
@@ -209,7 +226,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         Log.v("TAG","onCreate");
 
         super.onCreate(savedInstanceState);
-        SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
+        // SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
 
         // if we are starting for first time (not restarting)
         if (savedInstanceState == null) {
@@ -222,6 +239,7 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
         btnStartSlideshow = (Button) findViewById(R.id.btnPhotoStartSlideshow);
         btnPhotoDelete = (Button) findViewById(R.id.btnPhotoDelete);
         btnPhotoShare = (Button) findViewById(R.id.btnPhotoShare);
+        btnSlideshowSpeed = (Button) findViewById(R.id.btnSlideShowSpeed);
         btnShuffleOn = (ToggleButton) findViewById(R.id.btnshuffleOn);
         btnShuffleOn.setOnCheckedChangeListener(this);
 
@@ -276,6 +294,17 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
     }
 
     // button delete clicked.
+    public void btnSlideShowSpeedClicked(View v) {
+    // show confirm dialog
+    FragmentManager fm = getFragmentManager();
+    SlideshowSpeedDialog slideshowspeeddialog = new SlideshowSpeedDialog();
+    Bundle args = new Bundle();
+    args.putInt("currentValue", Utils.getSlideshowDelay(this));
+    slideshowspeeddialog.setArguments(args);
+    slideshowspeeddialog.show(fm, "fragment_slideshowspeed_dialog");
+    }
+
+    // button delete clicked.
     public void btnPhotoDeleteClicked(View v)
     {
         // show confirm dialog
@@ -290,7 +319,6 @@ public class PhotoActivity extends FragmentActivity implements PhotoViewPager.On
 
     // Delete dialog button clicked (callback)
     public void onDeleteDialogOK() {
-        Toast.makeText(this, "Delete", Toast.LENGTH_LONG).show();
         int currentPage = pager.getCurrentItem();
         File currentFile = this.filelist.get(currentPage);
 
