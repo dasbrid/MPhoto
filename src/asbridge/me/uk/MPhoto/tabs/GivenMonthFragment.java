@@ -13,12 +13,11 @@ import android.widget.Spinner;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.R;
-import android.support.v4.app.Fragment;
 
 /**
  * Created by David on 02/12/2015.
  */
-public class MonthFragment extends TabFragment {
+public class GivenMonthFragment extends TabFragment {
 
     private static final String[] MONTHS = new String[] { "January", "February",
             "March", "April", "May", "June", "July", "August", "September",
@@ -29,7 +28,7 @@ public class MonthFragment extends TabFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_month, container, false);
+        View v = inflater.inflate(R.layout.fragment_given_month, container, false);
         npYear = (NumberPicker) v.findViewById(R.id.numberpickerYearMonth);
         npYear.setMinValue(2011);
         npYear.setMaxValue(2016);
@@ -42,7 +41,7 @@ public class MonthFragment extends TabFragment {
     }
 
     public void doSlideshow() {
-        Log.d("DAVE", "YearFragment.doSlideshow" );
+        Log.d("DAVE", "GivenYearFragment.doSlideshow" );
         // get the MONTH
         String spunMonth = spinnerMonth.getSelectedItem().toString();
         int month = spinnerMonth.getSelectedItemPosition();
@@ -53,6 +52,7 @@ public class MonthFragment extends TabFragment {
         // start the slideshow activity
         Intent intent = new Intent(getActivity(), PhotoActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
+        intent.putExtra("albumType", "givenMonth");
         intent.putExtra("position", -1);
         intent.putExtra("month", month);
         intent.putExtra("year", year);
@@ -61,7 +61,7 @@ public class MonthFragment extends TabFragment {
 
     public void viewAlbum() {
         // do some shit
-        Log.d("DAVE", "YearFragment.viewAlbum" );
+        Log.d("DAVE", "GivenYearFragment.viewAlbum" );
         // get the MONTH
         String spunMonth = spinnerMonth.getSelectedItem().toString();
         int month = spinnerMonth.getSelectedItemPosition();
@@ -73,6 +73,7 @@ public class MonthFragment extends TabFragment {
         Intent intent = new Intent(getActivity(), AlbumActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
         intent.putExtra("albumName", "Photos taken in Month "+(month+1) + " in " + year);
+        intent.putExtra("albumType", "givenMonth");
         intent.putExtra("position", -1);
         intent.putExtra("month", month);
         intent.putExtra("year", year);

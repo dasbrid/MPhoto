@@ -3,12 +3,9 @@ package asbridge.me.uk.MPhoto.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.view.ViewGroup;
-import asbridge.me.uk.MPhoto.tabs.MonthFragment;
-import asbridge.me.uk.MPhoto.tabs.TabFragment;
-import asbridge.me.uk.MPhoto.tabs.YearFragment;
+import asbridge.me.uk.MPhoto.tabs.*;
 
 /**
  * Created by David on 02/12/2015.
@@ -16,9 +13,9 @@ import asbridge.me.uk.MPhoto.tabs.YearFragment;
 public class TabsAdapter extends FragmentPagerAdapter {
     int mNumOfTabs;
     TabFragment currentFragment;
-    public TabsAdapter(FragmentManager fm, int NumOfTabs) {
+    public TabsAdapter(FragmentManager fm) {
         super(fm);
-        this.mNumOfTabs = NumOfTabs;
+        this.mNumOfTabs = 6;
     }
 
     public TabFragment getCurrentFragment() {
@@ -40,14 +37,23 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                MonthFragment tab1 = new MonthFragment();
-                return tab1;
+                GivenMonthFragment tab0 = new GivenMonthFragment();
+                return tab0;
             case 1:
-                YearFragment tab2 = new YearFragment();
-                return tab2;
-/*
+                GivenYearFragment tab1 = new GivenYearFragment();
+                return tab1;
             case 2:
-*/
+                FromDateFragment tab2 = new FromDateFragment();
+                return tab2;
+            case 3:
+                AllPhotosFragment tab3 = new AllPhotosFragment();
+                return tab3;
+            case 4:
+                ThisYearFragment tab4 = new ThisYearFragment();
+                return tab4;
+            case 5:
+                ByBucketsFragment tab5 = new ByBucketsFragment();
+                return tab5;
             default:
                 return null;
         }

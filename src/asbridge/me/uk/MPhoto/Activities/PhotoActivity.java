@@ -253,9 +253,15 @@ public class PhotoActivity extends FragmentActivity
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
         Integer positionParameter = parameters.getInt("position");
-
+        String albumType = parameters.getString("albumType");
         int albumMonth = parameters.getInt("month");
         int albumYear = parameters.getInt("year");
+        int albumDay = -1;
+        if (albumType.equals("fromDate"))
+            albumDay = parameters.getInt("day");
+        String albumname = null;
+        if (albumType.equals("bucket"))
+            albumname = parameters.getString("albumName");
 
         if (positionParameter != -1)
         {
@@ -270,9 +276,16 @@ public class PhotoActivity extends FragmentActivity
 
         if (Utils.getFromMediaPreference(this)) {
             Log.d("DAVE", "displaying photos for " + albumMonth +"/" + albumYear);
-            if (albumYear == 0 && albumMonth == 0) {
+
+            if (albumType.equals("bucket")) {
+                filelist = Utils.getMediaInBucket(this, albumname);
+            } else if (albumType.equals("thisYear")) {
+                filelist = Utils.getMediaInCurrentYear(this);
+            } else if (albumType.equals("fromDate")) {
+                filelist = Utils.getMediaFromDate(this,albumDay, albumMonth, albumYear);
+            } else if (albumType.equals("allPhotos")) {
                 // ALL files
-                filelist = Utils.getMediaInDateRange(this, -1, -1);
+                filelist = Utils.getAllMedia(this);
             }
             else if (albumMonth == -1 && albumYear != -1) {
                 // Year but no month ... Get all for this year

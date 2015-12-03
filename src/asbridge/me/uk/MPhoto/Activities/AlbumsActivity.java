@@ -43,8 +43,8 @@ public class AlbumsActivity extends Activity {
         fromMediaPreference = Utils.getFromMediaPreference(this); // change the stored preference
         ArrayList<Album> listOfAlbums = new ArrayList<Album>();
         if (fromMediaPreference) {
-            // listOfAlbums = Utils.getAlbumsFromMedia(this);
-            listOfAlbums = Utils.getLotsOfAlbumsFromMedia(this);
+            listOfAlbums = Utils.getAlbumsFromMedia(this);
+            //listOfAlbums = Utils.getLotsOfAlbumsFromMedia(this);
         } else {
             String rootPhotosFolder = Utils.getRootPhotosFolder(this);
 

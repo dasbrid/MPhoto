@@ -368,7 +368,7 @@ public class Utils {
                     // Do something with the values.
                     File f = new File(data);
 
-                    Album album = new Album(bucketname, f, f.getParentFile());
+                    Album album = new Album(bucketname, f, f.getParentFile(),"bucket");
                     albums.add(album);
                 }
             } while (cur.moveToNext());
@@ -515,7 +515,7 @@ public class Utils {
     }
 
     // Just get all the media. No dates specified
-    public static ArrayList<File> getAllMedia(Context context, int year) {
+    public static ArrayList<File> getAllMedia(Context context) {
         return getMediaInDateRange(context, -1, -1);
     }
 
@@ -525,6 +525,31 @@ public class Utils {
 
         Calendar c = Calendar.getInstance();
         c.add(Calendar.YEAR, -1);
+        minDate = c.getTimeInMillis();
+        return getMediaInDateRange(context, minDate, -1);
+    }
+
+    // Get all media in specified year
+    // Calculates min and max dates and gets data inbetween
+    public static ArrayList<File> getMediaInCurrentYear(Context context) {
+        long minDate;
+
+        Calendar c = Calendar.getInstance();
+        int currentYear;
+        currentYear = c.get(Calendar.YEAR);
+
+        c.set(currentYear, 0, 1, 0, 0, 0);
+        minDate = c.getTimeInMillis();
+        return getMediaInDateRange(context, minDate, -1);
+    }
+
+    // Get all media since a certain tima ago (e.g. one year)
+    public static ArrayList<File> getMediaFromDate(Context context, int day, int month, int year) {
+        long minDate;
+
+        Calendar c = Calendar.getInstance();
+        c.clear();
+        c.set(year, month, day);
         minDate = c.getTimeInMillis();
         return getMediaInDateRange(context, minDate, -1);
     }

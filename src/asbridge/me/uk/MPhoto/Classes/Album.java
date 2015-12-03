@@ -11,6 +11,7 @@ public class Album {
     private File firstFile;
     private int year;
     private int month;
+    private String albumType;
 
     public Album(String name, File firstFile, File folder)
     {
@@ -19,8 +20,18 @@ public class Album {
         this.albumFolder = folder;
         this.month = -1;
         this.year = -1;
+        this.albumType = "folder";
     }
 
+    public Album(String name, File firstFile, File folder, String type)
+    {
+        this.albumName = name;
+        this.firstFile = firstFile;
+        this.albumFolder = folder;
+        this.month = -1;
+        this.year = -1;
+        this.albumType = type;
+    }
 
     public Album(String name, int year, int month, File firstFile, File folder)
     {
@@ -36,5 +47,6 @@ public class Album {
     public File getFolder() { return this.albumFolder;}
     public File getFirstFile() { return this.firstFile;}
     public String getName() { return this.albumName; }
+    public String getType() { return this.albumType; }
 
 }

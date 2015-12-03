@@ -29,9 +29,11 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
     private GridView gridView;
     private String albumAbsolutePath;
     private ArrayList<CheckedFile> imageFiles;
-    private String albumname;
+    private String albumName;
     private int albumMonth;
     private int albumYear;
+    private int albumDay;
+    private String albumType;
 
     private boolean modified;
 
@@ -44,7 +46,7 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
             ArrayList<File> files;
             if (Utils.getFromMediaPreference(this)) {
                 // get all files (in this folder and in subfolders)
-                files = Utils.getMediaInBucket(this, this.albumname);
+                files = Utils.getMediaInBucket(this, this.albumName);
             } else {
                 files = Utils.getAllFiles(albumAbsolutePath);
             }
@@ -75,9 +77,15 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
 
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
-        this.albumname = parameters.getString("albumName");
+        this.albumType = parameters.getString("albumType");
+        this.albumName = parameters.getString("albumName");
         this.albumMonth = parameters.getInt("month");
         this.albumYear = parameters.getInt("year");
+        if (this.albumType.equals("fromDate")) {
+            this.albumDay = parameters.getInt("day");
+        } else {
+            this.albumDay = -1;
+        }
         this.albumAbsolutePath = albumFolder;
         modified = false;
 
@@ -100,17 +108,22 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
             }
         }
 
-        getActionBar().setTitle(albumname);
+        getActionBar().setTitle(albumName);
 
         ArrayList<File> files;
         if (Utils.getFromMediaPreference(this)) {
-            // files = Utils.getMediaInBucket(this, albumname);
+            // files = Utils.getMediaInBucket(this, albumName);
             Log.d("DAVE", "displaying album for " + albumMonth +"/" + albumYear);
-            if (albumYear == 0 && albumMonth == 0) {
+            if (albumType.equals("bucket")) {
+                files = Utils.getMediaInBucket(this, albumName);
+            } else if (albumType.equals("thisYear")) {
+                files = Utils.getMediaInCurrentYear(this);
+            } else if (albumType.equals("fromDate")) {
+                files = Utils.getMediaFromDate(this,albumDay, albumMonth, albumYear);
+            } else if (albumType.equals("allPhotos")) {
                 // ALL files
-                files = Utils.getMediaInDateRange(this, -1, -1);
-            }
-            else if (albumMonth == -1 && albumYear != -1) {
+                files = Utils.getAllMedia(this);
+            } else if (albumMonth == -1 && albumYear != -1) {
                 // Year but no month ... Get all for this year
                 files = Utils.getMediaInYear(this, albumYear);
             } else if (albumMonth == -2 && albumYear == -2) {
@@ -125,7 +138,7 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
         }
 
         this.imageFiles = new ArrayList<CheckedFile>();
-        if (files != null) {
+        if (files != null && files.size() != 0) {
             for (int i = 0; i < files.size(); i++) {
                 this.imageFiles.add(new CheckedFile(files.get(i)));
             }
@@ -135,7 +148,7 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
             btnStartSlideshow.setEnabled(false);
         }
         // Gridview adapter
-        adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles, albumFolder, albumMonth, albumYear);
+        adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles, albumFolder, albumMonth, albumYear, albumName, albumType);
         // setting grid view adapter
         gridView.setAdapter(adapter);
 
@@ -223,11 +236,15 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
     // button clicked, launch slideshow for this folder
     public void btnStartSlideshowClicked(View v)
     {
+        Log.d("DAVE", "start slideshow for type "+this.albumType+" name = "+this.albumName);
         Intent intent = new Intent(this, PhotoActivity.class);
         intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
+        intent.putExtra("albumType", this.albumType);
+        intent.putExtra("albumName", this.albumName);
         intent.putExtra("position", -1);
         intent.putExtra("month", this.albumMonth);
         intent.putExtra("year", this.albumYear);
+        intent.putExtra("day", this.albumDay);
         this.startActivityForResult(intent,100);
     }
 

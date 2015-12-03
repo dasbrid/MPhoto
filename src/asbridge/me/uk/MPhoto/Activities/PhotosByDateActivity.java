@@ -1,19 +1,12 @@
 package asbridge.me.uk.MPhoto.Activities;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.*;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.TabsAdapter;
-import asbridge.me.uk.MPhoto.tabs.MonthFragment;
 import asbridge.me.uk.MPhoto.tabs.TabFragment;
-
-import java.util.Calendar;
 
 /**
  * Created by David on 02/12/2015.
@@ -28,7 +21,7 @@ public class PhotosByDateActivity extends FragmentActivity {
         setContentView(R.layout.activity_photosbydate);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.pagertabs);
-        tabsAdapter = new TabsAdapter(getSupportFragmentManager(), 2 /*number of tabs*/);
+        tabsAdapter = new TabsAdapter(getSupportFragmentManager());
         viewPager.setAdapter(tabsAdapter);
     }
 

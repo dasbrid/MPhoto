@@ -33,13 +33,17 @@ public class GridViewImageAdapter extends BaseAdapter  {
     private String _albumFolder;
     private int albumMonth;
     private int albumYear;
+    private String albumName;
+    private String albumType;
 
-    public GridViewImageAdapter(Activity activity, ArrayList<CheckedFile> imageFiles, String albumFolder, int albumMonth, int albumYear) {
+    public GridViewImageAdapter(Activity activity, ArrayList<CheckedFile> imageFiles, String albumFolder, int albumMonth, int albumYear, String albumName, String albumType) {
         this._context = activity;
         this._files = imageFiles;
         this._albumFolder = albumFolder;
         this.albumMonth = albumMonth;
         this.albumYear = albumYear;
+        this.albumName = albumName;
+        this.albumType = albumType;
     }
 
     public interface ISelectionChangedEventListener {
@@ -98,7 +102,7 @@ public class GridViewImageAdapter extends BaseAdapter  {
         }
         holder.checkbox.setChecked(isImageSelected(position));
         holder.checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
-        holder.btnViewPhoto.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder, albumMonth, albumYear));
+        holder.btnViewPhoto.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder, albumMonth, albumYear, albumName, albumType));
         Bitmap bMap = Utils.decodeFileToThumbnail(_files.get(position).getFile());
         holder.image.setImageBitmap(bMap);
 
@@ -131,12 +135,17 @@ public class GridViewImageAdapter extends BaseAdapter  {
         String _albumFolder;
         int albumMonth;
         int albumYear;
+        String albumName;
+        String albumType;
+
         // constructor
-        public OnbtnViewPhotoClickListener(int position, String albumFolder, int albumMonth, int albumYear ) {
+        public OnbtnViewPhotoClickListener(int position, String albumFolder, int albumMonth, int albumYear , String albumName, String albumType) {
             this._position = position;
             this._albumFolder = albumFolder;
             this.albumMonth = albumMonth;
             this.albumYear = albumYear;
+            this.albumName = albumName;
+            this.albumType = albumType;
         }
         // on click listener for view button
         @Override
@@ -146,6 +155,8 @@ public class GridViewImageAdapter extends BaseAdapter  {
                 File f = _files.get(_position).getFile();
                 Intent intent = new Intent(_context, PhotoActivity.class);
                 intent.putExtra("folderAbsolutePath", this._albumFolder);
+                intent.putExtra("albumName",this.albumName);
+                intent.putExtra("albumType",this.albumType);
                 intent.putExtra("position", _position);
                 intent.putExtra("month", albumMonth);
                 intent.putExtra("year", albumYear);
