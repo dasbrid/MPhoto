@@ -17,6 +17,6 @@
     <NumberPicker android:id="@+id/numberpickerYearMonth"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:layout_toRightOf="@id/spinnerMonth"
+                  android:layout_toRightOf="@id/spinnerMonthMonth"
     />
 </RelativeLayout>

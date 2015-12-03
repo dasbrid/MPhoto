@@ -20,12 +20,6 @@ import java.util.Calendar;
  */
 public class PhotosByDateActivity extends FragmentActivity {
 
-    private static final String[] MONTHS = new String[] { "January", "February",
-            "March", "April", "May", "June", "July", "August", "September",
-            "October", "November", "December" };
-
-    private Spinner spinnerMonth;
-    private NumberPicker npYear;
     private TabsAdapter tabsAdapter;
 
     @Override
@@ -33,16 +27,7 @@ public class PhotosByDateActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photosbydate);
 
-        spinnerMonth = (Spinner) findViewById(R.id.spinnerMonth);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, MONTHS);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMonth.setAdapter(adapter);
-
-        npYear = (NumberPicker) findViewById(R.id.numberpickerYear);
-        npYear.setMinValue(2011);
-        npYear.setMaxValue(2016);
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pagertabs);
         tabsAdapter = new TabsAdapter(getSupportFragmentManager(), 2 /*number of tabs*/);
         viewPager.setAdapter(tabsAdapter);
     }
