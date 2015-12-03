@@ -3,12 +3,15 @@ package asbridge.me.uk.MPhoto.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.*;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.TabsAdapter;
+import asbridge.me.uk.MPhoto.tabs.MonthFragment;
+import asbridge.me.uk.MPhoto.tabs.TabFragment;
 
 import java.util.Calendar;
 
@@ -23,6 +26,7 @@ public class PhotosByDateActivity extends FragmentActivity {
 
     private Spinner spinnerMonth;
     private NumberPicker npYear;
+    private TabsAdapter tabsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,12 +42,15 @@ public class PhotosByDateActivity extends FragmentActivity {
         npYear.setMinValue(2011);
         npYear.setMaxValue(2016);
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final TabsAdapter tabsAdapter = new TabsAdapter(getSupportFragmentManager(), 2 /*number of tabs*/);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        tabsAdapter = new TabsAdapter(getSupportFragmentManager(), 2 /*number of tabs*/);
         viewPager.setAdapter(tabsAdapter);
     }
 
     public void btnShowSlideshowClicked(View v) {
+        TabFragment currentFragment = tabsAdapter.getCurrentFragment();
+        currentFragment.doSlideshow();
+        /*
         // get the MONTH
         String spunMonth = spinnerMonth.getSelectedItem().toString();
         int month = spinnerMonth.getSelectedItemPosition();
@@ -58,10 +65,13 @@ public class PhotosByDateActivity extends FragmentActivity {
         intent.putExtra("month", month);
         intent.putExtra("year", year);
         this.startActivity(intent);
-
+*/
     }
 
     public void btnShowAlbumClicked(View v) {
+        TabFragment currentFragment = tabsAdapter.getCurrentFragment();
+        currentFragment.viewAlbum();
+        /*
         // get the MONTH
         String spunMonth = spinnerMonth.getSelectedItem().toString();
         int month = spinnerMonth.getSelectedItemPosition();
@@ -77,6 +87,7 @@ public class PhotosByDateActivity extends FragmentActivity {
         intent.putExtra("month", month);
         intent.putExtra("year", year);
         this.startActivity(intent);
+        */
     }
 
 }
