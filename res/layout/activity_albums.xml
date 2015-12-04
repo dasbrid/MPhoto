@@ -3,11 +3,7 @@
           android:id="@+id/grid_view"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:verticalSpacing="2dp"
-          android:horizontalSpacing="2dp"
-          android:columnWidth="@dimen/grid_column_width"
-          android:numColumns="auto_fit"
-          android:gravity="center"
+          android:numColumns="@integer/albumgrid_number_columns"
           android:stretchMode="columnWidth"
-          android:background="@color/albumsgrid_background_color">
+>
 </GridView>

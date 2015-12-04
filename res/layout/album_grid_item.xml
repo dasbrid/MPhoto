@@ -4,12 +4,11 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent">
 
-    <ImageView
+    <asbridge.me.uk.MPhoto.Classes.SquareImageView
             android:id="@+id/grid_item_image"
-            android:layout_width="@dimen/thumb_size"
-            android:layout_height="@dimen/thumb_size"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:layout_gravity="center"
     />
     <Button android:id="@+id/btnSlideshow"
             android:layout_width="wrap_content"
