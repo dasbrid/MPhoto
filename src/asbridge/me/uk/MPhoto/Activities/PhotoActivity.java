@@ -22,6 +22,8 @@ import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.PhotoPagerAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.helper.Utils;
+import asbridge.me.uk.MPhoto.transformers.DepthPageTransformer;
+import asbridge.me.uk.MPhoto.transformers.ZoomOutPageTransformer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -249,7 +251,7 @@ public class PhotoActivity extends FragmentActivity
 
         pager.setAdapter(photoPagerAdapter);
         pager.setOnTouchedListener(this);
-
+        pager.setPageTransformer(true, new DepthPageTransformer());
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
         Integer positionParameter = parameters.getInt("position");

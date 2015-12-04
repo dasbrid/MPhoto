@@ -15,13 +15,13 @@
             android:layout_height="fill_parent"
             android:onClick="btnPhotoClicked"
     />
-<RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-              android:layout_alignParentBottom="true"
->
+
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:layout_alignParentBottom="true"
+    >
     <Button android:id="@+id/btnPhotoStartSlideshow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:padding="@dimen/photo_button_padding"
             android:onClick="btnPhotoStartSlideshowClicked"
             android:text="Start Slideshow"
@@ -30,7 +30,6 @@
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Delete"
             android:onClick="btnPhotoDeleteClicked"
-
             android:layout_toRightOf="@id/btnPhotoStartSlideshow"
             android:padding="@dimen/photo_button_padding"
     />
@@ -47,16 +46,16 @@
             android:text="Slideshow Speed"
             android:onClick="btnSlideShowSpeedClicked"
 
-            android:layout_below="@id/btnPhotoStartSlideshow"
+            android:layout_toRightOf="@id/btnPhotoShare"
             android:padding="@dimen/photo_button_padding"
     />
     <ToggleButton android:id="@+id/btnshuffleOn"
                   android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:textOn="Turn shuffle off"
                   android:textOff="Turn shuffle on"
-                  android:layout_below="@id/btnPhotoStartSlideshow"
+
                   android:layout_toRightOf="@id/btnSlideShowSpeed"
                   android:padding="@dimen/photo_button_padding"
     />
-</RelativeLayout>
+    </RelativeLayout>
 </RelativeLayout>
