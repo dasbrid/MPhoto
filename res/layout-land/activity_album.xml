@@ -54,11 +54,7 @@
               android:id="@+id/grid_view"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:verticalSpacing="2dp"
-              android:horizontalSpacing="2dp"
-              android:background="#000111"
-              android:columnWidth="@dimen/grid_column_width"
-              android:numColumns="auto_fit"
+              android:numColumns="@integer/albumgrid_number_columns"
               android:stretchMode="columnWidth"
               android:layout_above="@id/layoutbuttons"
     >

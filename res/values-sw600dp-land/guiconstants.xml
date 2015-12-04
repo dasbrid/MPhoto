@@ -16,4 +16,6 @@
 
     <dimen name="photosbydate_button_text_size">36sp</dimen>
     <dimen name="photosbydate_button_padding">16dp</dimen>
+
+    <integer name="albumgrid_number_columns">5</integer>
 </resources>

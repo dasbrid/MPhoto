@@ -17,4 +17,6 @@
     <dimen name="tabs_text_size">24dp</dimen>
     <dimen name="tabs_text_margin_bottom">4dp</dimen>
 
+    <integer name="albumgrid_number_columns">3</integer>
+
 </resources>
