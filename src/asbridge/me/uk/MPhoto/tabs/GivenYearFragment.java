@@ -11,27 +11,29 @@ import android.widget.NumberPicker;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.R;
+import asbridge.me.uk.MPhoto.controls.YearControl;
 
 /**
  * Created by David on 02/12/2015.
  */
 public class GivenYearFragment extends TabFragment {
 
-    private NumberPicker npYear;
-
+    private YearControl ycYear;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_given_year, container, false);
-        npYear = (NumberPicker) v.findViewById(R.id.numberpickerYearYear);
-        npYear.setMinValue(2011);
-        npYear.setMaxValue(2016);
+
+        ycYear= (YearControl) v.findViewById(R.id.yearControl);
+        ycYear.setMinYear(2011);
+        ycYear.setMaxYear(2018);
+
         return v;
     }
 
     public void doSlideshow() {
         Log.d("DAVE", "GivenYearFragment.doSlideshow" );
         // get the Year
-        int year = npYear.getValue();
+        int year = ycYear.getYear();
 
         // start the slideshow activity
         Intent intent = new Intent(getActivity(), PhotoActivity.class);
@@ -48,7 +50,7 @@ public class GivenYearFragment extends TabFragment {
         Log.d("DAVE", "GivenYearFragment.viewAlbum" );
 
         // get the Year
-        int year = npYear.getValue();
+        int year = ycYear.getYear();
 
         // start the slideshow activity
         Intent intent = new Intent(getActivity(), AlbumActivity.class);

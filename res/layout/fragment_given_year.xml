@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center">
     <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Year"
-            />
-    <NumberPicker android:id="@+id/numberpickerYearYear"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_below="@id/textView"
+            android:textSize="@dimen/tabs_text_size"
+            android:gravity="center_horizontal"
+            android:text="View all photos in selected year"
+            android:layout_marginBottom="@dimen/tabs_text_margin_bottom"
+    />
+
+    <asbridge.me.uk.MPhoto.controls.YearControl
+            android:id="@+id/yearControl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/textView"
     />
 </RelativeLayout>

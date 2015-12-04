@@ -3,13 +3,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tabbuttons"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+    >
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="View Photos"
             android:id="@+id/btnShowAlbum"
             android:onClick="btnShowAlbumClicked"
+            android:layout_marginRight="5dp"
+            android:padding="@dimen/photosbydate_button_padding"
+            android:textSize="@dimen/photosbydate_button_text_size"
     />
     <Button
             android:layout_width="wrap_content"
@@ -18,11 +27,15 @@
             android:id="@+id/btnShowSlideshow"
             android:onClick="btnShowSlideshowClicked"
             android:layout_toRightOf="@id/btnShowAlbum"
+            android:layout_marginLeft="5dp"
+            android:padding="@dimen/photosbydate_button_padding"
+            android:textSize="@dimen/photosbydate_button_text_size"
     />
+    </LinearLayout>
     <android.support.v4.view.ViewPager
             android:id="@+id/pagertabs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btnShowSlideshow"
+            android:layout_below="@id/tabbuttons"
     />
 </RelativeLayout>

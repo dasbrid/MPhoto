@@ -13,6 +13,8 @@ import android.widget.Spinner;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.R;
+import asbridge.me.uk.MPhoto.controls.MonthControl;
+import asbridge.me.uk.MPhoto.controls.YearControl;
 
 /**
  * Created by David on 02/12/2015.
@@ -23,31 +25,28 @@ public class GivenMonthFragment extends TabFragment {
             "March", "April", "May", "June", "July", "August", "September",
             "October", "November", "December" };
 
-    private Spinner spinnerMonth;
-        private NumberPicker npYear;
+    private YearControl ycYear;
+    private MonthControl mcMonth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_given_month, container, false);
-        npYear = (NumberPicker) v.findViewById(R.id.numberpickerYearMonth);
-        npYear.setMinValue(2011);
-        npYear.setMaxValue(2016);
+        ycYear= (YearControl) v.findViewById(R.id.yearControlMonth);
+        ycYear.setMinYear(2011);
+        ycYear.setMaxYear(2018);
 
-        spinnerMonth = (Spinner) v.findViewById(R.id.spinnerMonthMonth);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, MONTHS);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMonth.setAdapter(adapter);
+        mcMonth = (MonthControl) v.findViewById(R.id.monthControlMonth);
+
         return v;
     }
 
     public void doSlideshow() {
         Log.d("DAVE", "GivenYearFragment.doSlideshow" );
         // get the MONTH
-        String spunMonth = spinnerMonth.getSelectedItem().toString();
-        int month = spinnerMonth.getSelectedItemPosition();
+        int month = mcMonth.getMonth();
 
         // get the Year
-        int year = npYear.getValue();
+        int year = ycYear.getYear();
 
         // start the slideshow activity
         Intent intent = new Intent(getActivity(), PhotoActivity.class);
@@ -63,16 +62,15 @@ public class GivenMonthFragment extends TabFragment {
         // do some shit
         Log.d("DAVE", "GivenYearFragment.viewAlbum" );
         // get the MONTH
-        String spunMonth = spinnerMonth.getSelectedItem().toString();
-        int month = spinnerMonth.getSelectedItemPosition();
+        int month = mcMonth.getMonth();
 
         // get the Year
-        int year = npYear.getValue();
+        int year = ycYear.getYear();
 
         // start the slideshow activity
         Intent intent = new Intent(getActivity(), AlbumActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
-        intent.putExtra("albumName", "Photos taken in Month "+(month+1) + " in " + year);
+        intent.putExtra("albumName", "Photos taken in "+mcMonth.getMonthText() + " in " + year);
         intent.putExtra("albumType", "givenMonth");
         intent.putExtra("position", -1);
         intent.putExtra("month", month);

@@ -13,4 +13,8 @@
 
     <dimen name="thumb_bottom_button_marginBottom">2dp</dimen>
     <dimen name="thumb_button_padding">2dp</dimen>
+
+    <dimen name="tabs_text_size">24dp</dimen>
+    <dimen name="tabs_text_margin_bottom">4dp</dimen>
+
 </resources>
