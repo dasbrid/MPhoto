@@ -25,5 +25,5 @@ public class AppConstant {
     // NOT the size on the screen (specified in guiconstants)
     public static int THUMB_SIZE= 160;
 
-    public static boolean ALLOW_DELETE = false;
+    public static boolean ALLOW_DELETE = true;
 }
