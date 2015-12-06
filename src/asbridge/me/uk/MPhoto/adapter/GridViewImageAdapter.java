@@ -25,7 +25,6 @@ public class GridViewImageAdapter extends BaseAdapter  {
     static class ViewHolder {
         CheckBox checkbox;
         ImageView image;
-        Button btnViewPhoto;
     }
 
     private Activity _context;
@@ -99,14 +98,13 @@ public class GridViewImageAdapter extends BaseAdapter  {
             holder = new ViewHolder();
             holder.checkbox = (CheckBox) convertView.findViewById(R.id.imageCheckBox);
             holder.image = (ImageView) convertView.findViewById(R.id.image_grid_item_image);
-            holder.btnViewPhoto = (Button) convertView.findViewById(R.id.btnViewPhoto);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.checkbox.setChecked(isImageSelected(position));
         holder.checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
-        holder.btnViewPhoto.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDStrings));
+        holder.image.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDStrings));
         Bitmap bMap = Utils.decodeFileToThumbnail(_files.get(position).getFile());
         holder.image.setImageBitmap(bMap);
 
@@ -159,7 +157,7 @@ public class GridViewImageAdapter extends BaseAdapter  {
         @Override
         public void onClick(View v)
         {
-            if(v.getId() == R.id.btnViewPhoto) {
+            if(v.getId() == R.id.image_grid_item_image) {
                 File f = _files.get(_position).getFile();
                 Intent intent = new Intent(_context, PhotoActivity.class);
                 intent.putExtra("folderAbsolutePath", this._albumFolder);
