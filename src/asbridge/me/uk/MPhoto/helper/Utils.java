@@ -258,12 +258,22 @@ public class Utils {
     // Get all the media in specified bucket
     public static ArrayList<File> getMediaInBucket(Context context, String bucketDisplayName )
     {
+
+        String photoDatePreference;
+        String storedpref;
+        storedpref = Utils.getphotoDatePreference(context);
+        Log.d("DAVE", storedpref);
+        if (Utils.getphotoDatePreference(context).equals("DateTaken"))
+            photoDatePreference = MediaStore.Images.Media.DATE_TAKEN;
+        else
+            photoDatePreference = MediaStore.Images.Media.DATE_ADDED;
+
         // which image properties are we querying
         String[] projection = new String[]{
                 MediaStore.Images.Media._ID,
                 MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
                 MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media.DATE_TAKEN
+                photoDatePreference
         };
 
         // Get the base URI for ...
@@ -271,7 +281,7 @@ public class Utils {
 
         String[] selectionArgs = null;
         String selectionClause = null;
-        String OrderBy = MediaStore.Images.Media.DATE_TAKEN + " DESC";
+
         if (bucketDisplayName != null) {
             // get media in specific bucket
             selectionArgs = new String[1];
@@ -279,13 +289,15 @@ public class Utils {
             selectionClause = MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " = ?";
         }
 
+        String BUCKET_ORDER_BY = photoDatePreference + " DESC"; // newest photo first
+
         // Make the query.
         Cursor cur = context.getContentResolver().query(
                 images,     // URI
                 projection, // Which columns to return
                 selectionClause,       // WHERE clause  (null = all rows)
                 selectionArgs,       // Selection arguments (null = none)
-                null        // Ordering
+                BUCKET_ORDER_BY        // Ordering
         );
 
         if (cur.getCount() == 0)
@@ -299,13 +311,11 @@ public class Utils {
             String data;
 
             Date dateTaken;
-            Date dateAdded;
 
             int bucketColumn = cur.getColumnIndex(
                     MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
 
-            int dateTakenColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.DATE_TAKEN);
+            int dateColumn = cur.getColumnIndex(photoDatePreference);
 
             int dataColumn = cur.getColumnIndex(
                     MediaStore.Images.Media.DATA);
@@ -313,7 +323,7 @@ public class Utils {
             do {
                 // Get the field values
                 bucket = cur.getString(bucketColumn);
-                dateTakenString = cur.getString(dateTakenColumn);
+                dateTakenString = cur.getString(dateColumn);
                 dateTaken = new Date(Long.parseLong(dateTakenString));
 
                 data = cur.getString(dataColumn);
@@ -325,6 +335,7 @@ public class Utils {
         return files;
     }
 
+    // Get list of media BUCKETS on the device
     public static ArrayList<Album> getAlbumsFromMedia(Context context) {
 
         ArrayList<Album> albums = new ArrayList<>();
@@ -386,6 +397,7 @@ public class Utils {
         return getAlbumsFromMediaGrouped(context, false);
     }
 
+    // gets ALBUMS (not images) containing all images grouped by Year, and optionally month
     public static ArrayList<Album> getAlbumsFromMediaGrouped(Context context, boolean groupbyMonth) {
 
         ArrayList<Album> albums = new ArrayList<>();
@@ -408,7 +420,7 @@ public class Utils {
         String BUCKET_GROUP_BY = null; // no group by
 
 
-        String BUCKET_ORDER_BY = photoDatePreference + " DESC"; // oldest photo first
+        String BUCKET_ORDER_BY = photoDatePreference + " DESC"; // newest photo first, therefore newest bucket first
 
         Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         int numimages = 0;
@@ -530,7 +542,7 @@ public class Utils {
     }
 
     // Get all media in specified year
-    // Calculates min and max dates and gets data inbetween
+    // Calculates min and max dates and gets data in between
     public static ArrayList<File> getMediaInCurrentYear(Context context) {
         long minDate;
 
@@ -543,7 +555,7 @@ public class Utils {
         return getMediaInDateRange(context, minDate, -1);
     }
 
-    // Get all media since a certain tima ago (e.g. one year)
+    // Get all media since a certain time ago (e.g. one year)
     public static ArrayList<File> getMediaFromDate(Context context, int day, int month, int year) {
         long minDate;
 
@@ -647,6 +659,7 @@ public class Utils {
 
     ///////////////////////////////////////////////////////////////////
     // Get all the different types of albums from the media store
+    // Not used anymore in the tabbed front end
     ///////////////////////////////////////////////////////////////////
     public static ArrayList<Album> getLotsOfAlbumsFromMedia(Context context) {
         ArrayList<Album> albums = new ArrayList<>();
