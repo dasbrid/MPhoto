@@ -12,57 +12,51 @@ import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.controls.NumberControl;
 
-import java.util.Calendar;
-
 /**
  * Created by David on 02/12/2015.
  */
-public class GivenYearFragment extends TabFragment {
+public class LastNPhotosFragment extends TabFragment {
 
-    private NumberControl ycYear;
+    private NumberControl ncLastNControl;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_given_year, container, false);
+        View v = inflater.inflate(R.layout.fragment_last_n_photos, container, false);
 
-        ycYear= (NumberControl) v.findViewById(R.id.yearControl);
-        ycYear.setMinNumber(2011);
-        ycYear.setMaxNumber(2018);
-        Calendar c = Calendar.getInstance();
-        ycYear.setNumber(c.get(Calendar.YEAR));
-
+        ncLastNControl = (NumberControl) v.findViewById(R.id.ncLastNControl);
+        ncLastNControl.setMinNumber(10);
+        ncLastNControl.setMaxNumber(100);
+        ncLastNControl.setNumber(25);
         return v;
     }
 
     public void doSlideshow() {
-        Log.d("DAVE", "GivenYearFragment.doSlideshow" );
         // get the Year
-        int year = ycYear.getNumber();
+        int numPhotos = ncLastNControl.getNumber();
 
         // start the slideshow activity
         Intent intent = new Intent(getActivity(), PhotoActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
-        intent.putExtra("albumType", "givenYear");
+        intent.putExtra("albumType", "lastNPhotos");
         intent.putExtra("position", -1);
         intent.putExtra("month", -1);
-        intent.putExtra("year", year);
+        intent.putExtra("year", -1);
+        intent.putExtra("numPhotos", numPhotos);
         this.startActivity(intent);
     }
 
     public void viewAlbum() {
-        // do some shit
-        Log.d("DAVE", "GivenYearFragment.viewAlbum" );
-
         // get the Year
-        int year = ycYear.getNumber();
+        int numPhotos = ncLastNControl.getNumber();
 
         // start the slideshow activity
         Intent intent = new Intent(getActivity(), AlbumActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
-        intent.putExtra("albumName", "Photos taken in " + year);
-        intent.putExtra("albumType", "givenYear");
+        intent.putExtra("albumName", "Most recent " + numPhotos + " photos");
+        intent.putExtra("albumType", "lastNPhotos");
         intent.putExtra("position", -1);
         intent.putExtra("month", -1);
-        intent.putExtra("year", year);
+        intent.putExtra("year", -1);
+        intent.putExtra("numPhotos", numPhotos);
         this.startActivity(intent);
     }
 }

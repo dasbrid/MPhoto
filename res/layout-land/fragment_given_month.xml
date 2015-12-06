@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
 
             android:layout_below="@+id/textView"/>
-    <asbridge.me.uk.MPhoto.controls.YearControl
+    <asbridge.me.uk.MPhoto.controls.NumberControl
             android:id="@+id/yearControlMonth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

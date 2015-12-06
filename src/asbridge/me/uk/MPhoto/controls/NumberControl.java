@@ -1,7 +1,6 @@
 package asbridge.me.uk.MPhoto.controls;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,52 +15,52 @@ import java.util.Calendar;
  * Created by David on 03/12/2015.
  http://code.tutsplus.com/tutorials/creating-compound-views-on-android--cms-22889
  */
-public class YearControl extends LinearLayout{
+public class NumberControl extends LinearLayout{
     private Button mPreviousButton;
     private Button mNextButton;
     private TextView mTextView;
 
-    private int minYear;
-    private int maxYear;
+    private int minNumber;
+    private int maxNumber;
 
-    private int currentYear;
+    private int currentNumber;
 
-    public void setMinYear(int i) {
-        minYear = i;
-        if (currentYear < i) currentYear = i;
+    public void setMinNumber(int i) {
+        minNumber = i;
+        if (currentNumber < i) currentNumber = i;
     }
 
-    public void setMaxYear(int i) {
-        maxYear = i;
-        if (currentYear > i) currentYear = i;
+    public void setMaxNumber(int i) {
+        maxNumber = i;
+        if (currentNumber > i) currentNumber = i;
     }
 
-    public void setYear(int i)
+    public void setNumber(int i)
     {
-        if (i < minYear) currentYear = minYear;
-        else if (i > maxYear) currentYear = maxYear;
-        else currentYear = i;
+        if (i < minNumber) currentNumber = minNumber;
+        else if (i > maxNumber) currentNumber = maxNumber;
+        else currentNumber = i;
 
-        mTextView.setText(Integer.toString(currentYear));
+        mTextView.setText(Integer.toString(currentNumber));
     }
 
-    public int getYear() {
-        return currentYear;
+    public int getNumber() {
+        return currentNumber;
     }
 
-    public YearControl(Context context) {
+    public NumberControl(Context context) {
         super(context);
         initializeViews(context);
     }
 
-    public YearControl(Context context, AttributeSet attrs) {
+    public NumberControl(Context context, AttributeSet attrs) {
         super(context, attrs);
         initializeViews(context);
     }
 
-    public YearControl(Context context,
-                       AttributeSet attrs,
-                       int defStyle) {
+    public NumberControl(Context context,
+                         AttributeSet attrs,
+                         int defStyle) {
         super(context, attrs, defStyle);
         initializeViews(context);
     }
@@ -75,22 +74,13 @@ public class YearControl extends LinearLayout{
     private void initializeViews(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.custom_control_year, this);
-
+        inflater.inflate(R.layout.custom_control_number, this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-
-
-        Calendar c = Calendar.getInstance();
-
-        minYear = 2000;
-        maxYear = 2020;
-
         mTextView = (TextView) this.findViewById(R.id.sidespinner_view_current_value);
-        setYear(c.get(Calendar.YEAR));
         // Sets the images for the previous and next buttons. Uses
         // built-in images so you don't need to add images, but in
         // a real application your images should be in the
@@ -108,8 +98,8 @@ public class YearControl extends LinearLayout{
         // When the previous button is pressed, go to prev year
         mPreviousButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
-                if (currentYear > minYear) {
-                    setYear(--currentYear);
+                if (currentNumber > minNumber) {
+                    setNumber(--currentNumber);
                 }
             }
         });
@@ -122,8 +112,8 @@ public class YearControl extends LinearLayout{
                 .setBackgroundResource(android.R.drawable.ic_media_next);
         mNextButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
-                if (currentYear < maxYear) {
-                    setYear(++currentYear);
+                if (currentNumber < maxNumber) {
+                    setNumber(++currentNumber);
                 }
             }
         });

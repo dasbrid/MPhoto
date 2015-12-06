@@ -65,7 +65,7 @@ public class MonthControl extends LinearLayout{
     private void initializeViews(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.custom_control_year, this);
+        inflater.inflate(R.layout.custom_control_number, this);
 
     }
 

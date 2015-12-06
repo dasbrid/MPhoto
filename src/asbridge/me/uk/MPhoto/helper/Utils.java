@@ -612,6 +612,12 @@ public class Utils {
         return getMediaInDateRange(context, -1, -1);
     }
 
+    // Just get all the media. No dates specified
+    public static ArrayList<File> getLastNPhotosinMedia(Context context, int n) {
+        return getMediaInDateRange(context, -1, -1, n);
+    }
+
+
     // Get all media since a certain tima ago (e.g. one year)
     public static ArrayList<File> getRecentMedia(Context context) {
         long minDate;
@@ -652,6 +658,12 @@ public class Utils {
     // If maxdate is -1 then no max date is used (up to present date)
     // If minDate and maxdate are both -1 then no clause is used and we get all media
     public static ArrayList<File> getMediaInDateRange(Context context, long minDate, long maxDate) {
+        return getMediaInDateRange(context, minDate, maxDate, 0);
+    }
+
+    // Get Media between two dates and optionally limited to n items (using Query) from content provider
+    // If limit = 0 then no limit
+    public static ArrayList<File> getMediaInDateRange(Context context, long minDate, long maxDate, int limit) {
 
         Log.d("DAVE", "searching between " + Long.toString(minDate) + " and " + Long.toString(maxDate));
 
@@ -668,13 +680,20 @@ public class Utils {
 
         String[] selectionArgs = null;
         String selectionClause = null;
-        String OrderBy = MediaStore.Images.Media.DATE_TAKEN + " DESC";
+
 
         String photoDatePreference;
         if (Utils.getphotoDatePreference(context).equals("DateTaken"))
             photoDatePreference = MediaStore.Images.Media.DATE_TAKEN;
         else
             photoDatePreference = MediaStore.Images.Media.DATE_ADDED;
+
+        String orderBy = photoDatePreference + " desc";
+
+        if (limit != 0)
+        {
+            orderBy += " limit " + limit;
+        }
 
         if (minDate != -1 && maxDate != -1) {
             // get media in specified time range
@@ -698,7 +717,7 @@ public class Utils {
                 projection, // Which columns to return
                 selectionClause,       // WHERE clause  (null = all rows)
                 selectionArgs,       // Selection arguments (null = none)
-                photoDatePreference + " desc"        // Ordering
+                orderBy        // Ordering (plus limit if applicable)
         );
 
         if (cur.getCount() == 0)

@@ -261,14 +261,15 @@ public class PhotoActivity extends FragmentActivity
         int albumDay = -1;
         if (albumType.equals("fromDate"))
             albumDay = parameters.getInt("day");
-        String albumname = null;
         long albumBucketID = -1;
+        int numPhotos = 0;
         ArrayList<String> bucketIDstrings = new ArrayList<String>();
         if (albumType.equals("bucket")) {
-            albumname = parameters.getString("albumName");
             albumBucketID = parameters.getLong("albumBucketID");
         } else if (albumType.equals("multipleBuckets")) {
             bucketIDstrings = parameters.getStringArrayList("bucketIDs");
+        } else if (albumType.equals("lastNPhotos")) {
+            numPhotos = parameters.getInt("numPhotos");
         }
         if (positionParameter != -1)
         {
@@ -284,7 +285,9 @@ public class PhotoActivity extends FragmentActivity
         if (Utils.getFromMediaPreference(this)) {
             Log.d("DAVE", "displaying photos for " + albumMonth +"/" + albumYear);
 
-            if (albumType.equals("multipleBuckets")) {
+            if (albumType.equals("lastNPhotos")) {
+                filelist = Utils.getLastNPhotosinMedia(this, numPhotos);
+            } else if (albumType.equals("multipleBuckets")) {
                 filelist = Utils.getMediaInListofBuckets(this, bucketIDstrings);
             } else if (albumType.equals("bucket")) {
                 filelist = Utils.getMediaInBucketID(this, albumBucketID);

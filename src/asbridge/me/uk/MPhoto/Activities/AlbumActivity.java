@@ -36,6 +36,7 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
     private String albumType;
     private long albumBucketID;
     private ArrayList<String> bucketIDstrings;
+    private int numPhotos;
 
     private boolean modified;
 
@@ -90,6 +91,8 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
             this.albumBucketID = parameters.getLong("albumBucketID");
         } else if (albumType.equals("multipleBuckets")) {
             this.bucketIDstrings = parameters.getStringArrayList("bucketIDs");
+        } else if (albumType.equals("lastNPhotos")) {
+            this.numPhotos = parameters.getInt("numPhotos");
         }
 
         this.albumMonth = parameters.getInt("month");
@@ -129,7 +132,9 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
         if (Utils.getFromMediaPreference(this)) {
             // files = Utils.getMediaInBucket(this, albumName);
             Log.d("DAVE", "displaying album for " + albumMonth +"/" + albumYear);
-            if (albumType.equals("multipleBuckets")) {
+            if (albumType.equals("lastNPhotos")) {
+                files = Utils.getLastNPhotosinMedia(this, numPhotos);
+            } else if (albumType.equals("multipleBuckets")) {
                 files = Utils.getMediaInListofBuckets(this, bucketIDstrings);
             } else if (albumType.equals("bucket")) {
                 files = Utils.getMediaInBucketID(this, albumBucketID);
@@ -261,6 +266,7 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
         intent.putExtra("albumName", this.albumName);
         intent.putExtra("albumBucketID", this.albumBucketID);
         intent.putStringArrayListExtra("bucketIDs", this.bucketIDstrings);
+        intent.putExtra("numPhotos", this.numPhotos);
         intent.putExtra("position", -1);
         intent.putExtra("month", this.albumMonth);
         intent.putExtra("year", this.albumYear);

@@ -109,7 +109,7 @@ public class BucketListFragment extends TabFragment {
             intent.putStringArrayListExtra("bucketIDs", selectedBucketIDs);
             //intent.putExtra("albumBucketID", firstAlbum.getBucketID());
             //intent.putExtra("month", firstAlbum.getMonth());
-            //intent.putExtra("year", firstAlbum.getYear());
+            //intent.putExtra("year", firstAlbum.getNumber());
             context.startActivity(intent);
         }
     }

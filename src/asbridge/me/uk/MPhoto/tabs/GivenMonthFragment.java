@@ -7,14 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.NumberPicker;
-import android.widget.Spinner;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.controls.MonthControl;
-import asbridge.me.uk.MPhoto.controls.YearControl;
+import asbridge.me.uk.MPhoto.controls.NumberControl;
+
+import java.util.Calendar;
 
 /**
  * Created by David on 02/12/2015.
@@ -25,15 +24,17 @@ public class GivenMonthFragment extends TabFragment {
             "March", "April", "May", "June", "July", "August", "September",
             "October", "November", "December" };
 
-    private YearControl ycYear;
+    private NumberControl ycYear;
     private MonthControl mcMonth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_given_month, container, false);
-        ycYear= (YearControl) v.findViewById(R.id.yearControlMonth);
-        ycYear.setMinYear(2011);
-        ycYear.setMaxYear(2018);
+        ycYear= (NumberControl) v.findViewById(R.id.yearControlMonth);
+        ycYear.setMinNumber(2011);
+        ycYear.setMaxNumber(2018);
+        Calendar c = Calendar.getInstance();
+        ycYear.setNumber(c.get(Calendar.YEAR));
 
         mcMonth = (MonthControl) v.findViewById(R.id.monthControlMonth);
 
@@ -46,7 +47,7 @@ public class GivenMonthFragment extends TabFragment {
         int month = mcMonth.getMonth();
 
         // get the Year
-        int year = ycYear.getYear();
+        int year = ycYear.getNumber();
 
         // start the slideshow activity
         Intent intent = new Intent(getActivity(), PhotoActivity.class);
@@ -65,7 +66,7 @@ public class GivenMonthFragment extends TabFragment {
         int month = mcMonth.getMonth();
 
         // get the Year
-        int year = ycYear.getYear();
+        int year = ycYear.getNumber();
 
         // start the slideshow activity
         Intent intent = new Intent(getActivity(), AlbumActivity.class);
