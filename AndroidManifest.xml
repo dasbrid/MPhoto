@@ -26,7 +26,7 @@
 
     </activity>
         <activity android:name=".Activities.PhotosByDateActivity"
-                  android:label="Choose Photos">
+                  android:label="Slideshow">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

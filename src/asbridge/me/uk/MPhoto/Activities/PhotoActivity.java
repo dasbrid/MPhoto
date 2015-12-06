@@ -262,9 +262,14 @@ public class PhotoActivity extends FragmentActivity
         if (albumType.equals("fromDate"))
             albumDay = parameters.getInt("day");
         String albumname = null;
-        if (albumType.equals("bucket"))
+        long albumBucketID = -1;
+        ArrayList<String> bucketIDstrings = new ArrayList<String>();
+        if (albumType.equals("bucket")) {
             albumname = parameters.getString("albumName");
-
+            albumBucketID = parameters.getLong("albumBucketID");
+        } else if (albumType.equals("multipleBuckets")) {
+            bucketIDstrings = parameters.getStringArrayList("bucketIDs");
+        }
         if (positionParameter != -1)
         {
             // we have been passed a specific photo index.
@@ -279,8 +284,10 @@ public class PhotoActivity extends FragmentActivity
         if (Utils.getFromMediaPreference(this)) {
             Log.d("DAVE", "displaying photos for " + albumMonth +"/" + albumYear);
 
-            if (albumType.equals("bucket")) {
-                filelist = Utils.getMediaInBucket(this, albumname);
+            if (albumType.equals("multipleBuckets")) {
+                filelist = Utils.getMediaInListofBuckets(this, bucketIDstrings);
+            } else if (albumType.equals("bucket")) {
+                filelist = Utils.getMediaInBucketID(this, albumBucketID);
             } else if (albumType.equals("thisYear")) {
                 filelist = Utils.getMediaInCurrentYear(this);
             } else if (albumType.equals("fromDate")) {

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import asbridge.me.uk.MPhoto.R;
+import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
 import java.io.File;
@@ -30,7 +31,7 @@ public class PhotoPagerFragment extends Fragment {
 
         ImageView iv = (ImageView) rootView.findViewById(R.id.photoImageView);
         // get the imageview size and scale the image to fit
-        Bitmap myBitmap = Utils.decodeFileToSize(new File(imagepath), 600,400);
+        Bitmap myBitmap = Utils.decodeFileToSize(new File(imagepath), AppConstant.SLIDESHOW_WIDTH,AppConstant.SLIDESHOW_HEIGHT);
         iv.setImageBitmap(myBitmap);
 
         return rootView;

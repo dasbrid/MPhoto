@@ -127,6 +127,7 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             Log.d("DAVE","type = "+album.getType()+" name = "+album.getName());
             intent.putExtra("albumType", album.getType());
             intent.putExtra("albumName", album.getName());
+            intent.putExtra("albumBucketID", album.getBucketID());
             intent.putExtra("month", album.getMonth());
             intent.putExtra("year", album.getYear());
             _context.startActivity(intent);
@@ -148,6 +149,7 @@ public class GridViewAlbumAdapter extends BaseAdapter {
             intent.putExtra("folderAbsolutePath", album.getFolder() == null ? null :album.getFolder().getAbsolutePath());
             intent.putExtra("albumType", album.getType());
             intent.putExtra("albumName", album.getName());
+            intent.putExtra("albumBucketID", album.getBucketID());
             intent.putExtra("position", -1);
             intent.putExtra("month", album.getMonth());
             intent.putExtra("year", album.getYear());

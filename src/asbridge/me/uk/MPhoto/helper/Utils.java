@@ -25,6 +25,7 @@ import asbridge.me.uk.MPhoto.Classes.Album;
 // http://www.androidhive.info/2013/09/android-fullscreen-image-slider-with-swipe-and-pinch-zoom-gestures/
 public class Utils {
 
+    private static String TAG = "DAVE:Utils";
     public static String getRootPhotosFolder(Context context)
     {
         SharedPreferences prefs = PreferenceManager
@@ -40,15 +41,7 @@ public class Utils {
         boolean fromMedia = prefs.getBoolean("fromMedia", false);
         return fromMedia;
     }
-/*
-    public static String getSlideshowDelay(Context context)
-    {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
-        String folder = prefs.getString("slideshowDelay", "3");
-        return folder;
-    }
-*/
+
     public static int getSlideshowDelay(Context context)
     {
         SharedPreferences sharedPref = context.getSharedPreferences("Asbridge.Me.Uk.MPhoto",Context.MODE_PRIVATE);
@@ -255,7 +248,7 @@ public class Utils {
         return !sc.hasNext();
     }
 
-    // Get all the media in specified bucket
+    // Get all the media in specified bucket NAME (not reliable if buckets have same names (e.g different subfolders with same name)
     public static ArrayList<File> getMediaInBucket(Context context, String bucketDisplayName )
     {
 
@@ -288,6 +281,94 @@ public class Utils {
             selectionArgs[0] = bucketDisplayName;
             selectionClause = MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " = ?";
         }
+
+        String BUCKET_ORDER_BY = photoDatePreference + " DESC"; // newest photo first
+
+        // Make the query.
+        Cursor cur = context.getContentResolver().query(
+                images,     // URI
+                projection, // Which columns to return
+                selectionClause,       // WHERE clause  (null = all rows)
+                selectionArgs,       // Selection arguments (null = none)
+                BUCKET_ORDER_BY        // Ordering
+        );
+
+        if (cur.getCount() == 0)
+            return null;
+
+        ArrayList<File> files = new ArrayList<File>();
+
+        if (cur.moveToFirst()) {
+            String bucket;
+            String dateTakenString;
+            String data;
+
+            Date dateTaken;
+
+            int bucketColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+
+            int dateColumn = cur.getColumnIndex(photoDatePreference);
+
+            int dataColumn = cur.getColumnIndex(
+                    MediaStore.Images.Media.DATA);
+
+            do {
+                // Get the field values
+                bucket = cur.getString(bucketColumn);
+                dateTakenString = cur.getString(dateColumn);
+                dateTaken = new Date(Long.parseLong(dateTakenString));
+
+                data = cur.getString(dataColumn);
+
+                files.add(new File(data));
+
+            } while (cur.moveToNext());
+        }
+        return files;
+    }
+
+    // Get all the media in specified list of buckets - buckets identified by bucket ID (more reliable if buckets have same names (e.g different subfolders with same name)
+    public static ArrayList<File> getMediaInListofBuckets(Context context, ArrayList<String> bucketIDStringss ) {
+        ArrayList<File> files = new ArrayList<File>();
+        for (String bucketIDStrings : bucketIDStringss) {
+            long bucketID = Long.parseLong(bucketIDStrings);
+            files.addAll(getMediaInBucketID(context, bucketID));
+        }
+        return files;
+    }
+
+
+
+    // Get all the media in specified bucket - identified by  bucket ID (more reliable if buckets have same names (e.g different subfolders with same name)
+    public static ArrayList<File> getMediaInBucketID(Context context, long bucketID )
+    {
+
+        String photoDatePreference;
+        String storedpref;
+        storedpref = Utils.getphotoDatePreference(context);
+        Log.d("DAVE", storedpref);
+        if (Utils.getphotoDatePreference(context).equals("DateTaken"))
+            photoDatePreference = MediaStore.Images.Media.DATE_TAKEN;
+        else
+            photoDatePreference = MediaStore.Images.Media.DATE_ADDED;
+
+        // which image properties are we querying
+        String[] projection = new String[]{
+                MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.BUCKET_ID,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.Media.DATA,
+                photoDatePreference
+        };
+
+        // Get the base URI for ...
+        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        // get media in specific bucket
+        String [] selectionArgs = new String[1];
+        selectionArgs[0] = Long.toString(bucketID);
+        String selectionClause = MediaStore.Images.Media.BUCKET_ID + " = ?";
 
         String BUCKET_ORDER_BY = photoDatePreference + " DESC"; // newest photo first
 
@@ -373,13 +454,13 @@ public class Utils {
                 bucketname = cur.getString(bucketColumn);
                 date = cur.getString(dateColumn);
                 data = cur.getString(dataColumn);
-                bucketId = cur.getInt(bucketIdColumn);
-
+                bucketId = cur.getLong(bucketIdColumn);
+                Log.d(TAG, "bucket name="+bucketname+" id="+bucketId);
                 if (bucketname != null && bucketname.length() > 0) {
                     // Do something with the values.
                     File f = new File(data);
 
-                    Album album = new Album(bucketname, f, f.getParentFile(),"bucket");
+                    Album album = new Album(bucketname, bucketId, f, f.getParentFile(),"bucket");
                     albums.add(album);
                 }
             } while (cur.moveToNext());

@@ -52,7 +52,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
                 ThisYearFragment tab4 = new ThisYearFragment();
                 return tab4;
             case 5:
-                ByBucketsFragment tab5 = new ByBucketsFragment();
+                BucketListFragment tab5 = new BucketListFragment();
                 return tab5;
             default:
                 return null;

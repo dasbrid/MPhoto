@@ -34,14 +34,19 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
     private int albumYear;
     private int albumDay;
     private String albumType;
+    private long albumBucketID;
+    private ArrayList<String> bucketIDstrings;
 
     private boolean modified;
 
+    private final String TAG = "DAVE:AlbumActivity";
     // Called after starting or when resuming (no saved instance state)
     @Override
     protected void onResume() {
         super.onResume();  // Always call the superclass method first
+
         if (modified) {
+            Log.d(TAG,"modified");
             this.imageFiles.clear();
             ArrayList<File> files;
             if (Utils.getFromMediaPreference(this)) {
@@ -55,6 +60,7 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
             }
             adapter.notifyDataSetChanged();
         }
+
     }
 
     @Override
@@ -79,6 +85,13 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
         String albumFolder = parameters.getString("folderAbsolutePath");
         this.albumType = parameters.getString("albumType");
         this.albumName = parameters.getString("albumName");
+
+        if (albumType.equals("bucket")) {
+            this.albumBucketID = parameters.getLong("albumBucketID");
+        } else if (albumType.equals("multipleBuckets")) {
+            this.bucketIDstrings = parameters.getStringArrayList("bucketIDs");
+        }
+
         this.albumMonth = parameters.getInt("month");
         this.albumYear = parameters.getInt("year");
         if (this.albumType.equals("fromDate")) {
@@ -111,11 +124,15 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
         getActionBar().setTitle(albumName);
 
         ArrayList<File> files;
+
+
         if (Utils.getFromMediaPreference(this)) {
             // files = Utils.getMediaInBucket(this, albumName);
             Log.d("DAVE", "displaying album for " + albumMonth +"/" + albumYear);
-            if (albumType.equals("bucket")) {
-                files = Utils.getMediaInBucket(this, albumName);
+            if (albumType.equals("multipleBuckets")) {
+                files = Utils.getMediaInListofBuckets(this, bucketIDstrings);
+            } else if (albumType.equals("bucket")) {
+                files = Utils.getMediaInBucketID(this, albumBucketID);
             } else if (albumType.equals("thisYear")) {
                 files = Utils.getMediaInCurrentYear(this);
             } else if (albumType.equals("fromDate")) {
@@ -148,7 +165,7 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
             btnStartSlideshow.setEnabled(false);
         }
         // Gridview adapter
-        adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles, albumFolder, albumMonth, albumYear, albumName, albumType);
+        adapter = new GridViewImageAdapter(AlbumActivity.this, imageFiles, albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDstrings);
         // setting grid view adapter
         gridView.setAdapter(adapter);
 
@@ -161,6 +178,7 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
         });
 
         enableDisableButtons();
+
     }
 
     private void enableDisableButtons()
@@ -241,6 +259,8 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
         intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
         intent.putExtra("albumType", this.albumType);
         intent.putExtra("albumName", this.albumName);
+        intent.putExtra("albumBucketID", this.albumBucketID);
+        intent.putStringArrayListExtra("bucketIDs", this.bucketIDstrings);
         intent.putExtra("position", -1);
         intent.putExtra("month", this.albumMonth);
         intent.putExtra("year", this.albumYear);
