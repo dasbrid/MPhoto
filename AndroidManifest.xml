@@ -13,14 +13,7 @@
         <activity android:name=".Activities.AlbumActivity"
                   android:label="Edit Album">
         </activity>
-        <activity android:name=".Activities.AlbumsActivity"
-        android:label="Photo Albums">
-        </activity>
-        <activity android:name=".settings.SettingsActivity"
-        android:label="Settings"/>
-        <activity android:name=".Activities.FileExplorerActivity">
 
-        </activity>
         <activity android:name=".Activities.PhotoActivity"
                   android:label="Photo View">
 

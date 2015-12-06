@@ -282,35 +282,32 @@ public class PhotoActivity extends FragmentActivity
             slideshowSharedState = true;
         }
 
-        if (Utils.getFromMediaPreference(this)) {
-            Log.d("DAVE", "displaying photos for " + albumMonth +"/" + albumYear);
+        Log.d("DAVE", "displaying photos for " + albumMonth +"/" + albumYear);
 
-            if (albumType.equals("lastNPhotos")) {
-                filelist = Utils.getLastNPhotosinMedia(this, numPhotos);
-            } else if (albumType.equals("multipleBuckets")) {
-                filelist = Utils.getMediaInListofBuckets(this, bucketIDstrings);
-            } else if (albumType.equals("bucket")) {
-                filelist = Utils.getMediaInBucketID(this, albumBucketID);
-            } else if (albumType.equals("thisYear")) {
-                filelist = Utils.getMediaInCurrentYear(this);
-            } else if (albumType.equals("fromDate")) {
-                filelist = Utils.getMediaFromDate(this,albumDay, albumMonth, albumYear);
-            } else if (albumType.equals("allPhotos")) {
-                // ALL files
-                filelist = Utils.getAllMedia(this);
-            }
-            else if (albumMonth == -1 && albumYear != -1) {
-                // Year but no month ... Get all for this year
-                filelist = Utils.getMediaInYear(this, albumYear);
-            } else if (albumMonth == -2 && albumYear == -2) {
-                // Get RECENT files
-                filelist = Utils.getRecentMedia(this);
-            } else {
-                filelist = Utils.getMediaInMonth(this, albumMonth, albumYear);
-            }
-        } else {
-            filelist = Utils.getAllFiles(albumFolder);
+        if (albumType.equals("lastNPhotos")) {
+            filelist = Utils.getLastNPhotosinMedia(this, numPhotos);
+        } else if (albumType.equals("multipleBuckets")) {
+            filelist = Utils.getMediaInListofBuckets(this, bucketIDstrings);
+        } else if (albumType.equals("bucket")) {
+            filelist = Utils.getMediaInBucketID(this, albumBucketID);
+        } else if (albumType.equals("thisYear")) {
+            filelist = Utils.getMediaInCurrentYear(this);
+        } else if (albumType.equals("fromDate")) {
+            filelist = Utils.getMediaFromDate(this,albumDay, albumMonth, albumYear);
+        } else if (albumType.equals("allPhotos")) {
+            // ALL files
+            filelist = Utils.getAllMedia(this);
         }
+        else if (albumMonth == -1 && albumYear != -1) {
+            // Year but no month ... Get all for this year
+            filelist = Utils.getMediaInYear(this, albumYear);
+        } else if (albumMonth == -2 && albumYear == -2) {
+            // Get RECENT files
+            filelist = Utils.getRecentMedia(this);
+        } else {
+            filelist = Utils.getMediaInMonth(this, albumMonth, albumYear);
+        }
+
 
         if (filelist == null)
         {

@@ -22,25 +22,9 @@ import asbridge.me.uk.MPhoto.Classes.Album;
 /**
  * Created by David on 10/11/2015.
  */
-// http://www.androidhive.info/2013/09/android-fullscreen-image-slider-with-swipe-and-pinch-zoom-gestures/
 public class Utils {
 
     private static String TAG = "DAVE:Utils";
-    public static String getRootPhotosFolder(Context context)
-    {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context); //
-        String folder = prefs.getString("rootPhotosFolder", "");
-        return folder;
-    }
-
-    public static boolean getFromMediaPreference(Context context)
-    {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context); //
-        boolean fromMedia = prefs.getBoolean("fromMedia", false);
-        return fromMedia;
-    }
 
     public static int getSlideshowDelay(Context context)
     {
@@ -60,112 +44,9 @@ public class Utils {
 
     public static String getphotoDatePreference(Context context)
     {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
-        String photoDate = prefs.getString("photoDate", "DateTaken");
+        // SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String photoDate = "DateTaken"; //  prefs.getString("photoDate", "DateTaken");
         return photoDate;
-    }
-
-    // TODO: first image may be in a subfolder
-    public static File getFirstImageInFolder(File folder)
-    {
-        if (!folder.isDirectory()) {
-            return null;
-        }
-        File[] listFiles = folder.listFiles();
-        // first look for a file in this folder
-        for (File file : listFiles) {
-            if (file.isFile() && isImageFile(file)) {
-                return file;
-            }
-        }
-
-        File file;
-        for (File subfolder : listFiles) {
-            if (subfolder.isDirectory()) {
-                file = getFirstImageInFolder(subfolder);
-                if (file != null)
-                return file;
-            }
-        }
-        return null;
-    }
-
-    public static boolean isImageFile(File file)
-    {
-        String filePath = file.getAbsolutePath();
-        // Check supported file extensions
-        String ext = filePath.substring((filePath.lastIndexOf(".") + 1),
-                filePath.length());
-
-        if (AppConstant.FILE_EXTN
-                .contains(ext.toLowerCase(Locale.getDefault())))
-            return true;
-        else
-            return false;
-
-    }
-
-    // get all FILES in path (including all files in subfolders)
-    // TODO: only return compatible (image) files
-    public static ArrayList<File> getAllFiles(String absolutePath)
-    {
-        ArrayList<File> files = new ArrayList<File>();
-        File rootFolder = new File(absolutePath);
-        if (!rootFolder.isDirectory())
-            return files;
-
-        addFilesToList(files, rootFolder);
-        return files;
-    }
-
-    // recursion method for getting FILES in a folder
-    private static void addFilesToList(ArrayList<File> fileList, File folder) {
-        if (folder.isFile())
-        {
-            if (isImageFile(folder)) {
-                fileList.add(folder);
-            }
-            return;
-        }
-
-        File[] listFiles = folder.listFiles();
-        if (listFiles == null)
-            return;
-
-        for (File file : listFiles) {
-            addFilesToList(fileList, file);
-        }
-    }
-
-    public static ArrayList<Album> getAlbumsFromFolders(String rootPhotosFolder)
-    {
-        ArrayList<Album> albums = new ArrayList<Album>();
-        File rootFolder = new File(rootPhotosFolder);
-        addAlbumsToList(albums, rootFolder);
-        return albums;
-    }
-
-    public static int addAlbumsToList(ArrayList<Album> albumList, File folder) {
-        int numfiles = 0;
-        File[] listFiles = folder.listFiles();
-        if (listFiles == null)
-            return numfiles;
-        // loop through all files
-        for (File file : listFiles) {
-            if (file.isFile()) {
-                numfiles++;
-            }
-            if (file.isDirectory()) {
-                numfiles=numfiles+addAlbumsToList(albumList, file);
-            }
-        }
-        if (numfiles > 0) {
-            File firstfile = getFirstImageInFolder(folder);
-            Album a = new Album(folder.getName(), firstfile, folder);
-            albumList.add(a);
-        }
-        return numfiles;
     }
 
     private static int exifToDegrees(int exifOrientation) {
@@ -232,20 +113,8 @@ public class Utils {
         return adjustedBitmap;
     }
 
-
-
     public static Bitmap decodeFileToThumbnail(File f) {
         return decodeFileToSize(f,AppConstant.THUMB_SIZE, AppConstant.THUMB_SIZE );
-    }
-
-    private static boolean isInteger(String s) {
-        int radix = 10;
-        Scanner sc = new Scanner(s.trim());
-        if(!sc.hasNextInt(radix)) return false;
-        // we know it starts with a valid int, now make sure
-        // there's nothing left!
-        sc.nextInt(radix);
-        return !sc.hasNext();
     }
 
     // Get all the media in specified bucket NAME (not reliable if buckets have same names (e.g different subfolders with same name)
@@ -757,37 +626,111 @@ public class Utils {
         return files;
     }
 
-    ///////////////////////////////////////////////////////////////////
-    // Get all the different types of albums from the media store
-    // Not used anymore in the tabbed front end
-    ///////////////////////////////////////////////////////////////////
-    public static ArrayList<Album> getLotsOfAlbumsFromMedia(Context context) {
-        ArrayList<Album> albums = new ArrayList<>();
+/*
 
-        // get everything grouped by months
-        ArrayList<Album> monthAlbums = new ArrayList<>();
-        monthAlbums = getAlbumsFromMediaGroupedByMonth(context);
+    // get all FILES in path (including all files in subfolders)
+    // TODO: only return compatible (image) files
+    public static ArrayList<File> getAllFiles(String absolutePath)
+    {
+        ArrayList<File> files = new ArrayList<File>();
+        File rootFolder = new File(absolutePath);
+        if (!rootFolder.isDirectory())
+            return files;
 
-        // get everything grouped by years, (note the month is -1)
-        ArrayList<Album> yearAlbums = new ArrayList<>();
-        yearAlbums = getAlbumsFromMediaGroupedByYear(context);
+        addFilesToList(files, rootFolder);
+        return files;
+    }
 
-        // the first file in the first album, a 'random' choice as the thumbnail for some esoteric albums
-        File firstFile = monthAlbums.get(0).getFirstFile();
+    // recursion method for getting FILES in a folder
+    private static void addFilesToList(ArrayList<File> fileList, File folder) {
+        if (folder.isFile())
+        {
+            if (isImageFile(folder)) {
+                fileList.add(folder);
+            }
+            return;
+        }
 
-        // create a dummy album for all photos (note the year is 0)
-        Album allPhotos = new Album("All Photos",0, 0, firstFile, null);
+        File[] listFiles = folder.listFiles();
+        if (listFiles == null)
+            return;
 
-        // create an album of recent pictures (note the month and year are -2)
-        Album recentPhotos = new Album("Recent Photos",-2, -2, firstFile, null);
+        for (File file : listFiles) {
+            addFilesToList(fileList, file);
+        }
+    }
 
-        // add the albums to the list
-        albums.add(allPhotos);
-        albums.add(recentPhotos);
-        albums.addAll(yearAlbums);
-        albums.addAll(monthAlbums);
+    public static ArrayList<Album> getAlbumsFromFolders(String rootPhotosFolder)
+    {
+        ArrayList<Album> albums = new ArrayList<Album>();
+        File rootFolder = new File(rootPhotosFolder);
+        addAlbumsToList(albums, rootFolder);
         return albums;
     }
+
+    public static int addAlbumsToList(ArrayList<Album> albumList, File folder) {
+        int numfiles = 0;
+        File[] listFiles = folder.listFiles();
+        if (listFiles == null)
+            return numfiles;
+        // loop through all files
+        for (File file : listFiles) {
+            if (file.isFile()) {
+                numfiles++;
+            }
+            if (file.isDirectory()) {
+                numfiles=numfiles+addAlbumsToList(albumList, file);
+            }
+        }
+        if (numfiles > 0) {
+            File firstfile = getFirstImageInFolder(folder);
+            Album a = new Album(folder.getName(), firstfile, folder);
+            albumList.add(a);
+        }
+        return numfiles;
+    }
+
+    // TODO: first image may be in a subfolder
+    public static File getFirstImageInFolder(File folder)
+    {
+        if (!folder.isDirectory()) {
+            return null;
+        }
+        File[] listFiles = folder.listFiles();
+        // first look for a file in this folder
+        for (File file : listFiles) {
+            if (file.isFile() && isImageFile(file)) {
+                return file;
+            }
+        }
+
+        File file;
+        for (File subfolder : listFiles) {
+            if (subfolder.isDirectory()) {
+                file = getFirstImageInFolder(subfolder);
+                if (file != null)
+                return file;
+            }
+        }
+        return null;
+    }
+
+
+    public static boolean isImageFile(File file)
+    {
+        String filePath = file.getAbsolutePath();
+        // Check supported file extensions
+        String ext = filePath.substring((filePath.lastIndexOf(".") + 1),
+                filePath.length());
+
+        if (AppConstant.FILE_EXTN
+                .contains(ext.toLowerCase(Locale.getDefault())))
+            return true;
+        else
+            return false;
+
+    }
+     */
 
 
 }

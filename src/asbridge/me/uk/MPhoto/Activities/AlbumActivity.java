@@ -15,7 +15,6 @@ import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.GridViewImageAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.helper.Utils;
-import asbridge.me.uk.MPhoto.settings.SettingsActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,12 +49,12 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
             Log.d(TAG,"modified");
             this.imageFiles.clear();
             ArrayList<File> files;
-            if (Utils.getFromMediaPreference(this)) {
-                // get all files (in this folder and in subfolders)
-                files = Utils.getMediaInBucket(this, this.albumName);
-            } else {
-                files = Utils.getAllFiles(albumAbsolutePath);
-            }
+
+            // TOTD: Check OnResume !!! WHAT ABOUT ALL THE OTHER ALBUM TYPES !!!
+            // CHECK THIS !!! WHAT ABOUT ALL THE OTHER ALBUM TYPES !!!!!!!!!!!!!!!!!
+            // get all files (in this folder and in subfolders)
+            files = Utils.getMediaInBucket(this, this.albumName);
+
             for (int i = 0; i < files.size(); i++) {
                 this.imageFiles.add(new CheckedFile(files.get(i)));
             }
@@ -105,59 +104,38 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
         this.albumAbsolutePath = albumFolder;
         modified = false;
 
-        if (!Utils.getFromMediaPreference(this)) {
-            if (albumAbsolutePath == null) {
-                Toast.makeText(this, "photos folder null", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, SettingsActivity.class));
-                return;
-            }
-            if (albumAbsolutePath == "") {
-                Toast.makeText(this, "photos folder is empty string", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(this, SettingsActivity.class));
-                return;
-            }
-
-            if (!new File(albumAbsolutePath).isDirectory()) {
-                Toast.makeText(this, "photos root folder is not a folder", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(this, SettingsActivity.class));
-                return;
-            }
-        }
-
         getActionBar().setTitle(albumName);
 
         ArrayList<File> files;
 
 
-        if (Utils.getFromMediaPreference(this)) {
-            // files = Utils.getMediaInBucket(this, albumName);
-            Log.d("DAVE", "displaying album for " + albumMonth +"/" + albumYear);
-            if (albumType.equals("lastNPhotos")) {
-                files = Utils.getLastNPhotosinMedia(this, numPhotos);
-            } else if (albumType.equals("multipleBuckets")) {
-                files = Utils.getMediaInListofBuckets(this, bucketIDstrings);
-            } else if (albumType.equals("bucket")) {
-                files = Utils.getMediaInBucketID(this, albumBucketID);
-            } else if (albumType.equals("thisYear")) {
-                files = Utils.getMediaInCurrentYear(this);
-            } else if (albumType.equals("fromDate")) {
-                files = Utils.getMediaFromDate(this,albumDay, albumMonth, albumYear);
-            } else if (albumType.equals("allPhotos")) {
-                // ALL files
-                files = Utils.getAllMedia(this);
-            } else if (albumMonth == -1 && albumYear != -1) {
-                // Year but no month ... Get all for this year
-                files = Utils.getMediaInYear(this, albumYear);
-            } else if (albumMonth == -2 && albumYear == -2) {
-                // Get RECENT files
-                files = Utils.getRecentMedia(this);
-            } else {
-                // Year and month specified ... get for this month
-                files = Utils.getMediaInMonth(this, albumMonth, albumYear);
-            }
+
+        // files = Utils.getMediaInBucket(this, albumName);
+        Log.d("DAVE", "displaying album for " + albumMonth +"/" + albumYear);
+        if (albumType.equals("lastNPhotos")) {
+            files = Utils.getLastNPhotosinMedia(this, numPhotos);
+        } else if (albumType.equals("multipleBuckets")) {
+            files = Utils.getMediaInListofBuckets(this, bucketIDstrings);
+        } else if (albumType.equals("bucket")) {
+            files = Utils.getMediaInBucketID(this, albumBucketID);
+        } else if (albumType.equals("thisYear")) {
+            files = Utils.getMediaInCurrentYear(this);
+        } else if (albumType.equals("fromDate")) {
+            files = Utils.getMediaFromDate(this,albumDay, albumMonth, albumYear);
+        } else if (albumType.equals("allPhotos")) {
+            // ALL files
+            files = Utils.getAllMedia(this);
+        } else if (albumMonth == -1 && albumYear != -1) {
+            // Year but no month ... Get all for this year
+            files = Utils.getMediaInYear(this, albumYear);
+        } else if (albumMonth == -2 && albumYear == -2) {
+            // Get RECENT files
+            files = Utils.getRecentMedia(this);
         } else {
-            files = Utils.getAllFiles(albumAbsolutePath);
+            // Year and month specified ... get for this month
+            files = Utils.getMediaInMonth(this, albumMonth, albumYear);
         }
+
 
         this.imageFiles = new ArrayList<CheckedFile>();
         if (files != null && files.size() != 0) {
