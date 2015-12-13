@@ -108,11 +108,12 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
 
         ArrayList<File> files;
 
-
-
         // files = Utils.getMediaInBucket(this, albumName);
         Log.d("DAVE", "displaying album for " + albumMonth +"/" + albumYear);
-        if (albumType.equals("lastNPhotos")) {
+
+        if (albumType.equals("lastYear")) {
+            files = Utils.getPhotosLastYear(this);
+        } else if (albumType.equals("lastNPhotos")) {
             files = Utils.getLastNPhotosinMedia(this, numPhotos);
         } else if (albumType.equals("multipleBuckets")) {
             files = Utils.getMediaInListofBuckets(this, bucketIDstrings);

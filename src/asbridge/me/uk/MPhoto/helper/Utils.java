@@ -462,6 +462,13 @@ public class Utils {
         return getMediaInDateRange(context, minDate, maxDate);
     }
 
+    public static ArrayList<File> getPhotosLastYear(Context context) {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR)-1;
+        Log.d(TAG, "getPhotosLastYear,"+year);
+        return getMediaInYear(context, year);
+    }
+
     // Get all media in specified year
     // Calculates min and max dates and gets data inbetween
     public static ArrayList<File> getMediaInYear(Context context, int year) {

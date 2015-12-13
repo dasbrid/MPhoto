@@ -284,7 +284,9 @@ public class PhotoActivity extends FragmentActivity
 
         Log.d("DAVE", "displaying photos for " + albumMonth +"/" + albumYear);
 
-        if (albumType.equals("lastNPhotos")) {
+        if (albumType.equals("lastYear")) {
+            filelist = Utils.getPhotosLastYear(this);
+        } else if (albumType.equals("lastNPhotos")) {
             filelist = Utils.getLastNPhotosinMedia(this, numPhotos);
         } else if (albumType.equals("multipleBuckets")) {
             filelist = Utils.getMediaInListofBuckets(this, bucketIDstrings);

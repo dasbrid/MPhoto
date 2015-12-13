@@ -15,7 +15,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
     TabFragment currentFragment;
     public TabsAdapter(FragmentManager fm) {
         super(fm);
-        this.mNumOfTabs = 7;
+        this.mNumOfTabs = 6;
     }
 
     public TabFragment getCurrentFragment() {
@@ -46,17 +46,15 @@ public class TabsAdapter extends FragmentPagerAdapter {
                 GivenYearFragment tab2 = new GivenYearFragment();
                 return tab2;
             case 3:
-                ThisYearFragment tab3 = new ThisYearFragment();
+                GivenPeriodFragment tab3 = new GivenPeriodFragment();
                 return tab3;
             case 4:
-                AllPhotosFragment tab4 = new AllPhotosFragment();
+                GivenMonthFragment tab4 = new GivenMonthFragment();
                 return tab4;
             case 5:
-                GivenMonthFragment tab5 = new GivenMonthFragment();
+                FromDateFragment tab5 = new FromDateFragment();
                 return tab5;
-            case 6:
-                FromDateFragment tab6 = new FromDateFragment();
-                return tab6;
+
 
 
             default:
