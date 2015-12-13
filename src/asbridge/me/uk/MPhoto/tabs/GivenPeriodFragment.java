@@ -79,7 +79,7 @@ public class GivenPeriodFragment extends TabFragment {
         switch (selectedId) {
             case (R.id.rbInLastWeek): {
                 c.add(Calendar.DATE, -7);
-                albumName = "Photos in the lats 7 days";
+                albumName = "Photos in the last 7 days";
                 break;
             }
             case (R.id.rbThisMonth): {

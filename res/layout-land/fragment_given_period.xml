@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+    <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/tabs_text_size"
+            android:gravity="center_horizontal"
+            android:text="Choose an option"
+            />
+
+    <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView"
+            android:id="@+id/radioGroup"
+            android:layout_marginLeft="20dp"
+    >
+    </RadioGroup>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_alignTop="@+id/radioGroup" android:layout_alignParentEnd="true"
+                  android:gravity="center_horizontal">
+        <LinearLayout android:layout_width="0px"
+                      android:layout_weight="1"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:layout_marginRight="10dp"
+        >
+    <RadioButton
+            android:layout_width="wrap_content"
+            android:text="In last week"
+            android:id="@+id/rbInLastWeek"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:textSize="@dimen/radioOptionsTextSize"
+    />
+    <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This month"
+            android:id="@+id/rbThisMonth"
+            android:checked="false"
+            android:textSize="@dimen/radioOptionsTextSize"
+    />
+
+    <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="In Last Month"
+            android:id="@+id/rbInLastMonth"
+            android:checked="false"
+            android:textSize="@dimen/radioOptionsTextSize"
+    />
+    <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="In Last 3 Months"
+            android:id="@+id/rbInLast3Months"
+            android:checked="true"
+            android:textSize="@dimen/radioOptionsTextSize"
+    />
+        </LinearLayout>
+        <LinearLayout android:layout_width="0px"
+                      android:layout_weight="1"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:layout_marginLeft="10dp"
+        >
+    <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="This year"
+            android:id="@+id/rbThisYear"
+            android:checked="false"
+            android:textSize="@dimen/radioOptionsTextSize"
+    />
+    <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="In last year"
+            android:id="@+id/rbInLastYear"
+            android:checked="false"
+            android:textSize="@dimen/radioOptionsTextSize"
+    />
+    <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last year"
+            android:id="@+id/rbLastYear"
+            android:checked="false"
+            android:textSize="@dimen/radioOptionsTextSize"
+    />
+    <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All photos"
+            android:id="@+id/rbAllPhotos"
+            android:checked="false"
+            android:textSize="@dimen/radioOptionsTextSize"
+    />
+    </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
