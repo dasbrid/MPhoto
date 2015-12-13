@@ -3,6 +3,7 @@ package asbridge.me.uk.MPhoto.tabs;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,20 +19,58 @@ import java.util.Calendar;
  */
 public class GivenPeriodFragment extends TabFragment {
 
-    RadioGroup radioGroup;
+    private String TAG = "DAVE:GivenPeriodFragment";
+
+    //RadioGroup radioGroup;
     Calendar c;
     String albumName;
 
+    RadioGroup rg1;
+    RadioGroup rg2;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_given_period, container, false);
-        radioGroup =(RadioGroup)v.findViewById(R.id.radioGroup);
+        //radioGroup =(RadioGroup)v.findViewById(R.id.radioGroup);
+        rg1 = (RadioGroup) v.findViewById(R.id.radioGroup1);
+        rg2 = (RadioGroup) v.findViewById(R.id.radioGroup2);
+        rg1.clearCheck(); // this is so we can start fresh, with no selection on both RadioGroups
+        rg2.clearCheck();
+        rg1.setOnCheckedChangeListener(listener1);
+        rg2.setOnCheckedChangeListener(listener2);
         return v;
     }
 
-    public void doSlideshow() {
-        int selectedId=radioGroup.getCheckedRadioButtonId();
+    private RadioGroup.OnCheckedChangeListener listener1 = new RadioGroup.OnCheckedChangeListener() {
 
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            if (checkedId != -1) {
+                rg2.setOnCheckedChangeListener(null); // remove the listener before clearing so we don't throw that stackoverflow exception(like Vladimir Volodin pointed out)
+                rg2.clearCheck(); // clear the second RadioGroup!
+                rg2.setOnCheckedChangeListener(listener2); //reset the listener
+                Log.e("XXX2", "do the work");
+            }
+        }
+    };
+
+    private RadioGroup.OnCheckedChangeListener listener2 = new RadioGroup.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            if (checkedId != -1) {
+                rg1.setOnCheckedChangeListener(null);
+                rg1.clearCheck();
+                rg1.setOnCheckedChangeListener(listener1);
+                Log.e("XXX2", "do the work");
+            }
+        }
+    };
+
+    public void doSlideshow() {
+        int selectedId=rg1.getCheckedRadioButtonId();
+        if (selectedId == -1)
+            selectedId = rg2.getCheckedRadioButtonId();
+        Log.d(TAG,"selectedId="+selectedId);
         Intent intent = new Intent(getActivity(), PhotoActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
 
@@ -113,8 +152,10 @@ public class GivenPeriodFragment extends TabFragment {
     }
 
     public void viewAlbum() {
-        int selectedId=radioGroup.getCheckedRadioButtonId();
-
+        int selectedId=rg1.getCheckedRadioButtonId();
+        if (selectedId == -1)
+            selectedId = rg2.getCheckedRadioButtonId();
+        Log.d(TAG,"selectedId="+selectedId);
         Intent intent = new Intent(getActivity(), AlbumActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
 
