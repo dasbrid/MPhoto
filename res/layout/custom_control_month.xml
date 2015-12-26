@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:ems="12"
-            android:text="MMMMMMMMM"
+            android:text="MMMMMMMMMMM"
             android:textSize="24sp" />
     <Button
             android:id="@+id/sidespinner_view_next"

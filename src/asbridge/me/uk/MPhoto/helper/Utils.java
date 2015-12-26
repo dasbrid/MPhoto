@@ -153,6 +153,8 @@ public class Utils {
 
         String BUCKET_ORDER_BY = photoDatePreference + " DESC"; // newest photo first
 
+        ArrayList<File> files = new ArrayList<File>();
+
         // Make the query.
         Cursor cur = context.getContentResolver().query(
                 images,     // URI
@@ -162,38 +164,42 @@ public class Utils {
                 BUCKET_ORDER_BY        // Ordering
         );
 
-        if (cur.getCount() == 0)
-            return null;
+            if (cur.getCount() == 0) {
+                cur.close();
+                return null;
+            }
 
-        ArrayList<File> files = new ArrayList<File>();
+            try {
+                if (cur.moveToFirst()) {
+                    String bucket;
+                    String dateTakenString;
+                    String data;
 
-        if (cur.moveToFirst()) {
-            String bucket;
-            String dateTakenString;
-            String data;
+                    Date dateTaken;
 
-            Date dateTaken;
+                    int bucketColumn = cur.getColumnIndex(
+                            MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
 
-            int bucketColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+                    int dateColumn = cur.getColumnIndex(photoDatePreference);
 
-            int dateColumn = cur.getColumnIndex(photoDatePreference);
+                    int dataColumn = cur.getColumnIndex(
+                            MediaStore.Images.Media.DATA);
 
-            int dataColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.DATA);
+                    do {
+                        // Get the field values
+                        bucket = cur.getString(bucketColumn);
+                        dateTakenString = cur.getString(dateColumn);
+                        dateTaken = new Date(Long.parseLong(dateTakenString));
 
-            do {
-                // Get the field values
-                bucket = cur.getString(bucketColumn);
-                dateTakenString = cur.getString(dateColumn);
-                dateTaken = new Date(Long.parseLong(dateTakenString));
+                        data = cur.getString(dataColumn);
 
-                data = cur.getString(dataColumn);
+                        files.add(new File(data));
 
-                files.add(new File(data));
-
-            } while (cur.moveToNext());
-        }
+                    } while (cur.moveToNext());
+                }
+            } finally {
+                cur.close();
+            }
         return files;
     }
 
@@ -241,6 +247,9 @@ public class Utils {
 
         String BUCKET_ORDER_BY = photoDatePreference + " DESC"; // newest photo first
 
+        ArrayList<File> files = new ArrayList<File>();
+
+
         // Make the query.
         Cursor cur = context.getContentResolver().query(
                 images,     // URI
@@ -250,37 +259,42 @@ public class Utils {
                 BUCKET_ORDER_BY        // Ordering
         );
 
-        if (cur.getCount() == 0)
+
+        if (cur.getCount() == 0) {
+            cur.close();
             return null;
+        }
 
-        ArrayList<File> files = new ArrayList<File>();
+        try {
+            if (cur.moveToFirst()) {
+                String bucket;
+                String dateTakenString;
+                String data;
 
-        if (cur.moveToFirst()) {
-            String bucket;
-            String dateTakenString;
-            String data;
+                Date dateTaken;
 
-            Date dateTaken;
+                int bucketColumn = cur.getColumnIndex(
+                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
 
-            int bucketColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+                int dateColumn = cur.getColumnIndex(photoDatePreference);
 
-            int dateColumn = cur.getColumnIndex(photoDatePreference);
+                int dataColumn = cur.getColumnIndex(
+                        MediaStore.Images.Media.DATA);
 
-            int dataColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.DATA);
+                do {
+                    // Get the field values
+                    bucket = cur.getString(bucketColumn);
+                    dateTakenString = cur.getString(dateColumn);
+                    dateTaken = new Date(Long.parseLong(dateTakenString));
 
-            do {
-                // Get the field values
-                bucket = cur.getString(bucketColumn);
-                dateTakenString = cur.getString(dateColumn);
-                dateTaken = new Date(Long.parseLong(dateTakenString));
+                    data = cur.getString(dataColumn);
 
-                data = cur.getString(dataColumn);
+                    files.add(new File(data));
 
-                files.add(new File(data));
-
-            } while (cur.moveToNext());
+                } while (cur.moveToNext());
+            }
+        } finally {
+            cur.close();
         }
         return files;
     }
@@ -308,33 +322,36 @@ public class Utils {
                 null,
                 BUCKET_ORDER_BY);
 
-        if (cur.moveToFirst()) {
-            String bucketname;
-            String date;
-            String data;
-            long bucketId;
-            int bucketColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-            int dateColumn = cur.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN);
-            int dataColumn = cur.getColumnIndex(MediaStore.Images.Media.DATA);
-            int bucketIdColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
+        try {
+            if (cur.moveToFirst()) {
+                String bucketname;
+                String date;
+                String data;
+                long bucketId;
+                int bucketColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+                int dateColumn = cur.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN);
+                int dataColumn = cur.getColumnIndex(MediaStore.Images.Media.DATA);
+                int bucketIdColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
 
-            do {
-                // Get the field values
-                bucketname = cur.getString(bucketColumn);
-                date = cur.getString(dateColumn);
-                data = cur.getString(dataColumn);
-                bucketId = cur.getLong(bucketIdColumn);
-                Log.d(TAG, "bucket name="+bucketname+" id="+bucketId);
-                if (bucketname != null && bucketname.length() > 0) {
-                    // Do something with the values.
-                    File f = new File(data);
+                do {
+                    // Get the field values
+                    bucketname = cur.getString(bucketColumn);
+                    date = cur.getString(dateColumn);
+                    data = cur.getString(dataColumn);
+                    bucketId = cur.getLong(bucketIdColumn);
+                    Log.d(TAG, "bucket name=" + bucketname + " id=" + bucketId);
+                    if (bucketname != null && bucketname.length() > 0) {
+                        // Do something with the values.
+                        File f = new File(data);
 
-                    Album album = new Album(bucketname, bucketId, f, f.getParentFile(),"bucket");
-                    albums.add(album);
-                }
-            } while (cur.moveToNext());
+                        Album album = new Album(bucketname, bucketId, f, f.getParentFile(), "bucket");
+                        albums.add(album);
+                    }
+                } while (cur.moveToNext());
+            }
+        } finally {
+            cur.close();
         }
-        cur.close();
 
         return albums;
     }
@@ -383,66 +400,69 @@ public class Utils {
                 null,
                 BUCKET_ORDER_BY);
 
-        if (cur.moveToFirst()) {
-            String bucketname;
-            String date;
-            String data;
-            long bucketId;
-            int bucketColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-            int dateColumn = cur.getColumnIndex(photoDatePreference);
-            int dataColumn = cur.getColumnIndex(MediaStore.Images.Media.DATA);
-            int bucketIdColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
+        try {
+            if (cur.moveToFirst()) {
+                String bucketname;
+                String date;
+                String data;
+                long bucketId;
+                int bucketColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+                int dateColumn = cur.getColumnIndex(photoDatePreference);
+                int dataColumn = cur.getColumnIndex(MediaStore.Images.Media.DATA);
+                int bucketIdColumn = cur.getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
 
-            int currentMonth = -1;
-            int currentYear = -1;
+                int currentMonth = -1;
+                int currentYear = -1;
 
 
-            do {
-                // Get the field values
-                bucketname = cur.getString(bucketColumn);
-                date = cur.getString(dateColumn);
-                data = cur.getString(dataColumn);
-                bucketId = cur.getInt(bucketIdColumn);
+                do {
+                    // Get the field values
+                    bucketname = cur.getString(bucketColumn);
+                    date = cur.getString(dateColumn);
+                    data = cur.getString(dataColumn);
+                    bucketId = cur.getInt(bucketIdColumn);
 
-                numimages++;
+                    numimages++;
 
-                if (date != null) {
-                    long milliseconds = Long.parseLong(date); // since 1/1/1970
-                    Calendar cl = Calendar.getInstance();
-                    cl.setTimeInMillis(milliseconds);
-                    int month = cl.get(Calendar.MONTH);
-                    int year = cl.get(Calendar.YEAR);
+                    if (date != null) {
+                        long milliseconds = Long.parseLong(date); // since 1/1/1970
+                        Calendar cl = Calendar.getInstance();
+                        cl.setTimeInMillis(milliseconds);
+                        int month = cl.get(Calendar.MONTH);
+                        int year = cl.get(Calendar.YEAR);
 
-                    numimagesWithDate++;
+                        numimagesWithDate++;
 
-                    if (bucketname != null && bucketname.length() > 0) {
-                        boolean newGroup = false;
-                        if (groupbyMonth == false) {
-                            newGroup = (year != currentYear);
-                        } else {
-                            newGroup = (month != currentMonth || year != currentYear);
-                        }
-                        if (newGroup) {
-                            currentMonth = month;
-                            currentYear = year;
-                            String albumdate;
-                            File f = new File(data);
-                            int albumMonth;
-                            if (groupbyMonth) {
-                                albumdate = cl.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + " " + year;
-                                albumMonth = month;
+                        if (bucketname != null && bucketname.length() > 0) {
+                            boolean newGroup = false;
+                            if (groupbyMonth == false) {
+                                newGroup = (year != currentYear);
                             } else {
-                                albumdate = Integer.toString(year);
-                                albumMonth = -1;
+                                newGroup = (month != currentMonth || year != currentYear);
                             }
-                            Album album = new Album(albumdate, year, albumMonth, f, f.getParentFile());
-                            albums.add(album);
+                            if (newGroup) {
+                                currentMonth = month;
+                                currentYear = year;
+                                String albumdate;
+                                File f = new File(data);
+                                int albumMonth;
+                                if (groupbyMonth) {
+                                    albumdate = cl.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.US) + " " + year;
+                                    albumMonth = month;
+                                } else {
+                                    albumdate = Integer.toString(year);
+                                    albumMonth = -1;
+                                }
+                                Album album = new Album(albumdate, year, albumMonth, f, f.getParentFile());
+                                albums.add(album);
+                            }
                         }
                     }
-                }
-            } while (cur.moveToNext());
+                } while (cur.moveToNext());
+            }
+        } finally {
+            cur.close();
         }
-        cur.close();
         Log.d("DAVE", "using "+ photoDatePreference + " found " +numimages+" images in " + albums.size()+" albums. Of which "+numimagesWithDate+" images with date");
         return albums;
     }
@@ -596,39 +616,46 @@ public class Utils {
                 orderBy        // Ordering (plus limit if applicable)
         );
 
-        if (cur.getCount() == 0)
+        if (cur.getCount() == 0) {
+            cur.close();
             return null;
+        }
 
         ArrayList<File> files = new ArrayList<File>();
 
-        if (cur.moveToFirst()) {
-            String bucket;
-            String dateTakenString;
-            String data;
+        try {
 
-            Date dateTaken;
-            Date dateAdded;
+            if (cur.moveToFirst()) {
+                String bucket;
+                String dateTakenString;
+                String data;
 
-            int bucketColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+                Date dateTaken;
+                Date dateAdded;
 
-            int dateTakenColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.DATE_TAKEN);
+                int bucketColumn = cur.getColumnIndex(
+                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
 
-            int dataColumn = cur.getColumnIndex(
-                    MediaStore.Images.Media.DATA);
+                int dateTakenColumn = cur.getColumnIndex(
+                        MediaStore.Images.Media.DATE_TAKEN);
 
-            do {
-                // Get the field values
-                bucket = cur.getString(bucketColumn);
-                dateTakenString = cur.getString(dateTakenColumn);
-                dateTaken = new Date(Long.parseLong(dateTakenString));
-                Log.d("DATE", dateTaken.toString());
-                data = cur.getString(dataColumn);
+                int dataColumn = cur.getColumnIndex(
+                        MediaStore.Images.Media.DATA);
 
-                files.add(new File(data));
+                do {
+                    // Get the field values
+                    bucket = cur.getString(bucketColumn);
+                    dateTakenString = cur.getString(dateTakenColumn);
+                    dateTaken = new Date(Long.parseLong(dateTakenString));
+                    Log.d("DATE", dateTaken.toString());
+                    data = cur.getString(dataColumn);
 
-            } while (cur.moveToNext());
+                    files.add(new File(data));
+
+                } while (cur.moveToNext());
+            }
+        } finally {
+            cur.close();
         }
         return files;
     }

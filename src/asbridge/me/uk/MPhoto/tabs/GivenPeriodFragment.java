@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
@@ -35,6 +36,8 @@ public class GivenPeriodFragment extends TabFragment {
         rg2 = (RadioGroup) v.findViewById(R.id.radioGroup2);
         rg1.clearCheck(); // this is so we can start fresh, with no selection on both RadioGroups
         rg2.clearCheck();
+        RadioButton rbDefault = (RadioButton) v.findViewById(R.id.rbAllPhotos);
+        rbDefault.setChecked(true);
         rg1.setOnCheckedChangeListener(listener1);
         rg2.setOnCheckedChangeListener(listener2);
         return v;
@@ -61,7 +64,6 @@ public class GivenPeriodFragment extends TabFragment {
                 rg1.setOnCheckedChangeListener(null);
                 rg1.clearCheck();
                 rg1.setOnCheckedChangeListener(listener1);
-                Log.e("XXX2", "do the work");
             }
         }
     };

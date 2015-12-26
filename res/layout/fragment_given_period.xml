@@ -59,6 +59,7 @@
             android:layout_below="@id/radioGroup1"
             android:id="@+id/radioGroup2"
             android:layout_marginLeft="20dp"
+            android:checkedButton="@+id/rbAllPhotos"
     >
         <RadioButton
                 android:layout_width="wrap_content"
@@ -89,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="All photos"
-                android:id="@+id/rbAllPhotos"
+                android:id="@id/rbAllPhotos"
                 android:checked="false"
                 android:textSize="@dimen/radioOptionsTextSize"
         />

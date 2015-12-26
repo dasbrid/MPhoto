@@ -60,6 +60,7 @@
             android:layout_toRightOf="@id/radioGroup1"
             android:id="@+id/radioGroup2"
             android:layout_marginLeft="20dp"
+            android:checkedButton="@id/rbAllPhotos"
     >
     <RadioButton
             android:layout_width="wrap_content"

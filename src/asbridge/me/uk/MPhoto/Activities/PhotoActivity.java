@@ -41,6 +41,8 @@ public class PhotoActivity extends FragmentActivity
         SlideshowSpeedDialog.SlideshowSpeedChangedListener,
         ToggleButton.OnCheckedChangeListener {
 
+    private final static String TAG = "PhotoActivity";
+
     private int numPages;
     private ArrayList<File> filelist;
     private boolean slideshowOn;
@@ -79,8 +81,10 @@ public class PhotoActivity extends FragmentActivity
                 while (newpage == page) {
                     newpage = r.nextInt(filelist.size());
                 }
+                Log.d(TAG, "page = "+page+"chosen random page "+newpage);
                 page = newpage;
             } else {
+                Log.d(TAG, "page = "+page+" choosing next page");
                 page++;
                 if (page >= numPages)
                     page = 0;
@@ -121,7 +125,7 @@ public class PhotoActivity extends FragmentActivity
         btnStartSlideshow.setVisibility(View.INVISIBLE);
         btnPhotoDelete.setVisibility(View.INVISIBLE);
         btnPhotoShare.setVisibility(View.INVISIBLE);
-        btnShuffleOn.setVisibility(View.INVISIBLE);
+// shuffle button always visible        btnShuffleOn.setVisibility(View.INVISIBLE);
         btnSlideshowSpeed.setVisibility(View.INVISIBLE);
         page = pager.getCurrentItem();
         startSlideshow();
@@ -133,7 +137,7 @@ public class PhotoActivity extends FragmentActivity
         btnStartSlideshow.setVisibility(View.VISIBLE);
         btnPhotoDelete.setVisibility(View.VISIBLE);
         btnPhotoShare.setVisibility(View.VISIBLE);
-        btnShuffleOn.setVisibility(View.VISIBLE);
+// shuffle button always visible        btnShuffleOn.setVisibility(View.VISIBLE);
         btnSlideshowSpeed.setVisibility(View.VISIBLE);
     }
 
@@ -195,13 +199,13 @@ public class PhotoActivity extends FragmentActivity
             btnStartSlideshow.setVisibility(View.INVISIBLE);
             btnPhotoDelete.setVisibility(View.INVISIBLE);
             btnPhotoShare.setVisibility(View.INVISIBLE);
-            btnShuffleOn.setVisibility(View.INVISIBLE);
+// shuffle button always visible            btnShuffleOn.setVisibility(View.INVISIBLE);
             btnSlideshowSpeed.setVisibility(View.INVISIBLE);
         } else {
             btnStartSlideshow.setVisibility(View.VISIBLE);
             btnPhotoDelete.setVisibility(View.VISIBLE);
             btnPhotoShare.setVisibility(View.VISIBLE);
-            btnShuffleOn.setVisibility(View.VISIBLE);
+// shuffle button always visible            btnShuffleOn.setVisibility(View.VISIBLE);
             btnSlideshowSpeed.setVisibility(View.VISIBLE);
         }
         // Code to make layout fullscreen. In onResume, otherwise when activity comes back it will revert to non-fullscreen
@@ -220,6 +224,7 @@ public class PhotoActivity extends FragmentActivity
 
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        Log.d(TAG, "shuffle turned "+(isChecked?"on":"off"));
         shuffleOn = isChecked;
     }
 
