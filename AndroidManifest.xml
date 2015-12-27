@@ -13,6 +13,9 @@
         <activity android:name=".Activities.AlbumActivity"
                   android:label="Edit Album">
         </activity>
+        <activity android:name=".Activities.PhotoGridActivity"
+                  android:label="Edit Album">
+        </activity>
 
         <activity android:name=".Activities.PhotoActivity"
                   android:label="Photo View">
