@@ -11,10 +11,7 @@ import android.support.v4.app.FragmentActivity;
 //import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Toast;
-import android.widget.ToggleButton;
+import android.widget.*;
 import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.Classes.PhotoViewPager;
 import asbridge.me.uk.MPhoto.Classes.SlideshowSpeedDialog;
@@ -39,7 +36,9 @@ public class PhotoActivity extends FragmentActivity
         PhotoViewPager.OnTouchedListener,
         DeleteConfirmDialog.DeleteDialogOKListener,
         SlideshowSpeedDialog.SlideshowSpeedChangedListener,
-        ToggleButton.OnCheckedChangeListener {
+        ToggleButton.OnCheckedChangeListener,
+        RadioGroup.OnCheckedChangeListener
+{
 
     private final static String TAG = "PhotoActivity";
 
@@ -63,7 +62,10 @@ public class PhotoActivity extends FragmentActivity
     private Button btnPhotoDelete;
     private Button btnStartSlideshow;
     private Button btnSlideshowSpeed;
-    private ToggleButton btnShuffleOn;
+//    private ToggleButton btnShuffleOn;
+    private RadioButton rbtnShuffleOn;
+    private RadioButton rbtnShuffleOff;
+    private RadioGroup radioGroupShuffle;
 
     private PhotoPagerAdapter photoPagerAdapter;
     private PhotoViewPager pager;
@@ -126,6 +128,7 @@ public class PhotoActivity extends FragmentActivity
         btnPhotoDelete.setVisibility(View.INVISIBLE);
         btnPhotoShare.setVisibility(View.INVISIBLE);
 // shuffle button always visible        btnShuffleOn.setVisibility(View.INVISIBLE);
+        radioGroupShuffle.setVisibility(View.INVISIBLE);
         btnSlideshowSpeed.setVisibility(View.INVISIBLE);
         page = pager.getCurrentItem();
         startSlideshow();
@@ -138,6 +141,7 @@ public class PhotoActivity extends FragmentActivity
         btnPhotoDelete.setVisibility(View.VISIBLE);
         btnPhotoShare.setVisibility(View.VISIBLE);
 // shuffle button always visible        btnShuffleOn.setVisibility(View.VISIBLE);
+        radioGroupShuffle.setVisibility(View.VISIBLE);
         btnSlideshowSpeed.setVisibility(View.VISIBLE);
     }
 
@@ -168,10 +172,11 @@ public class PhotoActivity extends FragmentActivity
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.d(TAG, "onRestoreInstanceState");
         // Always call the superclass so it can restore the view hierarchy
         super.onRestoreInstanceState(savedInstanceState);
         slideshowSharedState = savedInstanceState.getBoolean("slideshowOn");
-        shuffleOn = savedInstanceState.getBoolean("shuffleOn");
+        shuffleSharedState = savedInstanceState.getBoolean("shuffleOn");
         page = savedInstanceState.getInt("currentPage");
     }
 
@@ -186,13 +191,16 @@ public class PhotoActivity extends FragmentActivity
     // Called after starting or when resuming (no saved instance state)
     @Override
     protected void onResume() {
+        Log.v(TAG, "onResume");
         super.onResume();  // Always call the superclass method first
         // get the saved (in memory state of the slideshow)
         slideshowOn = slideshowSharedState;
         shuffleOn = shuffleSharedState;
         pager.setCurrentItemManual(page);
 
-        btnShuffleOn.setChecked(shuffleOn);
+//        btnShuffleOn.setChecked(shuffleOn);
+        rbtnShuffleOn.setChecked(shuffleOn);
+        rbtnShuffleOff.setChecked(!shuffleOn);
 
         if (slideshowOn) {
             startSlideshow();
@@ -200,12 +208,14 @@ public class PhotoActivity extends FragmentActivity
             btnPhotoDelete.setVisibility(View.INVISIBLE);
             btnPhotoShare.setVisibility(View.INVISIBLE);
 // shuffle button always visible            btnShuffleOn.setVisibility(View.INVISIBLE);
+            radioGroupShuffle.setVisibility(View.INVISIBLE);
             btnSlideshowSpeed.setVisibility(View.INVISIBLE);
         } else {
             btnStartSlideshow.setVisibility(View.VISIBLE);
             btnPhotoDelete.setVisibility(View.VISIBLE);
             btnPhotoShare.setVisibility(View.VISIBLE);
 // shuffle button always visible            btnShuffleOn.setVisibility(View.VISIBLE);
+            radioGroupShuffle.setVisibility(View.VISIBLE);
             btnSlideshowSpeed.setVisibility(View.VISIBLE);
         }
         // Code to make layout fullscreen. In onResume, otherwise when activity comes back it will revert to non-fullscreen
@@ -223,6 +233,18 @@ public class PhotoActivity extends FragmentActivity
     }
 
 
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if (checkedId != -1) {
+            if (checkedId == R.id.rbShuffleOn)
+                shuffleOn = true;
+            else
+                shuffleOn = false;
+            Log.d(TAG, "shuffle turned "+(shuffleOn?"on":"off"));
+        }
+    }
+
+
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         Log.d(TAG, "shuffle turned "+(isChecked?"on":"off"));
         shuffleOn = isChecked;
@@ -234,13 +256,12 @@ public class PhotoActivity extends FragmentActivity
 
         super.onCreate(savedInstanceState);
         // SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
-
         // if we are starting for first time (not restarting)
         if (savedInstanceState == null) {
+            Log.v("TAG","Saved instance state == null");
             slideshowSharedState = true;
             slideshowOn = true;
             shuffleSharedState = true;
-            shuffleOn = true;
         }
 
         setContentView(R.layout.activity_photo);
@@ -248,8 +269,13 @@ public class PhotoActivity extends FragmentActivity
         btnPhotoDelete = (Button) findViewById(R.id.btnPhotoDelete);
         btnPhotoShare = (Button) findViewById(R.id.btnPhotoShare);
         btnSlideshowSpeed = (Button) findViewById(R.id.btnSlideShowSpeed);
-        btnShuffleOn = (ToggleButton) findViewById(R.id.btnshuffleOn);
-        btnShuffleOn.setOnCheckedChangeListener(this);
+//        btnShuffleOn = (ToggleButton) findViewById(R.id.btnshuffleOn);
+        radioGroupShuffle = (RadioGroup) findViewById(R.id.radioGroupShuffleSlideshow);
+        rbtnShuffleOff = (RadioButton) findViewById(R.id.rbShuffleOff);
+        rbtnShuffleOn = (RadioButton) findViewById(R.id.rbShuffleOn);
+
+//        btnShuffleOn.setOnCheckedChangeListener(this);
+        radioGroupShuffle.setOnCheckedChangeListener(this);
 
         photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager());
 

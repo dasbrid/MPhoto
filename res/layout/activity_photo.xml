@@ -6,8 +6,6 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp" >
 
-
-
     <asbridge.me.uk.MPhoto.Classes.PhotoViewPager
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/photopager"
@@ -51,13 +49,31 @@
             android:layout_below="@id/btnPhotoStartSlideshow"
             android:padding="@dimen/photo_button_padding"
     />
-    <ToggleButton android:id="@+id/btnshuffleOn"
-                  android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:textOn="Turn shuffle off"
-                  android:textOff="Turn shuffle on"
-                  android:layout_below="@id/btnPhotoStartSlideshow"
-                  android:layout_toRightOf="@id/btnSlideShowSpeed"
-                  android:padding="@dimen/photo_button_padding"
-    />
+    <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioGroupShuffleSlideshow"
+            android:layout_below="@id/btnSlideShowSpeed"
+            android:layout_marginTop="12dp"
+            android:padding="@dimen/photo_button_padding"
+    >
+        <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Play in order"
+                android:id="@+id/rbShuffleOff"
+                android:checked="true"
+                android:textSize="@dimen/radioOptionsTextSize"
+        />
+        <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Play random order"
+                android:id="@+id/rbShuffleOn"
+                android:checked="false"
+                android:textSize="@dimen/radioOptionsTextSize"
+        />
+    </RadioGroup>
 </RelativeLayout>
 </RelativeLayout>

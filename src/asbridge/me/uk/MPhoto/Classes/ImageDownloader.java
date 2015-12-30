@@ -1,7 +1,9 @@
 package asbridge.me.uk.MPhoto.Classes;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -10,7 +12,6 @@ import android.util.Log;
 import android.widget.ImageView;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.Utils;
-import org.apache.http.client.HttpClient;
 
 import java.io.File;
 import java.lang.ref.SoftReference;
@@ -26,6 +27,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ImageDownloader {
 
     private static final String TAG = "ImageDownloader";
+
+    public static final Resources resources = null;
 
     public void download(String url, ImageView imageView) {
         resetPurgeTimer();
@@ -47,7 +50,7 @@ public class ImageDownloader {
      * Kept private at the moment as its interest is not clear.
      */
     private void forceDownload(String url, ImageView imageView) {
-        // State sanity: url is guaranteed to never be null in DownloadedDrawable and cache keys.
+        // State sanity: url is guaranteed to never be null in DownloadedColorDrawable and cache keys.
         if (url == null) {
             imageView.setImageDrawable(null);
             return;
@@ -55,7 +58,7 @@ public class ImageDownloader {
 
         if (cancelPotentialDownload(url, imageView)) {
             BitmapDownloaderTask task = new BitmapDownloaderTask(imageView);
-            DownloadedDrawable downloadedDrawable = new DownloadedDrawable(task);
+            DownloadedColorDrawable downloadedDrawable = new DownloadedColorDrawable(task);
             imageView.setImageDrawable(downloadedDrawable);
             imageView.setMinimumHeight(156);
             task.execute(url);
@@ -90,9 +93,9 @@ public class ImageDownloader {
      */
     private static BitmapDownloaderTask getBitmapDownloaderTask(ImageView imageView) {
         if (imageView != null) {
-            Drawable drawable = imageView.getDrawable();
-            if (drawable instanceof DownloadedDrawable) {
-                DownloadedDrawable downloadedDrawable = (DownloadedDrawable)drawable;
+            final Drawable drawable = imageView.getDrawable();
+            if (drawable instanceof DownloadedColorDrawable) {
+                final DownloadedColorDrawable downloadedDrawable = (DownloadedColorDrawable)drawable;
                 return downloadedDrawable.getBitmapDownloaderTask();
             }
         }
@@ -148,7 +151,6 @@ public class ImageDownloader {
         }
     }
 
-
     /**
      * A fake Drawable that will be attached to the imageView while the download is in progress.
      *
@@ -156,11 +158,11 @@ public class ImageDownloader {
      * if a new binding is required, and makes sure that only the last started download process can
      * bind its result, independently of the download finish order.</p>
      */
-    static class DownloadedDrawable extends ColorDrawable {
+    static class DownloadedColorDrawable extends ColorDrawable {
         private final WeakReference<BitmapDownloaderTask> bitmapDownloaderTaskReference;
 
-        public DownloadedDrawable(BitmapDownloaderTask bitmapDownloaderTask) {
-            super(Color.BLACK);
+        public DownloadedColorDrawable(BitmapDownloaderTask bitmapDownloaderTask) {
+            super(Color.argb(128, 10,10,10));
             bitmapDownloaderTaskReference =
                     new WeakReference<BitmapDownloaderTask>(bitmapDownloaderTask);
         }
@@ -168,9 +170,8 @@ public class ImageDownloader {
         public BitmapDownloaderTask getBitmapDownloaderTask() {
             return bitmapDownloaderTaskReference.get();
         }
+
     }
-
-
 
 
 
