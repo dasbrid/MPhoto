@@ -62,10 +62,10 @@ public class PhotoActivity extends FragmentActivity
     private Button btnPhotoDelete;
     private Button btnStartSlideshow;
     private Button btnSlideshowSpeed;
-//    private ToggleButton btnShuffleOn;
     private RadioButton rbtnShuffleOn;
     private RadioButton rbtnShuffleOff;
     private RadioGroup radioGroupShuffle;
+
 
     private PhotoPagerAdapter photoPagerAdapter;
     private PhotoViewPager pager;
@@ -283,7 +283,7 @@ public class PhotoActivity extends FragmentActivity
 
         pager.setAdapter(photoPagerAdapter);
         pager.setOnTouchedListener(this);
-        pager.setPageTransformer(true, new DepthPageTransformer());
+//        pager.setPageTransformer(true, new DepthPageTransformer());
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
         Integer positionParameter = parameters.getInt("position");

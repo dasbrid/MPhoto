@@ -18,11 +18,10 @@ public class AppConstant {
     public static final String PHOTO_ALBUM = "MatthewsPhotos";
 
     // supported file formats
-    public static final List<String> FILE_EXTN = Arrays.asList("jpg", "jpeg",
-            "png");
+    public static final List<String> FILE_EXTN = Arrays.asList("jpg", "jpeg", "png");
 
     // size (pixels) of images used for thumbnails
-    // NOT the size on the screen (specified in guiconstants)
+    // NOT the size on the screen (specified in gui constants)
     public static int THUMB_SIZE= 128;
 
     public static int SLIDESHOW_WIDTH= 1280;

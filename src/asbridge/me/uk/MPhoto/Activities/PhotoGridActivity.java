@@ -149,8 +149,8 @@ public class PhotoGridActivity extends Activity
             }
         } else {
             Toast.makeText(this, "No files found", Toast.LENGTH_SHORT).show();
-//            Button btnStartSlideshow = (Button)findViewById(R.id.btnStartSlideshow);
-//            btnStartSlideshow.setEnabled(false);
+            Button btnStartSlideshow = (Button)findViewById(R.id.btnStartSlideshow);
+            btnStartSlideshow.setEnabled(false);
         }
         // Gridview adapter
         adapter = new PhotoGridAdapter(PhotoGridActivity.this, imageFiles, albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDstrings);
@@ -238,7 +238,7 @@ public class PhotoGridActivity extends Activity
         deleteDialog.setArguments(args);
         deleteDialog.show(fm, "fragment_delete_dialog");
     }
-
+*/
     // button clicked, launch slideshow for this folder
     public void btnStartSlideshowClicked(View v)
     {
@@ -256,7 +256,7 @@ public class PhotoGridActivity extends Activity
         intent.putExtra("day", this.albumDay);
         this.startActivityForResult(intent,100);
     }
-
+/*
     public void btnSelectAllClicked(View v)
     {
         adapter.selectAll();
