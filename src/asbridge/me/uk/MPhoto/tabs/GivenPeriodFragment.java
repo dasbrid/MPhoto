@@ -11,7 +11,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
+import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
 import asbridge.me.uk.MPhoto.R;
+import asbridge.me.uk.MPhoto.helper.AppConstant;
 
 import java.util.Calendar;
 
@@ -158,7 +160,11 @@ public class GivenPeriodFragment extends TabFragment {
         if (selectedId == -1)
             selectedId = rg2.getCheckedRadioButtonId();
         Log.d(TAG,"selectedId="+selectedId);
-        Intent intent = new Intent(getActivity(), AlbumActivity.class);
+        Intent intent;
+        if (AppConstant.USE_PHOTO_GRID_ACTIVITY)
+            intent = new Intent(getActivity(), PhotoGridActivity.class);
+        else
+            intent = new Intent(getActivity(), AlbumActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
 
         if (selectedId == R.id.rbAllPhotos) {

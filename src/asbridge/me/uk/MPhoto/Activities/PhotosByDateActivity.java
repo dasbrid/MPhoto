@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.Button;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.TabsAdapter;
+import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.tabs.TabFragment;
 
 /**
@@ -21,6 +23,9 @@ public class PhotosByDateActivity extends FragmentActivity {
         setContentView(R.layout.activity_photosbydate);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.pagertabs);
+        Button btnViewPhotos = (Button) findViewById(R.id.btnShowAlbum);
+        if (AppConstant.ALLOW_VIEW_PHOTOS == false)
+            btnViewPhotos.setVisibility(View.INVISIBLE);
         tabsAdapter = new TabsAdapter(getSupportFragmentManager());
         viewPager.setAdapter(tabsAdapter);
     }
@@ -28,44 +33,11 @@ public class PhotosByDateActivity extends FragmentActivity {
     public void btnShowSlideshowClicked(View v) {
         TabFragment currentFragment = tabsAdapter.getCurrentFragment();
         currentFragment.doSlideshow();
-        /*
-        // get the MONTH
-        String spunMonth = spinnerMonth.getSelectedItem().toString();
-        int month = spinnerMonth.getSelectedItemPosition();
-
-        // get the Year
-        int year = npYear.getValue();
-
-        // start the slideshow activity
-        Intent intent = new Intent(this, PhotoActivity.class);
-        intent.putExtra("folderAbsolutePath", "not needed");
-        intent.putExtra("position", -1);
-        intent.putExtra("month", month);
-        intent.putExtra("year", year);
-        this.startActivity(intent);
-*/
     }
 
     public void btnShowAlbumClicked(View v) {
         TabFragment currentFragment = tabsAdapter.getCurrentFragment();
         currentFragment.viewAlbum();
-        /*
-        // get the MONTH
-        String spunMonth = spinnerMonth.getSelectedItem().toString();
-        int month = spinnerMonth.getSelectedItemPosition();
-
-        // get the Year
-        int year = npYear.getValue();
-
-        // start the slideshow activity
-        Intent intent = new Intent(this, AlbumActivity.class);
-        intent.putExtra("folderAbsolutePath", "not needed");
-        intent.putExtra("albumName", "Photos taken in Month "+(month+1) + " in " + year);
-        intent.putExtra("position", -1);
-        intent.putExtra("month", month);
-        intent.putExtra("year", year);
-        this.startActivity(intent);
-        */
-    }
+   }
 
 }

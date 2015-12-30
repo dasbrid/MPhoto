@@ -6,7 +6,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
+import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.Utils;
 import org.apache.http.client.HttpClient;
 
@@ -23,15 +25,18 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ImageDownloader {
 
-    private static final String LOG_TAG = "ImageDownloader";
+    private static final String TAG = "ImageDownloader";
 
     public void download(String url, ImageView imageView) {
         resetPurgeTimer();
         Bitmap bitmap = getBitmapFromCache(url);
 
         if (bitmap == null) {
+            Log.d(TAG, "url "+url + " not found in cache");
+            imageView.setImageResource(R.drawable.ic_launcher);
             forceDownload(url, imageView);
         } else {
+            Log.d(TAG, "url "+url + " loaded from cache");
             cancelPotentialDownload(url, imageView);
             imageView.setImageBitmap(bitmap);
         }
@@ -94,11 +99,11 @@ public class ImageDownloader {
         return null;
     }
 
-
+/*
     Bitmap downloadBitmap(String url) {
         return Utils.decodeFileToThumbnail(new File (url));
     }
-
+*/
     /**
      * The actual AsyncTask that will asynchronously download the image.
      */
@@ -116,7 +121,8 @@ public class ImageDownloader {
         @Override
         protected Bitmap doInBackground(String... params) {
             url = params[0];
-            return downloadBitmap(url);
+            Log.d(TAG, "start downloading "+url);
+            return Utils.decodeFileToThumbnail(new File (url));// downloadBitmap(url);
         }
 
         /**
@@ -127,7 +133,7 @@ public class ImageDownloader {
             if (isCancelled()) {
                 bitmap = null;
             }
-
+            Log.d(TAG, "finished downloading  "+url);
             addBitmapToCache(url, bitmap);
 
             if (imageViewReference != null) {

@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
+import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.controls.MonthControl;
 import asbridge.me.uk.MPhoto.controls.NumberControl;
+import asbridge.me.uk.MPhoto.helper.AppConstant;
 
 import java.util.Calendar;
 
@@ -68,8 +70,11 @@ public class GivenMonthFragment extends TabFragment {
         // get the Year
         int year = ycYear.getNumber();
 
-        // start the slideshow activity
-        Intent intent = new Intent(getActivity(), AlbumActivity.class);
+        Intent intent;
+        if (AppConstant.USE_PHOTO_GRID_ACTIVITY)
+            intent = new Intent(getActivity(), PhotoGridActivity.class);
+        else
+            intent = new Intent(getActivity(), AlbumActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
         intent.putExtra("albumName", "Photos taken in "+mcMonth.getMonthText() + " in " + year);
         intent.putExtra("albumType", "givenMonth");

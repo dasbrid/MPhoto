@@ -28,5 +28,8 @@ public class AppConstant {
     public static int SLIDESHOW_WIDTH= 1280;
     public static int SLIDESHOW_HEIGHT= 800;
 
-    public static boolean ALLOW_DELETE = true;
+    public static final boolean ALLOW_DELETE = true;
+    public static final boolean ALLOW_VIEW_PHOTOS = true;
+    public static final boolean USE_PHOTO_GRID_ACTIVITY = true;
+
 }

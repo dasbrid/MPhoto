@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
  */
 public class PhotoGridAdapter extends BaseAdapter  {
 
+    private final static String TAG = "PhotoGridAdapter";
+
     static class ViewHolder {
         CheckBox checkbox;
         ImageView image;
@@ -41,6 +44,9 @@ public class PhotoGridAdapter extends BaseAdapter  {
     private ArrayList<String> bucketIDStrings;
 
     public PhotoGridAdapter(Activity activity, ArrayList<CheckedFile> imageFiles, String albumFolder, int albumMonth, int albumYear, String albumName, String albumType, long albumBucketID, ArrayList<String> bucketIDStrings) {
+
+
+
         this._context = activity;
         this._files = imageFiles;
         this._albumFolder = albumFolder;
@@ -85,22 +91,28 @@ public class PhotoGridAdapter extends BaseAdapter  {
         LayoutInflater inflater = (LayoutInflater) _context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.image_grid_item, null);
+            Log.d(TAG, "getView " + position + " convertView == null");
+            convertView = inflater.inflate(R.layout.photo_grid_item, null);
             holder = new ViewHolder();
             holder.checkbox = (CheckBox) convertView.findViewById(R.id.imageCheckBox);
-            holder.image = (ImageView) convertView.findViewById(R.id.image_grid_item_image);
+            holder.image = (ImageView) convertView.findViewById(R.id.photo_grid_item_image);
             convertView.setTag(holder);
         } else {
+            Log.d(TAG, "getView " + position + " convertView != null");
             holder = (ViewHolder) convertView.getTag();
         }
-
+        // THIS MUST BE OUTSID THE THE CONVERT_VIEW==NULL (or views scrolling back in view get images changed)
         imageDownloader.download(_files.get(position).getFile().getAbsolutePath(), (ImageView) holder.image);
+
+        // onclick for the image
+        holder.image.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDStrings));
+
+
 //        Bitmap bMap = Utils.decodeFileToThumbnail(_files.get(position).getFile());
 //        holder.image.setImageBitmap(bMap);
 
 //        holder.checkbox.setChecked(isImageSelected(position));
 //        holder.checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
-//        holder.image.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDStrings));
 
         return convertView;
     }
@@ -142,7 +154,7 @@ public class PhotoGridAdapter extends BaseAdapter  {
 */
 
 
-    /*
+
     class OnbtnViewPhotoClickListener implements OnClickListener {
 
         int _position;
@@ -169,7 +181,7 @@ public class PhotoGridAdapter extends BaseAdapter  {
         @Override
         public void onClick(View v)
         {
-            if(v.getId() == R.id.image_grid_item_image) {
+            if(v.getId() == R.id.photo_grid_item_image) {
                 File f = _files.get(_position).getFile();
                 Intent intent = new Intent(_context, PhotoActivity.class);
                 intent.putExtra("folderAbsolutePath", this._albumFolder);
@@ -184,7 +196,7 @@ public class PhotoGridAdapter extends BaseAdapter  {
             }
         }
     }
-    */
+
 /*
     class OnCheckBoxClickListener implements OnClickListener {
 

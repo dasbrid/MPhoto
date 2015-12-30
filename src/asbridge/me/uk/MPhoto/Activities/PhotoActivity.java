@@ -239,7 +239,8 @@ public class PhotoActivity extends FragmentActivity
         if (savedInstanceState == null) {
             slideshowSharedState = true;
             slideshowOn = true;
-            shuffleOn = false;
+            shuffleSharedState = true;
+            shuffleOn = true;
         }
 
         setContentView(R.layout.activity_photo);

@@ -13,9 +13,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
+import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
 import asbridge.me.uk.MPhoto.Classes.Album;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.BucketListAdapter;
+import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
 import java.util.ArrayList;
@@ -99,7 +101,11 @@ public class BucketListFragment extends TabFragment {
 
         if (selectedItems.size() > 0 ) {
             Context context = getContext();
-            Intent intent = new Intent(context, AlbumActivity.class);
+            Intent intent;
+            if (AppConstant.USE_PHOTO_GRID_ACTIVITY)
+                intent = new Intent(context, PhotoGridActivity.class);
+            else
+                intent = new Intent(context, AlbumActivity.class);
             //intent.putExtra("folderAbsolutePath", firstAlbum.getFolder() == null ? null : firstAlbum.getFolder().getAbsolutePath());
             intent.putExtra("albumType", "multipleBuckets");
             intent.putExtra("albumName", albumNames);

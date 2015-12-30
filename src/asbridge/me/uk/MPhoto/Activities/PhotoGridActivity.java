@@ -149,8 +149,8 @@ public class PhotoGridActivity extends Activity
             }
         } else {
             Toast.makeText(this, "No files found", Toast.LENGTH_SHORT).show();
-            Button btnStartSlideshow = (Button)findViewById(R.id.btnStartSlideshow);
-            btnStartSlideshow.setEnabled(false);
+//            Button btnStartSlideshow = (Button)findViewById(R.id.btnStartSlideshow);
+//            btnStartSlideshow.setEnabled(false);
         }
         // Gridview adapter
         adapter = new PhotoGridAdapter(PhotoGridActivity.this, imageFiles, albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDstrings);
