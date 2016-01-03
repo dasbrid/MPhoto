@@ -28,6 +28,9 @@ public class ImageDownloader {
 
     private static final String TAG = "ImageDownloader";
 
+    private static final int HARD_CACHE_CAPACITY = 50;
+    private static final int DELAY_BEFORE_PURGE = 20 * 1000; // in milliseconds
+
     public static final Resources resources = null;
 
     public void download(String url, ImageView imageView) {
@@ -162,7 +165,7 @@ public class ImageDownloader {
         private final WeakReference<BitmapDownloaderTask> bitmapDownloaderTaskReference;
 
         public DownloadedColorDrawable(BitmapDownloaderTask bitmapDownloaderTask) {
-            super(Color.argb(128, 10,10,10));
+            super(Color.RED);
             bitmapDownloaderTaskReference =
                     new WeakReference<BitmapDownloaderTask>(bitmapDownloaderTask);
         }
@@ -173,13 +176,6 @@ public class ImageDownloader {
 
     }
 
-
-
-
-
-
-
-
         /*
      * Cache-related fields and methods.
      *
@@ -187,8 +183,6 @@ public class ImageDownloader {
      * Garbage Collector.
      */
 
-    private static final int HARD_CACHE_CAPACITY = 10;
-    private static final int DELAY_BEFORE_PURGE = 10 * 1000; // in milliseconds
 
     // Hard cache, with a fixed maximum capacity and a life duration
     private final HashMap<String, Bitmap> sHardBitmapCache =

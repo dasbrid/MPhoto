@@ -102,6 +102,9 @@ public class PhotoGridAdapter extends BaseAdapter  {
             holder = (ViewHolder) convertView.getTag();
         }
         // THIS MUST BE OUTSID THE THE CONVERT_VIEW==NULL (or views scrolling back in view get images changed)
+        // Pass the filepath and the view
+        // Image will be loaded asynchronously and then put in the view when loaded
+        // http://android-developers.blogspot.co.uk/2010/07/multithreading-for-performance.html
         imageDownloader.download(_files.get(position).getFile().getAbsolutePath(), (ImageView) holder.image);
 
         // onclick for the image

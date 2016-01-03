@@ -41,7 +41,13 @@ public class PhotoGridActivity extends Activity
     private ArrayList<String> bucketIDstrings;
     private int numPhotos;
 
+    private Button btnSelectPhotos;
+
     private boolean modified;
+
+    private int clickMode;
+    private static final int MODE_SELECT = 0;
+    private static final int MODE_VIEW = 1;
 
     private final String TAG = "DAVE:PhotoGridActivity";
     // Called after starting or when resuming (no saved instance state)
@@ -67,6 +73,22 @@ public class PhotoGridActivity extends Activity
 
     }
 
+    private void setButtonVisibility () {
+        if (clickMode == MODE_VIEW) {
+//            btnSelectPhotos.setVisibility(View.VISIBLE);
+            btnSelectPhotos.setText("Select photos");
+        } else {
+//            btnSelectPhotos.setVisibility(View.INVISIBLE);
+            btnSelectPhotos.setText("Cancel select");
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        setButtonVisibility();
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if (requestCode == 100)
@@ -84,6 +106,10 @@ public class PhotoGridActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_grid);
         gridView = (GridView) findViewById(R.id.photo_grid_view);
+
+        clickMode = MODE_VIEW;
+
+        btnSelectPhotos = (Button) findViewById(R.id.btnSelectPhotos);
 
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
@@ -239,9 +265,26 @@ public class PhotoGridActivity extends Activity
         deleteDialog.show(fm, "fragment_delete_dialog");
     }
 */
+
+    // button clicked, launch slideshow for this folder
+    public void btnSelectPhotosClicked(View v)
+    {
+        Log.d("DAVE", "Select Photos");
+        if (clickMode == MODE_SELECT)
+            clickMode = MODE_VIEW;
+        else
+            clickMode = MODE_SELECT;
+        setButtonVisibility();
+    }
+
+    public void startSlideshow() {
+
+    }
+
     // button clicked, launch slideshow for this folder
     public void btnStartSlideshowClicked(View v)
     {
+        if (clickMode == MODE_VIEW) {
         Log.d("DAVE", "start slideshow for type "+this.albumType+" name = "+this.albumName);
         Intent intent = new Intent(this, PhotoActivity.class);
         intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
@@ -255,6 +298,7 @@ public class PhotoGridActivity extends Activity
         intent.putExtra("year", this.albumYear);
         intent.putExtra("day", this.albumDay);
         this.startActivityForResult(intent,100);
+        }
     }
 /*
     public void btnSelectAllClicked(View v)

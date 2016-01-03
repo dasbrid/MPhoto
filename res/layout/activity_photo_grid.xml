@@ -16,13 +16,27 @@
               android:stretchMode="columnWidth"
     >
     </GridView>
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_below="@id/photo_grid_view"
+
+                    android:gravity="bottom"
+    >
     <Button android:id="@+id/btnStartSlideshow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Slideshow"
+            android:text="Play slideshow"
             android:onClick="btnStartSlideshowClicked"
-            android:layout_below="@id/photo_grid_view"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
     />
+    <Button android:id="@+id/btnSelectPhotos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Photos"
+            android:layout_toRightOf="@id/btnStartSlideshow"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:onClick="btnSelectPhotosClicked"
+    />
+    </RelativeLayout>
 </LinearLayout>
