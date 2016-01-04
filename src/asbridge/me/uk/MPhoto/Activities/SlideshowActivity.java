@@ -70,7 +70,7 @@ public class SlideshowActivity extends FragmentActivity
     private PhotoPagerAdapter photoPagerAdapter;
     private CustomPagerAdapter mCustomPagerAdapter;
     private PhotoViewPager pager;
-    private ViewPager mViewPager;
+    private PhotoViewPager mViewPager;
 
     private Handler handler = new Handler();
 
@@ -133,7 +133,7 @@ public class SlideshowActivity extends FragmentActivity
 // shuffle button always visible        btnShuffleOn.setVisibility(View.INVISIBLE);
         radioGroupShuffle.setVisibility(View.INVISIBLE);
         btnSlideshowSpeed.setVisibility(View.INVISIBLE);
-        page = pager.getCurrentItem();
+        page = mViewPager.getCurrentItem();
         startSlideshow();
     }
 
@@ -290,9 +290,10 @@ public class SlideshowActivity extends FragmentActivity
 
         mCustomPagerAdapter = new CustomPagerAdapter(this);
         photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.slideshowpager);
+        mViewPager = (PhotoViewPager) findViewById(R.id.slideshowpager);
         mViewPager.setAdapter(mCustomPagerAdapter);
 
+        mViewPager.setOnTouchedListener(this);
 
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
