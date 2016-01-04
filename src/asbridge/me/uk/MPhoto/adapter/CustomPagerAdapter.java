@@ -37,6 +37,8 @@ public class CustomPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
+        if (fileList==null)
+            return 0;
         return fileList.size();
     }
 

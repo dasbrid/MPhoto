@@ -94,7 +94,8 @@ public class SlideshowActivity extends FragmentActivity
                     page = 0;
             }
 
-            pager.setCurrentItemManual(page);
+//            pager.setCurrentItemManual(page);
+            mViewPager.setCurrentItem(page,true);
 
             // to keep the slideshow going, start the timer again
             int ssd = Utils.getSlideshowDelay(getApplicationContext());
@@ -198,8 +199,8 @@ public class SlideshowActivity extends FragmentActivity
         // get the saved (in memory state of the slideshow)
         slideshowOn = slideshowSharedState;
         shuffleOn = shuffleSharedState;
-        pager.setCurrentItemManual(page);
-
+//        pager.setCurrentItemManual(page);
+        mViewPager.setCurrentItem(page);
 //        btnShuffleOn.setChecked(shuffleOn);
         rbtnShuffleOn.setChecked(shuffleOn);
         rbtnShuffleOff.setChecked(!shuffleOn);
