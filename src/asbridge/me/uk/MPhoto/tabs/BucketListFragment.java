@@ -73,12 +73,12 @@ public class BucketListFragment extends TabFragment {
         }
 
         if (selectedItems.size() > 0 ) {
-            Context context = getContext();
-            Intent intent = new Intent(context, SlideshowActivity.class);
+            Intent intent = new Intent(getActivity(), SlideshowActivity.class);
             intent.putExtra("albumType", "multipleBuckets");
             intent.putExtra("albumName", albumNames);
+            intent.putExtra("position", -1);
             intent.putStringArrayListExtra("bucketIDs", selectedBucketIDs);
-            context.startActivity(intent);
+            this.startActivity(intent);
         }
     }
 
@@ -101,15 +101,14 @@ public class BucketListFragment extends TabFragment {
         }
 
         if (selectedItems.size() > 0 ) {
-            Context context = getContext();
             Intent intent;
 
-            intent = new Intent(context, PhotoGridActivity.class);
+            intent = new Intent(getActivity(), PhotoGridActivity.class);
 
             intent.putExtra("albumType", "multipleBuckets");
             intent.putExtra("albumName", albumNames);
             intent.putStringArrayListExtra("bucketIDs", selectedBucketIDs);
-            context.startActivity(intent);
+            this.startActivity(intent);
         }
     }
 }

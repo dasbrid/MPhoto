@@ -33,7 +33,7 @@ import java.util.Timer;
  * Created by David on 04/11/2015.
  * See http://developer.android.com/training/animation/screen-slide.html
  */
-public class SlideshowActivity extends FragmentActivity
+public class SlideshowActivity extends Activity
         implements
         PhotoViewPager.OnTouchedListener,
         DeleteConfirmDialog.DeleteDialogOKListener,
@@ -42,7 +42,7 @@ public class SlideshowActivity extends FragmentActivity
         RadioGroup.OnCheckedChangeListener
 {
 
-    private final static String TAG = "PhotoActivity";
+    private final static String TAG = "SlideshowActivity";
 
     private int numPages;
     private ArrayList<File> filelist;
@@ -69,7 +69,7 @@ public class SlideshowActivity extends FragmentActivity
     private RadioGroup radioGroupShuffle;
 
 
-    private PhotoPagerAdapter photoPagerAdapter;
+//    private PhotoPagerAdapter photoPagerAdapter;
     private CustomPagerAdapter mCustomPagerAdapter;
     private PhotoViewPager mViewPager;
 
@@ -246,7 +246,7 @@ public class SlideshowActivity extends FragmentActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.v("TAG","onCreate");
+        Log.v(TAG,"onCreate");
 
         super.onCreate(savedInstanceState);
         // SLIDE_SHOW_DELAY = Integer.parseInt(Utils.getSlideshowDelay(this)); // in seconds
@@ -271,7 +271,6 @@ public class SlideshowActivity extends FragmentActivity
         radioGroupShuffle.setOnCheckedChangeListener(this);
 
         mCustomPagerAdapter = new CustomPagerAdapter(this);
-        photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager());
         mViewPager = (PhotoViewPager) findViewById(R.id.slideshowpager);
         mViewPager.setAdapter(mCustomPagerAdapter);
 
@@ -296,6 +295,7 @@ public class SlideshowActivity extends FragmentActivity
         } else if (albumType.equals("lastNPhotos")) {
             numPhotos = parameters.getInt("numPhotos");
         }
+        Log.d(TAG, "positionParameter = "+positionParameter);
         if (positionParameter != -1)
         {
             // we have been passed a specific photo index.
@@ -380,7 +380,7 @@ public class SlideshowActivity extends FragmentActivity
 
         this.filelist.remove(currentFile);
         mViewPager.invalidate();
-        photoPagerAdapter.notifyDataSetChanged();
+        mCustomPagerAdapter.notifyDataSetChanged();
         modified = true;
         // Only actually delete if deletion enabled
         if (AppConstant.ALLOW_DELETE)
