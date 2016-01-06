@@ -9,7 +9,8 @@
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/photo_grid_view"
               android:layout_width="match_parent"
-
+              android:horizontalSpacing="2dp"
+              android:verticalSpacing="2dp"
               android:layout_height="0px"
               android:layout_weight="1"
               android:numColumns="@integer/albumgrid_number_columns"

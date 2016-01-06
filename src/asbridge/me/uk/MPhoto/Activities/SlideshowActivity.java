@@ -71,7 +71,6 @@ public class SlideshowActivity extends FragmentActivity
 
     private PhotoPagerAdapter photoPagerAdapter;
     private CustomPagerAdapter mCustomPagerAdapter;
-    private PhotoViewPager pager;
     private PhotoViewPager mViewPager;
 
     private Handler handler = new Handler();
@@ -96,7 +95,6 @@ public class SlideshowActivity extends FragmentActivity
                     page = 0;
             }
 
-//            pager.setCurrentItemManual(page);
             Utils.setLastDisplayed(getApplicationContext(),Integer.toString(page));
             mViewPager.setCurrentItem(page,true);
 
@@ -111,10 +109,6 @@ public class SlideshowActivity extends FragmentActivity
     private Runnable hidenavigation = new  Runnable() {
         @Override
         public void run() {
-            /*
-            Button btnEnableSwiping = (Button)findViewById(R.id.btnEnableSwiping);
-            btnEnableSwiping.setVisibility(View.INVISIBLE);
-            */
             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(uiOptions);
@@ -133,7 +127,6 @@ public class SlideshowActivity extends FragmentActivity
         btnStartSlideshow.setVisibility(View.INVISIBLE);
         btnPhotoDelete.setVisibility(View.INVISIBLE);
         btnPhotoShare.setVisibility(View.INVISIBLE);
-// shuffle button always visible        btnShuffleOn.setVisibility(View.INVISIBLE);
         radioGroupShuffle.setVisibility(View.INVISIBLE);
         btnSlideshowSpeed.setVisibility(View.INVISIBLE);
         page = mViewPager.getCurrentItem();
@@ -146,7 +139,6 @@ public class SlideshowActivity extends FragmentActivity
         btnStartSlideshow.setVisibility(View.VISIBLE);
         btnPhotoDelete.setVisibility(View.VISIBLE);
         btnPhotoShare.setVisibility(View.VISIBLE);
-// shuffle button always visible        btnShuffleOn.setVisibility(View.VISIBLE);
         radioGroupShuffle.setVisibility(View.VISIBLE);
         btnSlideshowSpeed.setVisibility(View.VISIBLE);
     }
@@ -202,9 +194,7 @@ public class SlideshowActivity extends FragmentActivity
         // get the saved (in memory state of the slideshow)
         slideshowOn = slideshowSharedState;
         shuffleOn = shuffleSharedState;
-//        pager.setCurrentItemManual(page);
         mViewPager.setCurrentItem(page);
-//        btnShuffleOn.setChecked(shuffleOn);
         rbtnShuffleOn.setChecked(shuffleOn);
         rbtnShuffleOff.setChecked(!shuffleOn);
 
@@ -213,14 +203,12 @@ public class SlideshowActivity extends FragmentActivity
             btnStartSlideshow.setVisibility(View.INVISIBLE);
             btnPhotoDelete.setVisibility(View.INVISIBLE);
             btnPhotoShare.setVisibility(View.INVISIBLE);
-// shuffle button always visible            btnShuffleOn.setVisibility(View.INVISIBLE);
             radioGroupShuffle.setVisibility(View.INVISIBLE);
             btnSlideshowSpeed.setVisibility(View.INVISIBLE);
         } else {
             btnStartSlideshow.setVisibility(View.VISIBLE);
             btnPhotoDelete.setVisibility(View.VISIBLE);
             btnPhotoShare.setVisibility(View.VISIBLE);
-// shuffle button always visible            btnShuffleOn.setVisibility(View.VISIBLE);
             radioGroupShuffle.setVisibility(View.VISIBLE);
             btnSlideshowSpeed.setVisibility(View.VISIBLE);
         }
@@ -267,8 +255,7 @@ public class SlideshowActivity extends FragmentActivity
             Log.v("TAG","Saved instance state == null");
             slideshowSharedState = true;
             slideshowOn = true;
-            ///!!!! in this debug activity we set shuffle off when starting
-            shuffleSharedState = false;
+            shuffleSharedState = true;
         }
 
         setContentView(R.layout.activity_slideshow);
@@ -282,15 +269,6 @@ public class SlideshowActivity extends FragmentActivity
 
 
         radioGroupShuffle.setOnCheckedChangeListener(this);
-
-/*
-        photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager());
-
-        pager = (PhotoViewPager)findViewById(R.id.photopager);
-
-        pager.setAdapter(photoPagerAdapter);
-        pager.setOnTouchedListener(this);
-*/
 
         mCustomPagerAdapter = new CustomPagerAdapter(this);
         photoPagerAdapter = new PhotoPagerAdapter(getSupportFragmentManager());
@@ -363,10 +341,7 @@ public class SlideshowActivity extends FragmentActivity
             filelist = new ArrayList<File>();
             Toast.makeText(this,"No pictures found", Toast.LENGTH_LONG).show();
         }
-        /*
-        photoPagerAdapter.setFileList(filelist);
-        photoPagerAdapter.notifyDataSetChanged();
-        */
+
         mCustomPagerAdapter.setFileList(filelist);
         mCustomPagerAdapter.notifyDataSetChanged();
 
@@ -400,11 +375,11 @@ public class SlideshowActivity extends FragmentActivity
 
     // Delete dialog button clicked (callback)
     public void onDeleteDialogOK() {
-        int currentPage = pager.getCurrentItem();
+        int currentPage = mViewPager.getCurrentItem();
         File currentFile = this.filelist.get(currentPage);
 
         this.filelist.remove(currentFile);
-        pager.invalidate();
+        mViewPager.invalidate();
         photoPagerAdapter.notifyDataSetChanged();
         modified = true;
         // Only actually delete if deletion enabled
@@ -414,7 +389,7 @@ public class SlideshowActivity extends FragmentActivity
 
     // button share clicked. Share selected image
     public void btnPhotoShareClicked(View v) {
-        int currentPage = pager.getCurrentItem();
+        int currentPage = mViewPager.getCurrentItem();
         File currentFile = this.filelist.get(currentPage);
         final Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
@@ -426,6 +401,5 @@ public class SlideshowActivity extends FragmentActivity
 
         startActivity(Intent.createChooser(emailIntent, "Send mail:"));
     }
-
 
 }
