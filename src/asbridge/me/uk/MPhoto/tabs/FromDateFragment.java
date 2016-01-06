@@ -12,6 +12,7 @@ import android.widget.NumberPicker;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
+import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
 
@@ -42,7 +43,7 @@ public class FromDateFragment extends TabFragment {
         int year =  dpFromDate.getYear();
 
         // start the slideshow activity
-        Intent intent = new Intent(getActivity(), PhotoActivity.class);
+        Intent intent = new Intent(getActivity(), SlideshowActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
         intent.putExtra("albumType", "fromDate");
         intent.putExtra("position", -1);
@@ -60,10 +61,8 @@ public class FromDateFragment extends TabFragment {
         int year =  dpFromDate.getYear();
 
         Intent intent;
-        if (AppConstant.USE_PHOTO_GRID_ACTIVITY)
-            intent = new Intent(getActivity(), PhotoGridActivity.class);
-        else
-            intent = new Intent(getActivity(), AlbumActivity.class);
+
+        intent = new Intent(getActivity(), PhotoGridActivity.class);
 
         intent.putExtra("folderAbsolutePath", "not needed");
         intent.putExtra("albumName", "Photos taken after " + day + "/" + (month+1) + "/" + year);

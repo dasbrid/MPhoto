@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
+import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.controls.MonthControl;
 import asbridge.me.uk.MPhoto.controls.NumberControl;
@@ -52,7 +53,7 @@ public class GivenMonthFragment extends TabFragment {
         int year = ycYear.getNumber();
 
         // start the slideshow activity
-        Intent intent = new Intent(getActivity(), PhotoActivity.class);
+        Intent intent = new Intent(getActivity(), SlideshowActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
         intent.putExtra("albumType", "givenMonth");
         intent.putExtra("position", -1);
@@ -71,10 +72,9 @@ public class GivenMonthFragment extends TabFragment {
         int year = ycYear.getNumber();
 
         Intent intent;
-        if (AppConstant.USE_PHOTO_GRID_ACTIVITY)
-            intent = new Intent(getActivity(), PhotoGridActivity.class);
-        else
-            intent = new Intent(getActivity(), AlbumActivity.class);
+
+        intent = new Intent(getActivity(), PhotoGridActivity.class);
+
         intent.putExtra("folderAbsolutePath", "not needed");
         intent.putExtra("albumName", "Photos taken in "+mcMonth.getMonthText() + " in " + year);
         intent.putExtra("albumType", "givenMonth");

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
+import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.Classes.Album;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.BucketListAdapter;
@@ -73,7 +74,7 @@ public class BucketListFragment extends TabFragment {
 
         if (selectedItems.size() > 0 ) {
             Context context = getContext();
-            Intent intent = new Intent(context, PhotoActivity.class);
+            Intent intent = new Intent(context, SlideshowActivity.class);
             intent.putExtra("albumType", "multipleBuckets");
             intent.putExtra("albumName", albumNames);
             intent.putStringArrayListExtra("bucketIDs", selectedBucketIDs);
@@ -102,17 +103,12 @@ public class BucketListFragment extends TabFragment {
         if (selectedItems.size() > 0 ) {
             Context context = getContext();
             Intent intent;
-            if (AppConstant.USE_PHOTO_GRID_ACTIVITY)
-                intent = new Intent(context, PhotoGridActivity.class);
-            else
-                intent = new Intent(context, AlbumActivity.class);
-            //intent.putExtra("folderAbsolutePath", firstAlbum.getFolder() == null ? null : firstAlbum.getFolder().getAbsolutePath());
+
+            intent = new Intent(context, PhotoGridActivity.class);
+
             intent.putExtra("albumType", "multipleBuckets");
             intent.putExtra("albumName", albumNames);
             intent.putStringArrayListExtra("bucketIDs", selectedBucketIDs);
-            //intent.putExtra("albumBucketID", firstAlbum.getBucketID());
-            //intent.putExtra("month", firstAlbum.getMonth());
-            //intent.putExtra("year", firstAlbum.getNumber());
             context.startActivity(intent);
         }
     }

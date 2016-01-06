@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
+import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.Classes.CheckedFile;
 import asbridge.me.uk.MPhoto.Classes.ImageDownloader;
 import asbridge.me.uk.MPhoto.R;
@@ -186,7 +187,7 @@ public class PhotoGridAdapter extends BaseAdapter  {
         {
             if(v.getId() == R.id.photo_grid_item_image) {
                 File f = _files.get(_position).getFile();
-                Intent intent = new Intent(_context, PhotoActivity.class);
+                Intent intent = new Intent(_context, SlideshowActivity.class);
                 intent.putExtra("folderAbsolutePath", this._albumFolder);
                 intent.putExtra("albumName",this.albumName);
                 intent.putExtra("albumType",this.albumType);

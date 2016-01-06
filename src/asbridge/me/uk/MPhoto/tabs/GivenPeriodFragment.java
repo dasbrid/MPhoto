@@ -76,7 +76,7 @@ public class GivenPeriodFragment extends TabFragment {
         if (selectedId == -1)
             selectedId = rg2.getCheckedRadioButtonId();
         Log.d(TAG,"selectedId="+selectedId);
-        Intent intent = new Intent(getActivity(), PhotoActivity.class);
+        Intent intent = new Intent(getActivity(), SlideshowActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
 
         if (selectedId == R.id.rbAllPhotos) {
@@ -162,10 +162,9 @@ public class GivenPeriodFragment extends TabFragment {
             selectedId = rg2.getCheckedRadioButtonId();
         Log.d(TAG,"selectedId="+selectedId);
         Intent intent;
-        if (AppConstant.USE_PHOTO_GRID_ACTIVITY)
-            intent = new Intent(getActivity(), PhotoGridActivity.class);
-        else
-            intent = new Intent(getActivity(), AlbumActivity.class);
+
+        intent = new Intent(getActivity(), PhotoGridActivity.class);
+
         intent.putExtra("folderAbsolutePath", "not needed");
 
         if (selectedId == R.id.rbAllPhotos) {

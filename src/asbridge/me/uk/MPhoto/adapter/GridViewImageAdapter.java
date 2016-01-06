@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
+import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.Classes.CheckedFile;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.Utils;
@@ -159,7 +160,7 @@ public class GridViewImageAdapter extends BaseAdapter  {
         {
             if(v.getId() == R.id.image_grid_item_image) {
                 File f = _files.get(_position).getFile();
-                Intent intent = new Intent(_context, PhotoActivity.class);
+                Intent intent = new Intent(_context, SlideshowActivity.class);
                 intent.putExtra("folderAbsolutePath", this._albumFolder);
                 intent.putExtra("albumName",this.albumName);
                 intent.putExtra("albumType",this.albumType);

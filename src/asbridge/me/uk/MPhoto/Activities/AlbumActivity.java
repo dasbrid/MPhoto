@@ -239,7 +239,7 @@ public class AlbumActivity extends Activity implements DeleteConfirmDialog.Delet
     public void btnStartSlideshowClicked(View v)
     {
         Log.d("DAVE", "start slideshow for type "+this.albumType+" name = "+this.albumName);
-        Intent intent = new Intent(this, PhotoActivity.class);
+        Intent intent = new Intent(this, SlideshowActivity.class);
         intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
         intent.putExtra("albumType", this.albumType);
         intent.putExtra("albumName", this.albumName);
