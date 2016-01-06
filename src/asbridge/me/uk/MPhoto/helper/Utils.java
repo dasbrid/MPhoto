@@ -89,7 +89,7 @@ public class Utils {
         return 0;
     }
 
-    private static int calculateInSampleSize(File f, int reqWidth, int reqHeight) {
+    private static int calculateInSampleSize_std(File f, int reqWidth, int reqHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true; // just do the decode, don't load into memory
 
@@ -117,7 +117,27 @@ public class Utils {
         return inSampleSize;
     }
 
-    public static Bitmap decodeFileByScale(File f, int sampleSize)
+    private static int calculateInSampleSize(File f, int reqWidth, int reqHeight) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true; // just do the decode, don't load into memory
+
+        BitmapFactory.decodeFile(f.getAbsolutePath(),options); // decode results into options
+
+        int actualHeight = options.outHeight;
+        int actualWidth = options.outWidth;
+
+        int numPixelsAllowed = reqHeight * reqWidth;
+
+        int scale = 1;
+        while (actualHeight / scale * actualWidth / scale > numPixelsAllowed) {
+            scale = scale * 2;
+        }
+
+        return scale;
+    }
+
+
+        public static Bitmap decodeFileByScale(File f, int sampleSize)
     {
         // Decode bitmap with inSampleSize set
         BitmapFactory.Options options = new BitmapFactory.Options();
