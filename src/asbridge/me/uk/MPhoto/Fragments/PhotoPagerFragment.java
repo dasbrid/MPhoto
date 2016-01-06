@@ -31,7 +31,9 @@ public class PhotoPagerFragment extends Fragment {
 
         ImageView iv = (ImageView) rootView.findViewById(R.id.photoImageView);
         // get the imageview size and scale the image to fit
+
         Bitmap myBitmap = Utils.decodeFileToSize(new File(imagepath), AppConstant.SLIDESHOW_WIDTH,AppConstant.SLIDESHOW_HEIGHT);
+
         iv.setImageBitmap(myBitmap);
 
         return rootView;

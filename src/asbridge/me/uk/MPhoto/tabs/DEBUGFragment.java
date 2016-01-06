@@ -9,22 +9,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
-import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
 import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
 import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
+import asbridge.me.uk.MPhoto.helper.Utils;
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
 /**
  * Created by David on 02/12/2015.
  */
-public class GivenPeriodFragment extends TabFragment {
+public class DEBUGFragment extends TabFragment {
 
     private String TAG = "DAVE:GivenPeriodFragment";
 
+    private View v;
     //RadioGroup radioGroup;
     Calendar c;
     String albumName;
@@ -33,7 +36,7 @@ public class GivenPeriodFragment extends TabFragment {
     RadioGroup rg2;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_given_period, container, false);
+        v = inflater.inflate(R.layout.fragment_debug, container, false);
         //radioGroup =(RadioGroup)v.findViewById(R.id.radioGroup);
         rg1 = (RadioGroup) v.findViewById(R.id.radioGroup1);
         rg2 = (RadioGroup) v.findViewById(R.id.radioGroup2);
@@ -43,9 +46,16 @@ public class GivenPeriodFragment extends TabFragment {
         rbDefault.setChecked(true);
         rg1.setOnCheckedChangeListener(listener1);
         rg2.setOnCheckedChangeListener(listener2);
+
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        TextView tvLastDisplayed = (TextView) v.findViewById(R.id.tvLastDisplayed);
+        tvLastDisplayed.setText("image "+ Utils.getLastDisplayed(getContext())+" "+Utils.getImageFilename(getContext()));
+    }
     private RadioGroup.OnCheckedChangeListener listener1 = new RadioGroup.OnCheckedChangeListener() {
 
         @Override
@@ -76,7 +86,7 @@ public class GivenPeriodFragment extends TabFragment {
         if (selectedId == -1)
             selectedId = rg2.getCheckedRadioButtonId();
         Log.d(TAG,"selectedId="+selectedId);
-        Intent intent = new Intent(getActivity(), PhotoActivity.class);
+        Intent intent = new Intent(getActivity(), /*PhotoActivity*/SlideshowActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
 
         if (selectedId == R.id.rbAllPhotos) {

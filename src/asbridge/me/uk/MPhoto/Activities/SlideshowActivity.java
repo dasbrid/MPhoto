@@ -3,7 +3,9 @@ package asbridge.me.uk.MPhoto.Activities;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -95,6 +97,7 @@ public class SlideshowActivity extends FragmentActivity
             }
 
 //            pager.setCurrentItemManual(page);
+            Utils.setLastDisplayed(getApplicationContext(),Integer.toString(page));
             mViewPager.setCurrentItem(page,true);
 
             // to keep the slideshow going, start the timer again
@@ -163,7 +166,7 @@ public class SlideshowActivity extends FragmentActivity
         super.onSaveInstanceState(savedInstanceState);        // Save the slideshow status
         savedInstanceState.putBoolean("slideshowOn", slideshowOn);
         savedInstanceState.putBoolean("shuffleOn", shuffleOn);
-        savedInstanceState.putInt("currentPage", pager.getCurrentItem());
+        savedInstanceState.putInt("currentPage", mViewPager.getCurrentItem());
     }
 
     @Override
@@ -264,7 +267,8 @@ public class SlideshowActivity extends FragmentActivity
             Log.v("TAG","Saved instance state == null");
             slideshowSharedState = true;
             slideshowOn = true;
-            shuffleSharedState = true;
+            ///!!!! in this debug activity we set shuffle off when starting
+            shuffleSharedState = false;
         }
 
         setContentView(R.layout.activity_slideshow);
@@ -422,4 +426,6 @@ public class SlideshowActivity extends FragmentActivity
 
         startActivity(Intent.createChooser(emailIntent, "Send mail:"));
     }
+
+
 }

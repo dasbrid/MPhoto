@@ -26,6 +26,39 @@ public class Utils {
 
     private static String TAG = "DAVE:Utils";
 
+    public static  String getLastDisplayed(Context context)
+    {
+        SharedPreferences sharedPref = context.getSharedPreferences("Asbridge.Me.Uk.MPhoto",Context.MODE_PRIVATE);
+
+        String ssd = sharedPref.getString("lastDisplayed", "nothing");
+        return ssd;
+    }
+
+    public static void setLastDisplayed(Context context,String ssd)
+    {
+        SharedPreferences sharedPref = context.getSharedPreferences("Asbridge.Me.Uk.MPhoto",Context.MODE_PRIVATE);
+        SharedPreferences.Editor settingsEditor = sharedPref.edit();
+        settingsEditor.putString("lastDisplayed", ssd);
+        settingsEditor.commit();
+    }
+
+
+    public static void setImageFilename(Context context,String ssd)
+    {
+        SharedPreferences sharedPref = context.getSharedPreferences("Asbridge.Me.Uk.MPhoto",Context.MODE_PRIVATE);
+        SharedPreferences.Editor settingsEditor = sharedPref.edit();
+        settingsEditor.putString("imageFilename", ssd);
+        settingsEditor.commit();
+    }
+
+    public static String getImageFilename(Context context)
+    {
+        SharedPreferences sharedPref = context.getSharedPreferences("Asbridge.Me.Uk.MPhoto",Context.MODE_PRIVATE);
+
+        String ssd = sharedPref.getString("imageFilename", "none");
+        return ssd;
+    }
+
     public static int getSlideshowDelay(Context context)
     {
         SharedPreferences sharedPref = context.getSharedPreferences("Asbridge.Me.Uk.MPhoto",Context.MODE_PRIVATE);
@@ -75,8 +108,8 @@ public class Utils {
 
             // Calculate the largest inSampleSize value that is a power of 2 and keeps both
             // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
                 inSampleSize *= 2;
             }
         }
@@ -84,13 +117,15 @@ public class Utils {
         return inSampleSize;
     }
 
-    public static Bitmap decodeFileToSize(File f, int reqWidth, int reqHeight) {
+    public static Bitmap decodeFileByScale(File f, int sampleSize)
+    {
         // Decode bitmap with inSampleSize set
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
-        options.inSampleSize = calculateInSampleSize(f, reqWidth, reqHeight);
+        options.inSampleSize = sampleSize;
 
         Bitmap scaledBitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+
 
 
         ExifInterface exif = null;
@@ -111,6 +146,15 @@ public class Utils {
         Bitmap adjustedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,  scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
 
         return adjustedBitmap;
+    }
+
+
+    public static Bitmap decodeFileToSize(File f, int reqWidth, int reqHeight) {
+        // Decode bitmap with inSampleSize set
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        int sampleSize = calculateInSampleSize(f, reqWidth, reqHeight);
+        return decodeFileByScale(f, sampleSize);
     }
 
     public static Bitmap decodeFileToThumbnail(File f) {

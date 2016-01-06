@@ -2,7 +2,10 @@ package asbridge.me.uk.MPhoto.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
  */
 public class CustomPagerAdapter extends PagerAdapter {
 
+    private static final String TAG = "CustomPagerAdapter";
     private ArrayList<File> fileList = null;
     public void setFileList(ArrayList<File> fileList)
     {
@@ -49,23 +53,42 @@ public class CustomPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+        Log.d (TAG,"instantiate " + position +" of " + fileList.size() + "=" + fileList.get(position).getAbsolutePath());
+
+        Utils.setImageFilename(mContext, "instantiate " + position +" of " + fileList.size() + "=" + fileList.get(position).getAbsolutePath());
         View itemView = mLayoutInflater.inflate(R.layout.slideshow_page, container, false);
 
         ImageView iv = (ImageView) itemView.findViewById(R.id.slideshowImage);
         // get the imageview size and scale the image to fit
         Bitmap myBitmap = Utils.decodeFileToSize(new File(fileList.get(position).getAbsolutePath()), AppConstant.SLIDESHOW_WIDTH,AppConstant.SLIDESHOW_HEIGHT);
+
+//        Bitmap myBitmap = Utils.decodeFileByScale(new File(fileList.get(position).getAbsolutePath()), 16);
+
+
+        Utils.setImageFilename(mContext,Utils.getImageFilename(mContext) + " decoded bitmap");
         iv.setImageBitmap(myBitmap);
  /*
         ImageView imageView = (ImageView) itemView.findViewById(R.id.slideshowImage);
         imageView.setImageResource(mResources[position]);
 */
         container.addView(itemView);
-
+        Utils.setImageFilename(mContext,Utils.getImageFilename(mContext) + " added view");
         return itemView;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((LinearLayout) object);
+        Log.d (TAG,"destroy position = "+position);
+        View itemView = (View)object;
+        ImageView iv = (ImageView) itemView.findViewById(R.id.slideshowImage);
+        BitmapDrawable bmpDrawable = (BitmapDrawable) iv.getDrawable();
+        if (bmpDrawable != null && bmpDrawable.getBitmap() != null) {
+            // This is the important part
+            Log.d (TAG,"recycling position = "+position);
+            bmpDrawable.getBitmap().recycle();
+        }
+        ((ViewPager) container).removeView(itemView);
+
+        //container.removeView((LinearLayout) object);
     }
 }
