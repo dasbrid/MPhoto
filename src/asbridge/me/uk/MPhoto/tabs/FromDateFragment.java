@@ -1,6 +1,5 @@
 package asbridge.me.uk.MPhoto.tabs;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,13 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.NumberPicker;
-import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
-import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
+
 import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
 import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.R;
-import asbridge.me.uk.MPhoto.helper.AppConstant;
 
 import java.util.Calendar;
 
