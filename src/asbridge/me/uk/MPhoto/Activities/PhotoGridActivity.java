@@ -1,9 +1,7 @@
 package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,11 +9,8 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 import asbridge.me.uk.MPhoto.Classes.CheckedFile;
-import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.R;
-import asbridge.me.uk.MPhoto.adapter.GridViewImageAdapter;
 import asbridge.me.uk.MPhoto.adapter.PhotoGridAdapter;
-import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
 import java.io.File;
