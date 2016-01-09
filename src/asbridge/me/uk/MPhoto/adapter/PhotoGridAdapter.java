@@ -29,7 +29,6 @@ public class PhotoGridAdapter extends BaseAdapter  {
     private final static String TAG = "PhotoGridAdapter";
 
     static class ViewHolder {
-        CheckBox checkbox;
         ImageView image;
     }
 
@@ -94,7 +93,6 @@ public class PhotoGridAdapter extends BaseAdapter  {
             Log.d(TAG, "getView " + position + " convertView == null");
             convertView = inflater.inflate(R.layout.photo_grid_item, null);
             holder = new ViewHolder();
-            holder.checkbox = (CheckBox) convertView.findViewById(R.id.imageCheckBox);
             holder.image = (ImageView) convertView.findViewById(R.id.photo_grid_item_image);
             convertView.setTag(holder);
         } else {
