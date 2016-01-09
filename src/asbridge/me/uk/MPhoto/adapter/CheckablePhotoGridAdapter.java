@@ -117,8 +117,6 @@ public class CheckablePhotoGridAdapter extends BaseAdapter  {
         // onclick for the image
         holder.layout.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDStrings));
 
-//        holder.checkbox.setOnClickListener(new OnCheckBoxClickListener(position));
-
         return convertView;
     }
 
@@ -192,31 +190,25 @@ public class CheckablePhotoGridAdapter extends BaseAdapter  {
         @Override
         public void onClick(View v)
         {
-            Log.d(TAG,"item clicked "+_position + " mode = "+gridClickMode);
             if (gridClickMode == GridClickMode.MODE_SELECT) {
                 boolean checked = ((CheckableLinearLayout) v).isChecked();
                 ((CheckableLinearLayout) v).setChecked(!checked);
                 _files.get(_position).setChecked(!checked);
-                Log.v(TAG, "item clicked");
-
                 if (mEventListener != null) {
-                    Log.v(TAG, "fire listener");
                     mEventListener.onSelectionChanged(getNumSelectedItems());
                 }
             } else if (gridClickMode == GridClickMode.MODE_VIEW) {
-                //if(v.getId() == R.id.photo_grid_item_image) {
-                    File f = _files.get(_position).getFile();
-                    Intent intent = new Intent(_context, SlideshowActivity.class);
-                    intent.putExtra("folderAbsolutePath", this._albumFolder);
-                    intent.putExtra("albumName",this.albumName);
-                    intent.putExtra("albumType",this.albumType);
-                    intent.putExtra("albumBucketID", albumBucketID);
-                    intent.putStringArrayListExtra("bucketIDs", albumBucketIDStrings);
-                    intent.putExtra("position", _position);
-                    intent.putExtra("month", albumMonth);
-                    intent.putExtra("year", albumYear);
-                    _context.startActivityForResult(intent,100);
-                //}
+                File f = _files.get(_position).getFile();
+                Intent intent = new Intent(_context, SlideshowActivity.class);
+                intent.putExtra("folderAbsolutePath", this._albumFolder);
+                intent.putExtra("albumName",this.albumName);
+                intent.putExtra("albumType",this.albumType);
+                intent.putExtra("albumBucketID", albumBucketID);
+                intent.putStringArrayListExtra("bucketIDs", albumBucketIDStrings);
+                intent.putExtra("position", _position);
+                intent.putExtra("month", albumMonth);
+                intent.putExtra("year", albumYear);
+                _context.startActivityForResult(intent,100);
             }
         }
     }

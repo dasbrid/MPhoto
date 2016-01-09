@@ -2,6 +2,7 @@ package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +41,7 @@ public class CheckablePhotoGridActivity extends Activity implements CheckablePho
     private TextView tvNumSelectedItems;
 
     private Button btnSelectPhotos;
+    private Button btnSharePhotos;
 
     private boolean modified;
 
@@ -73,11 +75,11 @@ public class CheckablePhotoGridActivity extends Activity implements CheckablePho
 
     private void setButtonVisibility () {
         if (clickMode == MODE_VIEW) {
-//            btnSelectPhotos.setVisibility(View.VISIBLE);
+            btnSharePhotos.setVisibility(View.INVISIBLE);
             btnSelectPhotos.setText("Select photos");
             adapter.setGridClickMode(CheckablePhotoGridAdapter.GridClickMode.MODE_VIEW);
         } else {
-//            btnSelectPhotos.setVisibility(View.INVISIBLE);
+            btnSharePhotos.setVisibility(View.VISIBLE);
             btnSelectPhotos.setText("Cancel select");
             adapter.setGridClickMode(CheckablePhotoGridAdapter.GridClickMode.MODE_SELECT);
         }
@@ -110,6 +112,7 @@ public class CheckablePhotoGridActivity extends Activity implements CheckablePho
         clickMode = MODE_SELECT;
 
         btnSelectPhotos = (Button) findViewById(R.id.btnSelectPhotos);
+        btnSharePhotos = (Button) findViewById(R.id.btnSharePhotos);
 
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
@@ -220,13 +223,11 @@ public class CheckablePhotoGridActivity extends Activity implements CheckablePho
         btnSelectAll.setEnabled(numImages != numSelected);
     }
 */
-/*
-    // button share clicked. Share selected image
-    public void btnShareClicked(View v) {
-        ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();
-        File fileToShare = selectedFiles.get(0).getFile();
 
-        // many files
+    // button share clicked. Share selected image
+    public void btnSharePhotosClicked(View v) {
+        ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();
+
         final Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         ArrayList<Uri> attachmentUris = new ArrayList<Uri>();
 
@@ -243,7 +244,7 @@ public class CheckablePhotoGridActivity extends Activity implements CheckablePho
 
         startActivity(Intent.createChooser(emailIntent, "Send mail:"));
     }
-
+/*
     // Delete dialog button clicked (callback)
     public void onDeleteDialogOK() {
         Toast.makeText(this, "Delete files", Toast.LENGTH_LONG).show();
