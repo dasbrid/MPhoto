@@ -8,9 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
+import android.graphics.*;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -18,6 +16,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 import asbridge.me.uk.MPhoto.Classes.Album;
+import asbridge.me.uk.MPhoto.R;
 
 /**
  * Created by David on 10/11/2015.
@@ -132,42 +131,62 @@ public class Utils {
         while (actualHeight / scale * actualWidth / scale > numPixelsAllowed) {
             scale = scale * 2;
         }
-
+        Log.d(TAG, "num allowed="+numPixelsAllowed+" size="+actualHeight+"x"+actualWidth+" scale="+scale);
         return scale;
     }
 
 
-        public static Bitmap decodeFileByScale(File f, int sampleSize)
+    public static Bitmap decodeFileByScale(File f, int sampleSize)
     {
         // Decode bitmap with inSampleSize set
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
         options.inSampleSize = sampleSize;
 
-        Bitmap scaledBitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
-
-
-
-        ExifInterface exif = null;
         try
         {
-            exif = new ExifInterface(f.getAbsolutePath());
-        }
-        catch (IOException e)
-        {
-            //Error
-            e.printStackTrace();
-        }
-        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-        int orientation = orientString != null ? Integer.parseInt(orientString) :  ExifInterface.ORIENTATION_NORMAL;
-        int rotationInDegrees = exifToDegrees(orientation);
-        Matrix matrix = new Matrix();
-        if (orientation != 0f) {matrix.preRotate(rotationInDegrees);}
-        Bitmap adjustedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,  scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+            Bitmap scaledBitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
 
-        return adjustedBitmap;
+            ExifInterface exif;
+
+            exif = new ExifInterface(f.getAbsolutePath());
+
+            String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+            int orientation = orientString != null ? Integer.parseInt(orientString) :  ExifInterface.ORIENTATION_NORMAL;
+            int rotationInDegrees = exifToDegrees(orientation);
+            Matrix matrix = new Matrix();
+            if (orientation != 0f) {matrix.preRotate(rotationInDegrees);}
+            Bitmap adjustedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,  scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+
+            return adjustedBitmap;
+
+        }
+        catch (/*IO*/Exception e)
+        {
+            // Some error has occurred ... Send back a static created bitmap
+            e.printStackTrace();
+            return getBadImageBitmap(320,320);
+        }
     }
 
+    private static Bitmap getBadImageBitmap(int height, int width) {
+
+        Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(b);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawPaint(paint);
+
+        paint.setColor(Color.WHITE);
+        paint.setAntiAlias(true);
+        paint.setTextSize(14.f);
+        paint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText("Bad Image", (width / 2.f) , (height / 2.f), paint);
+
+        return b;
+    }
 
     public static Bitmap decodeFileToSize(File f, int reqWidth, int reqHeight) {
         // Decode bitmap with inSampleSize set

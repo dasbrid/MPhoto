@@ -165,7 +165,7 @@ public class ImageDownloader {
         private final WeakReference<BitmapDownloaderTask> bitmapDownloaderTaskReference;
 
         public DownloadedColorDrawable(BitmapDownloaderTask bitmapDownloaderTask) {
-            super(Color.RED);
+            super(Color.DKGRAY);
             bitmapDownloaderTaskReference =
                     new WeakReference<BitmapDownloaderTask>(bitmapDownloaderTask);
         }
