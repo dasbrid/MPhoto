@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+              android:orientation="vertical"
+                android:layout_alignParentBottom="true"
+
+>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:text="number of selected items"
+              android:id="@+id/tvNumSelectedItems"
+    >
+    </TextView>
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/photo_grid_view"
+              android:layout_width="match_parent"
+              android:horizontalSpacing="2dp"
+              android:verticalSpacing="2dp"
+              android:layout_height="0px"
+              android:layout_weight="1"
+              android:numColumns="@integer/albumgrid_number_columns"
+              android:stretchMode="columnWidth"
+    >
+    </GridView>
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_below="@id/photo_grid_view"
+
+                    android:gravity="bottom"
+    >
+    <Button android:id="@+id/btnStartSlideshow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play slideshow"
+            android:onClick="btnStartSlideshowClicked"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+    />
+    <Button android:id="@+id/btnSelectPhotos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Photos"
+            android:layout_toRightOf="@id/btnStartSlideshow"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:onClick="btnSelectPhotosClicked"
+    />
+    </RelativeLayout>
+</LinearLayout>

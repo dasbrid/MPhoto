@@ -9,10 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import asbridge.me.uk.MPhoto.Activities.AlbumActivity;
-import asbridge.me.uk.MPhoto.Activities.PhotoActivity;
-import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
-import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
+import asbridge.me.uk.MPhoto.Activities.*;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
 
@@ -163,7 +160,7 @@ public class GivenPeriodFragment extends TabFragment {
         Log.d(TAG,"selectedId="+selectedId);
         Intent intent;
 
-        intent = new Intent(getActivity(), PhotoGridActivity.class);
+        intent = new Intent(getActivity(), CheckablePhotoGridActivity.class);
 
         intent.putExtra("folderAbsolutePath", "not needed");
 
@@ -171,6 +168,7 @@ public class GivenPeriodFragment extends TabFragment {
             intent.putExtra("albumType", "allPhotos");
             intent.putExtra("albumName", "All photos");
             intent.putExtra("position", -1);
+
             intent.putExtra("month", -1);
             intent.putExtra("year", -1);
             this.startActivity(intent);
