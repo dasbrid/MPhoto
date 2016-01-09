@@ -3,23 +3,18 @@ package asbridge.me.uk.MPhoto.Activities;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
-import asbridge.me.uk.MPhoto.Classes.PhotoViewPager;
+import asbridge.me.uk.MPhoto.Classes.SlideshowViewPager;
 import asbridge.me.uk.MPhoto.Classes.SlideshowSpeedDialog;
 import asbridge.me.uk.MPhoto.R;
-import asbridge.me.uk.MPhoto.adapter.PhotoPagerAdapter;
-import asbridge.me.uk.MPhoto.adapter.CustomPagerAdapter;
+import asbridge.me.uk.MPhoto.adapter.SlideshowPagerAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.helper.Utils;
 import java.io.File;
@@ -27,15 +22,13 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 
-//import android.support.v4.app.FragmentManager;
-
 /**
  * Created by David on 04/11/2015.
  * See http://developer.android.com/training/animation/screen-slide.html
  */
 public class SlideshowActivity extends Activity
         implements
-        PhotoViewPager.OnTouchedListener,
+        SlideshowViewPager.OnTouchedListener,
         DeleteConfirmDialog.DeleteDialogOKListener,
         SlideshowSpeedDialog.SlideshowSpeedChangedListener,
         ToggleButton.OnCheckedChangeListener,
@@ -68,10 +61,8 @@ public class SlideshowActivity extends Activity
     private RadioButton rbtnShuffleOff;
     private RadioGroup radioGroupShuffle;
 
-
-//    private PhotoPagerAdapter photoPagerAdapter;
-    private CustomPagerAdapter mCustomPagerAdapter;
-    private PhotoViewPager mViewPager;
+    private SlideshowPagerAdapter mSlideshowPagerAdapter;
+    private SlideshowViewPager mViewPager;
 
     private Handler handler = new Handler();
 
@@ -270,9 +261,9 @@ public class SlideshowActivity extends Activity
 
         radioGroupShuffle.setOnCheckedChangeListener(this);
 
-        mCustomPagerAdapter = new CustomPagerAdapter(this);
-        mViewPager = (PhotoViewPager) findViewById(R.id.slideshowpager);
-        mViewPager.setAdapter(mCustomPagerAdapter);
+        mSlideshowPagerAdapter = new SlideshowPagerAdapter(this);
+        mViewPager = (SlideshowViewPager) findViewById(R.id.slideshowpager);
+        mViewPager.setAdapter(mSlideshowPagerAdapter);
 
         mViewPager.setOnTouchedListener(this);
 
@@ -342,8 +333,8 @@ public class SlideshowActivity extends Activity
             Toast.makeText(this,"No pictures found", Toast.LENGTH_LONG).show();
         }
 
-        mCustomPagerAdapter.setFileList(filelist);
-        mCustomPagerAdapter.notifyDataSetChanged();
+        mSlideshowPagerAdapter.setFileList(filelist);
+        mSlideshowPagerAdapter.notifyDataSetChanged();
 
         modified = false;
         numPages = filelist.size();
@@ -380,7 +371,7 @@ public class SlideshowActivity extends Activity
 
         this.filelist.remove(currentFile);
         mViewPager.invalidate();
-        mCustomPagerAdapter.notifyDataSetChanged();
+        mSlideshowPagerAdapter.notifyDataSetChanged();
         modified = true;
         // Only actually delete if deletion enabled
         if (AppConstant.ALLOW_DELETE)

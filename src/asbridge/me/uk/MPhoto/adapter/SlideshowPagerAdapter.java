@@ -22,9 +22,9 @@ import java.util.ArrayList;
  * Created by David on 03/01/2016.
  * http://codetheory.in/android-image-slideshow-using-viewpager-pageradapter/
  */
-public class CustomPagerAdapter extends PagerAdapter {
+public class SlideshowPagerAdapter extends PagerAdapter {
 
-    private static final String TAG = "CustomPagerAdapter";
+    private static final String TAG = "SlideshowPagerAdapter";
     private ArrayList<File> fileList = null;
     public void setFileList(ArrayList<File> fileList)
     {
@@ -34,7 +34,7 @@ public class CustomPagerAdapter extends PagerAdapter {
     Context mContext;
     LayoutInflater mLayoutInflater;
 
-    public CustomPagerAdapter(Context context) {
+    public SlideshowPagerAdapter(Context context) {
         mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -44,6 +44,11 @@ public class CustomPagerAdapter extends PagerAdapter {
         if (fileList==null)
             return 0;
         return fileList.size();
+    }
+
+    public File getFileAtPosition(int position)
+    {
+        return fileList.get(position);
     }
 
     @Override

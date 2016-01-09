@@ -5,8 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.Toast;
-import asbridge.me.uk.MPhoto.adapter.PhotoPagerAdapter;
+import asbridge.me.uk.MPhoto.adapter.SlideshowPagerAdapter;
 
 import java.io.File;
 
@@ -15,7 +14,7 @@ import java.io.File;
  * For disabling swipe see
  * http://stackoverflow.com/questions/9650265/how-do-disable-paging-by-swiping-with-finger-in-viewpager-but-still-be-able-to-s
  */
-public class PhotoViewPager extends ViewPager {
+public class SlideshowViewPager extends ViewPager {
 
     OnTouchedListener mCallback = null;
     // implement this interface to listen
@@ -23,11 +22,11 @@ public class PhotoViewPager extends ViewPager {
         public void onTouched();
     }
 
-    public PhotoViewPager(Context context) {
+    public SlideshowViewPager(Context context) {
         super(context);
     }
 
-    public PhotoViewPager(Context context, AttributeSet attrs) {
+    public SlideshowViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -39,7 +38,7 @@ public class PhotoViewPager extends ViewPager {
     public void getCurrentFile()
     {
         int currentIndex = getCurrentItem();
-        PhotoPagerAdapter adapter = (PhotoPagerAdapter) getAdapter();
+        SlideshowPagerAdapter adapter = (SlideshowPagerAdapter) getAdapter();
         File currentFile = adapter.getFileAtPosition(currentIndex);
         Log.d("DAVE","file = "+currentFile.getName());
     }

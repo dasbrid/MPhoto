@@ -8,7 +8,7 @@
 
 
 
-    <asbridge.me.uk.MPhoto.Classes.PhotoViewPager
+    <asbridge.me.uk.MPhoto.Classes.SlideshowViewPager
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/photopager"
             android:layout_width="match_parent"
