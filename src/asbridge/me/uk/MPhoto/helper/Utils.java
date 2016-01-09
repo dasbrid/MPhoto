@@ -136,37 +136,27 @@ public class Utils {
     }
 
 
-    public static Bitmap decodeFileByScale(File f, int sampleSize)
+    public static Bitmap decodeFileByScale(File f, int sampleSize) throws IOException
     {
         // Decode bitmap with inSampleSize set
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
         options.inSampleSize = sampleSize;
 
-        try
-        {
-            Bitmap scaledBitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+        Bitmap scaledBitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
 
-            ExifInterface exif;
+        ExifInterface exif;
 
-            exif = new ExifInterface(f.getAbsolutePath());
+        exif = new ExifInterface(f.getAbsolutePath()); // can throw IOException
 
-            String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-            int orientation = orientString != null ? Integer.parseInt(orientString) :  ExifInterface.ORIENTATION_NORMAL;
-            int rotationInDegrees = exifToDegrees(orientation);
-            Matrix matrix = new Matrix();
-            if (orientation != 0f) {matrix.preRotate(rotationInDegrees);}
-            Bitmap adjustedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,  scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+        String orientString = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+        int orientation = orientString != null ? Integer.parseInt(orientString) :  ExifInterface.ORIENTATION_NORMAL;
+        int rotationInDegrees = exifToDegrees(orientation);
+        Matrix matrix = new Matrix();
+        if (orientation != 0f) {matrix.preRotate(rotationInDegrees);}
+        Bitmap adjustedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0,  scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
 
-            return adjustedBitmap;
-
-        }
-        catch (/*IO*/Exception e)
-        {
-            // Some error has occurred ... Send back a static created bitmap
-            e.printStackTrace();
-            return getBadImageBitmap(320,320);
-        }
+        return adjustedBitmap;
     }
 
     private static Bitmap getBadImageBitmap(int height, int width) {
@@ -193,7 +183,13 @@ public class Utils {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
         int sampleSize = calculateInSampleSize(f, reqWidth, reqHeight);
-        return decodeFileByScale(f, sampleSize);
+        try {
+            return decodeFileByScale(f, sampleSize);
+        } catch (Exception e) {
+            // Some error has occurred ... Send back a static created bitmap
+            // This happened on the phone with one 'bad' image
+            return getBadImageBitmap(reqWidth,reqHeight);
+        }
     }
 
     public static Bitmap decodeFileToThumbnail(File f) {
