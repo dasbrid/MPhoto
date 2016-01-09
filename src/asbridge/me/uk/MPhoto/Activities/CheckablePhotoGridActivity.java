@@ -13,7 +13,6 @@ import android.widget.Toast;
 import asbridge.me.uk.MPhoto.Classes.CheckedFile;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.CheckablePhotoGridAdapter;
-import asbridge.me.uk.MPhoto.adapter.PhotoGridAdapter;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
 import java.io.File;
@@ -49,7 +48,7 @@ public class CheckablePhotoGridActivity extends Activity implements CheckablePho
     private static final int MODE_SELECT = 0;
     private static final int MODE_VIEW = 1;
 
-    private final String TAG = "DAVE:PhotoGridActivity";
+    private final String TAG = "DAVE:ChkblePhGrAct";
     // Called after starting or when resuming (no saved instance state)
     @Override
     protected void onResume() {
@@ -187,7 +186,7 @@ public class CheckablePhotoGridActivity extends Activity implements CheckablePho
         // setting grid view adapter
         gridView.setAdapter(adapter);
 /*
-        adapter.setEventListener(new PhotoGridAdapter.ISelectionChangedEventListener() {
+        adapter.setEventListener(new CheckablePhotoGridAdapter.ISelectionChangedEventListener() {
 
             @Override
             public void onSelectionChanged() {
