@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
+import asbridge.me.uk.MPhoto.Activities.CheckablePhotoGridActivity;
 import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.controls.NumberControl;
@@ -47,7 +47,7 @@ public class LastNPhotosFragment extends TabFragment {
         int numPhotos = ncLastNControl.getNumber();
 
         // start the slideshow activity
-        Intent intent = new Intent(getActivity(), PhotoGridActivity.class);
+        Intent intent = new Intent(getActivity(), CheckablePhotoGridActivity.class);
         intent.putExtra("folderAbsolutePath", "not needed");
         intent.putExtra("albumName", "Most recent " + numPhotos + " photos");
         intent.putExtra("albumType", "lastNPhotos");

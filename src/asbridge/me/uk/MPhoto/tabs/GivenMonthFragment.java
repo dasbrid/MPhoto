@@ -7,12 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
+import asbridge.me.uk.MPhoto.Activities.CheckablePhotoGridActivity;
 import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.controls.MonthControl;
 import asbridge.me.uk.MPhoto.controls.NumberControl;
-import asbridge.me.uk.MPhoto.helper.AppConstant;
 
 import java.util.Calendar;
 
@@ -71,7 +70,7 @@ public class GivenMonthFragment extends TabFragment {
 
         Intent intent;
 
-        intent = new Intent(getActivity(), PhotoGridActivity.class);
+        intent = new Intent(getActivity(), CheckablePhotoGridActivity.class);
 
         intent.putExtra("folderAbsolutePath", "not needed");
         intent.putExtra("albumName", "Photos taken in "+mcMonth.getMonthText() + " in " + year);

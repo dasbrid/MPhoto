@@ -7,10 +7,9 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import asbridge.me.uk.MPhoto.Activities.PhotoGridActivity;
+import asbridge.me.uk.MPhoto.Activities.CheckablePhotoGridActivity;
 import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.Classes.Album;
 import asbridge.me.uk.MPhoto.R;
@@ -27,7 +26,6 @@ public class BucketListFragment extends TabFragment {
     private ArrayList<Album> bucketList;
     ListView lvBucketList;
     BucketListAdapter bucketAdapter;
-    private ArrayAdapter arrayAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,7 +97,7 @@ public class BucketListFragment extends TabFragment {
         if (selectedItems.size() > 0 ) {
             Intent intent;
 
-            intent = new Intent(getActivity(), PhotoGridActivity.class);
+            intent = new Intent(getActivity(), CheckablePhotoGridActivity.class);
 
             intent.putExtra("albumType", "multipleBuckets");
             intent.putExtra("albumName", albumNames);
