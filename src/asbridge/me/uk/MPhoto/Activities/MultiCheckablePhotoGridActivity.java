@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.*;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import asbridge.me.uk.MPhoto.Classes.CheckedFile;
 import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.R;
@@ -29,6 +26,7 @@ import java.util.ArrayList;
  */
 public class MultiCheckablePhotoGridActivity extends Activity
         implements MultiCheckablePhotoGridAdapter.ISelectionChangedEventListener,
+            GridView.OnItemClickListener,
              DeleteConfirmDialog.DeleteDialogOKListener
 {
     private MultiCheckablePhotoGridAdapter adapter;
@@ -187,9 +185,28 @@ public class MultiCheckablePhotoGridActivity extends Activity
         gridView.setAdapter(adapter);
         gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
         gridView.setMultiChoiceModeListener(new MultiChoiceModeListener());
+        gridView.setOnItemClickListener(this);
         enableDisableButtons(0);
     }
 
+    // grid item short clicked - launch the slideshow activity
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+                            long id) {
+        File f = imageFiles.get(position).getFile();
+        Intent intent = new Intent(this, SlideshowActivity.class);
+        intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
+        intent.putExtra("albumName",this.albumName);
+        intent.putExtra("albumType",this.albumType);
+        intent.putExtra("albumBucketID", albumBucketID);
+        intent.putStringArrayListExtra("bucketIDs", this.bucketIDstrings);
+        intent.putExtra("position", position);
+        intent.putExtra("month", albumMonth);
+        intent.putExtra("year", albumYear);
+        this.startActivityForResult(intent,100);
+    }
+
+    // listener for the long press on the grid
     public class MultiChoiceModeListener implements
             GridView.MultiChoiceModeListener {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -219,7 +236,6 @@ public class MultiCheckablePhotoGridActivity extends Activity
                     return false;
             }
         }
-
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             return true;
