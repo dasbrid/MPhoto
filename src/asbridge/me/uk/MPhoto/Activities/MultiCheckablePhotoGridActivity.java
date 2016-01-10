@@ -40,14 +40,15 @@ public class MultiCheckablePhotoGridActivity extends Activity
     private long albumBucketID;
     private ArrayList<String> bucketIDstrings;
     private int numPhotos;
-    private TextView tvNumSelectedItems;
 
+    /*
+    private TextView tvNumSelectedItems;
     private Button btnSelectPhotos;
     private Button btnSharePhotos;
     private Button btnDeletePhotos;
     private Button btnSelectNoPhotos;
     private Button btnSelectAllPhotos;
-
+    */
     private boolean modified;
 
 //    private int clickMode;
@@ -97,14 +98,17 @@ public class MultiCheckablePhotoGridActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_checkable_photo_grid);
+        setContentView(R.layout.activity_multi_checkable_photo_grid);
         gridView = (GridView) findViewById(R.id.photo_grid_view);
+
+        /*
         tvNumSelectedItems = (TextView) findViewById(R.id.tvNumSelectedItems);
         btnSelectPhotos = (Button) findViewById(R.id.btnSelectPhotos);
         btnSharePhotos = (Button) findViewById(R.id.btnSharePhotos);
         btnDeletePhotos = (Button) findViewById(R.id.btnDeletePhotos);
         btnSelectAllPhotos = (Button) findViewById(R.id.btnSelectAllPhotos);
         btnSelectNoPhotos = (Button) findViewById(R.id.btnSelectNoPhotos);
+        */
 
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
@@ -174,8 +178,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
             btnStartSlideshow.setEnabled(false);
         }
         // Gridview adapter
-        adapter = new MultiCheckablePhotoGridAdapter(MultiCheckablePhotoGridActivity.this, imageFiles, albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDstrings);
-        //adapter.setEventListener(this);
+        adapter = new MultiCheckablePhotoGridAdapter(MultiCheckablePhotoGridActivity.this, imageFiles); //,  albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDstrings);
         // setting grid view adapter
         gridView.setAdapter(adapter);
         gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -253,7 +256,6 @@ public class MultiCheckablePhotoGridActivity extends Activity
                     break;
             }
         }
-
     }
 
     // share selected on CAB. Share selected images

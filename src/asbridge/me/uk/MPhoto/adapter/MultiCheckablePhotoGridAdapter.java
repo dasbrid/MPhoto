@@ -34,6 +34,7 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
 
     private Activity _context;
     private ArrayList<File> _files;
+    /*
     private String _albumFolder;
     private int albumMonth;
     private int albumYear;
@@ -41,11 +42,13 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
     private String albumType;
     private long albumBucketID;
     private ArrayList<String> bucketIDStrings;
+    */
 
 
-    public MultiCheckablePhotoGridAdapter(Activity activity, ArrayList<File> imageFiles, String albumFolder, int albumMonth, int albumYear, String albumName, String albumType, long albumBucketID, ArrayList<String> bucketIDStrings) {
+    public MultiCheckablePhotoGridAdapter(Activity activity, ArrayList<File> imageFiles /*, String albumFolder, int albumMonth, int albumYear, String albumName, String albumType, long albumBucketID, ArrayList<String> bucketIDStrings*/) {
         this._context = activity;
         this._files = imageFiles;
+/*
         this._albumFolder = albumFolder;
         this.albumMonth = albumMonth;
         this.albumYear = albumYear;
@@ -53,6 +56,7 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
         this.albumType = albumType;
         this.albumBucketID = albumBucketID;
         this.bucketIDStrings = bucketIDStrings;
+*/
     }
 
     @Override
@@ -90,7 +94,6 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
         }
         // http://android-developers.blogspot.co.uk/2010/07/multithreading-for-performance.html
         imageDownloader.download(_files.get(position).getAbsolutePath(), (ImageView) holder.image);
-//        holder.layout.setChecked(_files.get(position).isChecked());
 
         return convertView;
     }
