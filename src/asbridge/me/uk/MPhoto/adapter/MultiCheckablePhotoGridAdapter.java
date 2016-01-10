@@ -27,15 +27,7 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
 
     private final static String TAG = "PhotoGridAdapter";
 
-    private int gridClickMode;
-
-    public static class GridClickMode {
-        public static final int MODE_SELECT = 0;
-        public static final int MODE_VIEW = 1;
-    }
-
     static class ViewHolder {
-        CheckBox checkbox;
         ImageView image;
         CheckableLinearLayout layout;
     }
@@ -50,12 +42,6 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
     private long albumBucketID;
     private ArrayList<String> bucketIDStrings;
 
-    public void setGridClickMode(int gcm) {
-        gridClickMode = gcm;
-    }
-    public int getGridClickMode() {
-        return gridClickMode;
-    }
 
     public MultiCheckablePhotoGridAdapter(Activity activity, ArrayList<CheckedFile> imageFiles, String albumFolder, int albumMonth, int albumYear, String albumName, String albumType, long albumBucketID, ArrayList<String> bucketIDStrings) {
         this._context = activity;
@@ -67,18 +53,6 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
         this.albumType = albumType;
         this.albumBucketID = albumBucketID;
         this.bucketIDStrings = bucketIDStrings;
-
-        gridClickMode = GridClickMode.MODE_SELECT;
-    }
-
-    public interface ISelectionChangedEventListener {
-        void onSelectionChanged(int numItemsSelected);
-    }
-
-    private ISelectionChangedEventListener mEventListener;
-
-    public void setEventListener(ISelectionChangedEventListener mEventListener) {
-        this.mEventListener = mEventListener;
     }
 
     @Override
@@ -116,21 +90,9 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
         }
         // http://android-developers.blogspot.co.uk/2010/07/multithreading-for-performance.html
         imageDownloader.download(_files.get(position).getFile().getAbsolutePath(), (ImageView) holder.image);
-        holder.layout.setChecked(_files.get(position).isChecked());
-        // onclick for the image
-//        holder.layout.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDStrings));
+//        holder.layout.setChecked(_files.get(position).isChecked());
 
         return convertView;
-    }
-
-    public ArrayList<CheckedFile> getSelectedFiles() {
-        ArrayList<CheckedFile> selectedFiles = new ArrayList<CheckedFile>();
-        for (int i = 0; i < getCount(); i++) {
-            if (isImageSelected(i)) {
-                selectedFiles.add(_files.get(i));
-            }
-        }
-        return selectedFiles;
     }
 
     public CheckedFile getImageFile(int position)
@@ -138,82 +100,9 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
         return _files.get(position);
     }
 
-    public boolean isImageSelected(int position)
-    {
-        return _files.get(position).isChecked();
-    }
 
-    public void clearSelection() {
-        for (int i = 0 ; i < _files.size(); i++)
-            _files.get(i).setChecked(false);
-        notifyDataSetChanged();
-        if (mEventListener != null)
-            mEventListener.onSelectionChanged(0);
-    }
 
-    public void selectAll() {
-        for (int i = 0 ; i < _files.size(); i++)
-            _files.get(i).setChecked(true);
-        notifyDataSetChanged();
-        if (mEventListener != null)
-            mEventListener.onSelectionChanged(_files.size());
 
-    }
 
-    public int getNumSelectedItems() {
-        int count = 0;
-        for (CheckedFile cf : _files ) {
-            if (cf.isChecked()) count++;
-        }
-        return count;
-    }
 
-    class OnbtnViewPhotoClickListener implements OnClickListener {
-
-        int _position;
-        String _albumFolder;
-        int albumMonth;
-        int albumYear;
-        String albumName;
-        String albumType;
-        long albumBucketID;
-        ArrayList<String> albumBucketIDStrings;
-
-        // constructor
-        public OnbtnViewPhotoClickListener(int position, String albumFolder, int albumMonth, int albumYear , String albumName, String albumType, long albumBucketID, ArrayList<String> bucketIDStrings) {
-            this._position = position;
-            this._albumFolder = albumFolder;
-            this.albumMonth = albumMonth;
-            this.albumYear = albumYear;
-            this.albumName = albumName;
-            this.albumType = albumType;
-            this.albumBucketID = albumBucketID;
-            this.albumBucketIDStrings = bucketIDStrings;
-        }
-        // on click listener for view button
-        @Override
-        public void onClick(View v)
-        {
-            if (gridClickMode == GridClickMode.MODE_SELECT) {
-                boolean checked = ((CheckableLinearLayout) v).isChecked();
-                ((CheckableLinearLayout) v).setChecked(!checked);
-                _files.get(_position).setChecked(!checked);
-                if (mEventListener != null) {
-                    mEventListener.onSelectionChanged(getNumSelectedItems());
-                }
-            } else if (gridClickMode == GridClickMode.MODE_VIEW) {
-                File f = _files.get(_position).getFile();
-                Intent intent = new Intent(_context, SlideshowActivity.class);
-                intent.putExtra("folderAbsolutePath", this._albumFolder);
-                intent.putExtra("albumName",this.albumName);
-                intent.putExtra("albumType",this.albumType);
-                intent.putExtra("albumBucketID", albumBucketID);
-                intent.putStringArrayListExtra("bucketIDs", albumBucketIDStrings);
-                intent.putExtra("position", _position);
-                intent.putExtra("month", albumMonth);
-                intent.putExtra("year", albumYear);
-                _context.startActivityForResult(intent,100);
-            }
-        }
-    }
 }
