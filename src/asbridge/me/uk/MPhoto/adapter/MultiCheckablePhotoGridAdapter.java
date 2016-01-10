@@ -34,29 +34,10 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
 
     private Activity _context;
     private ArrayList<File> _files;
-    /*
-    private String _albumFolder;
-    private int albumMonth;
-    private int albumYear;
-    private String albumName;
-    private String albumType;
-    private long albumBucketID;
-    private ArrayList<String> bucketIDStrings;
-    */
 
-
-    public MultiCheckablePhotoGridAdapter(Activity activity, ArrayList<File> imageFiles /*, String albumFolder, int albumMonth, int albumYear, String albumName, String albumType, long albumBucketID, ArrayList<String> bucketIDStrings*/) {
+    public MultiCheckablePhotoGridAdapter(Activity activity, ArrayList<File> imageFiles) {
         this._context = activity;
         this._files = imageFiles;
-/*
-        this._albumFolder = albumFolder;
-        this.albumMonth = albumMonth;
-        this.albumYear = albumYear;
-        this.albumName = albumName;
-        this.albumType = albumType;
-        this.albumBucketID = albumBucketID;
-        this.bucketIDStrings = bucketIDStrings;
-*/
     }
 
     @Override
@@ -97,15 +78,4 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
 
         return convertView;
     }
-
-    public File getImageFile(int position)
-    {
-        return _files.get(position);
-    }
-
-
-
-
-
-
 }

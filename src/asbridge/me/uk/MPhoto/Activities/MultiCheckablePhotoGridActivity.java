@@ -24,7 +24,6 @@ import java.util.ArrayList;
  */
 public class MultiCheckablePhotoGridActivity extends Activity
     implements
-       // MultiCheckablePhotoGridAdapter.ISelectionChangedEventListener,
             GridView.OnItemClickListener,
              DeleteConfirmDialog.DeleteDialogOKListener
 {
@@ -41,19 +40,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
     private ArrayList<String> bucketIDstrings;
     private int numPhotos;
 
-    /*
-    private TextView tvNumSelectedItems;
-    private Button btnSelectPhotos;
-    private Button btnSharePhotos;
-    private Button btnDeletePhotos;
-    private Button btnSelectNoPhotos;
-    private Button btnSelectAllPhotos;
-    */
     private boolean modified;
-
-//    private int clickMode;
-    private static final int MODE_SELECT = 0;
-    private static final int MODE_VIEW = 1;
 
     private final String TAG = "DAVE:ChkblePhGrAct";
     // Called after starting or when resuming (no saved instance state)
@@ -101,15 +88,6 @@ public class MultiCheckablePhotoGridActivity extends Activity
         setContentView(R.layout.activity_multi_checkable_photo_grid);
         gridView = (GridView) findViewById(R.id.photo_grid_view);
 
-        /*
-        tvNumSelectedItems = (TextView) findViewById(R.id.tvNumSelectedItems);
-        btnSelectPhotos = (Button) findViewById(R.id.btnSelectPhotos);
-        btnSharePhotos = (Button) findViewById(R.id.btnSharePhotos);
-        btnDeletePhotos = (Button) findViewById(R.id.btnDeletePhotos);
-        btnSelectAllPhotos = (Button) findViewById(R.id.btnSelectAllPhotos);
-        btnSelectNoPhotos = (Button) findViewById(R.id.btnSelectNoPhotos);
-        */
-
         Bundle parameters = getIntent().getExtras();
         String albumFolder = parameters.getString("folderAbsolutePath");
         this.albumType = parameters.getString("albumType");
@@ -137,7 +115,6 @@ public class MultiCheckablePhotoGridActivity extends Activity
 
         ArrayList<File> files;
 
-        // files = Utils.getMediaInBucket(this, albumName);
         Log.d("DAVE", "displaying album for " + albumMonth +"/" + albumYear);
 
         if (albumType.equals("lastYear")) {
@@ -178,7 +155,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
             btnStartSlideshow.setEnabled(false);
         }
         // Gridview adapter
-        adapter = new MultiCheckablePhotoGridAdapter(MultiCheckablePhotoGridActivity.this, imageFiles); //,  albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDstrings);
+        adapter = new MultiCheckablePhotoGridAdapter(MultiCheckablePhotoGridActivity.this, imageFiles);
         // setting grid view adapter
         gridView.setAdapter(adapter);
         gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
