@@ -297,4 +297,37 @@ public class MultiCheckablePhotoGridActivity extends Activity
         intent.putExtra("day", this.albumDay);
         this.startActivityForResult(intent,100);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.photo_grid_standard_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_play_slideshow:
+                Log.d("DAVE", "start slideshow for type "+this.albumType+" name = "+this.albumName);
+                Intent intent = new Intent(this, SlideshowActivity.class);
+                intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
+                intent.putExtra("albumType", this.albumType);
+                intent.putExtra("albumName", this.albumName);
+                intent.putExtra("albumBucketID", this.albumBucketID);
+                intent.putStringArrayListExtra("bucketIDs", this.bucketIDstrings);
+                intent.putExtra("numPhotos", this.numPhotos);
+                intent.putExtra("position", -1);
+                intent.putExtra("month", this.albumMonth);
+                intent.putExtra("year", this.albumYear);
+                intent.putExtra("day", this.albumDay);
+                this.startActivityForResult(intent,100);
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 }

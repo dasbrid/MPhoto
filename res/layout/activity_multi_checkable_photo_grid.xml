@@ -17,18 +17,4 @@
               android:stretchMode="columnWidth"
     >
     </GridView>
-    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:layout_below="@id/photo_grid_view"
-
-                    android:gravity="bottom"
-    >
-    <Button android:id="@+id/btnStartSlideshow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Play slideshow"
-            android:onClick="btnStartSlideshowClicked"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-    />
-    </RelativeLayout>
 </LinearLayout>
