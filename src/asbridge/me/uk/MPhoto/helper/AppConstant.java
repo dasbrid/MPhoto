@@ -22,7 +22,7 @@ public class AppConstant {
 
     // size (pixels) of images used for thumbnails
     // NOT the size on the screen (specified in gui constants)
-    public static int THUMB_SIZE= 128;
+    public static int THUMB_SIZE= 240;
 
     public static int SLIDESHOW_WIDTH= 1280;
     public static int SLIDESHOW_HEIGHT= 800;

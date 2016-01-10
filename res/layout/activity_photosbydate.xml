@@ -14,6 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="View Photos"
+            android:drawableLeft="@drawable/icon_view_photos"
             android:id="@+id/btnShowAlbum"
             android:onClick="btnShowAlbumClicked"
             android:layout_marginRight="5dp"
@@ -23,7 +24,8 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View Slideshow"
+            android:text="Play Slideshow"
+            android:drawableLeft="@drawable/icon_play_slideshow"
             android:id="@+id/btnShowSlideshow"
             android:onClick="btnShowSlideshowClicked"
             android:layout_toRightOf="@id/btnShowAlbum"

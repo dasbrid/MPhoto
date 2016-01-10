@@ -5,6 +5,6 @@
             android:id="@+id/action_play_slideshow"
             android:icon="@drawable/icon_play_slideshow"
             android:title="Play Slideshow"
-            android:showAsAction="withText"
+            android:showAsAction="ifRoom|withText"
 />
 </menu>
