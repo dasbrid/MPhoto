@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 
-import asbridge.me.uk.MPhoto.Activities.CheckablePhotoGridActivity;
+import asbridge.me.uk.MPhoto.Activities.MultiCheckablePhotoGridActivity;
 import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.R;
 
@@ -58,7 +58,7 @@ public class FromDateFragment extends TabFragment {
 
         Intent intent;
 
-        intent = new Intent(getActivity(), CheckablePhotoGridActivity.class);
+        intent = new Intent(getActivity(), MultiCheckablePhotoGridActivity.class);
 
         intent.putExtra("folderAbsolutePath", "not needed");
         intent.putExtra("albumName", "Photos taken after " + day + "/" + (month+1) + "/" + year);

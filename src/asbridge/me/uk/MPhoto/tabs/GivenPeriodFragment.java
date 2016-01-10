@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import asbridge.me.uk.MPhoto.Activities.*;
+import asbridge.me.uk.MPhoto.Activities.MultiCheckablePhotoGridActivity;
+import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.R;
-import asbridge.me.uk.MPhoto.helper.AppConstant;
 
 import java.util.Calendar;
 
@@ -160,7 +160,7 @@ public class GivenPeriodFragment extends TabFragment {
         Log.d(TAG,"selectedId="+selectedId);
         Intent intent;
 
-        intent = new Intent(getActivity(), CheckablePhotoGridActivity.class);
+        intent = new Intent(getActivity(), MultiCheckablePhotoGridActivity.class);
 
         intent.putExtra("folderAbsolutePath", "not needed");
 

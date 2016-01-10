@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
-import asbridge.me.uk.MPhoto.Activities.CheckablePhotoGridActivity;
 import asbridge.me.uk.MPhoto.Activities.MultiCheckablePhotoGridActivity;
 import asbridge.me.uk.MPhoto.Activities.SlideshowActivity;
 import asbridge.me.uk.MPhoto.Classes.Album;

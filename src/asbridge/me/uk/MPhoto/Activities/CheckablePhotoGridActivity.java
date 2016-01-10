@@ -178,7 +178,7 @@ public class CheckablePhotoGridActivity extends Activity
             btnStartSlideshow.setEnabled(false);
         }
         // Gridview adapter
-        adapter = new CheckablePhotoGridAdapter(CheckablePhotoGridActivity.this, imageFiles, albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDstrings);
+        adapter = new CheckablePhotoGridAdapter(this, imageFiles, albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDstrings);
         adapter.setGridClickMode(MODE_SELECT);
         adapter.setEventListener(this);
         // setting grid view adapter
