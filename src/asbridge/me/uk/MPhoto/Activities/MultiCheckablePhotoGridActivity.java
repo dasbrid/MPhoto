@@ -9,7 +9,6 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.*;
 import android.widget.*;
-import asbridge.me.uk.MPhoto.Classes.CheckedFile;
 import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.MultiCheckablePhotoGridAdapter;
@@ -57,10 +56,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
             // CHECK THIS !!! WHAT ABOUT ALL THE OTHER ALBUM TYPES !!!!!!!!!!!!!!!!!
             // get all files (in this folder and in subfolders)
             files = Utils.getMediaInBucket(this, this.albumName);
-
-            for (int i = 0; i < files.size(); i++) {
-                this.imageFiles.add(files.get(i));
-            }
+            imageFiles.addAll(files);
             adapter.notifyDataSetChanged();
         }
 
@@ -143,17 +139,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
             files = Utils.getMediaInMonth(this, albumMonth, albumYear);
         }
 
-
-        this.imageFiles = new ArrayList<File>();
-        if (files != null && files.size() != 0) {
-            for (int i = 0; i < files.size(); i++) {
-                this.imageFiles.add(files.get(i));
-            }
-        } else {
-            Toast.makeText(this, "No files found", Toast.LENGTH_SHORT).show();
-            Button btnStartSlideshow = (Button)findViewById(R.id.btnStartSlideshow);
-            btnStartSlideshow.setEnabled(false);
-        }
+        imageFiles = files;
         // Gridview adapter
         adapter = new MultiCheckablePhotoGridAdapter(MultiCheckablePhotoGridActivity.this, imageFiles);
         // setting grid view adapter
