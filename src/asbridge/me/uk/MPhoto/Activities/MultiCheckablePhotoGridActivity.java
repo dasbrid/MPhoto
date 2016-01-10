@@ -31,7 +31,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
     private MultiCheckablePhotoGridAdapter adapter;
     private GridView gridView;
     private String albumAbsolutePath;
-    private ArrayList<CheckedFile> imageFiles;
+    private ArrayList<File> imageFiles;
     private String albumName;
     private int albumMonth;
     private int albumYear;
@@ -71,7 +71,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
             files = Utils.getMediaInBucket(this, this.albumName);
 
             for (int i = 0; i < files.size(); i++) {
-                this.imageFiles.add(new CheckedFile(files.get(i)));
+                this.imageFiles.add(files.get(i));
             }
             adapter.notifyDataSetChanged();
         }
@@ -163,10 +163,10 @@ public class MultiCheckablePhotoGridActivity extends Activity
         }
 
 
-        this.imageFiles = new ArrayList<CheckedFile>();
+        this.imageFiles = new ArrayList<File>();
         if (files != null && files.size() != 0) {
             for (int i = 0; i < files.size(); i++) {
-                this.imageFiles.add(new CheckedFile(files.get(i)));
+                this.imageFiles.add(files.get(i));
             }
         } else {
             Toast.makeText(this, "No files found", Toast.LENGTH_SHORT).show();
@@ -187,7 +187,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
-        File f = imageFiles.get(position).getFile();
+        File f = imageFiles.get(position);
         Intent intent = new Intent(this, SlideshowActivity.class);
         intent.putExtra("folderAbsolutePath", this.albumAbsolutePath);
         intent.putExtra("albumName",this.albumName);
@@ -268,8 +268,8 @@ public class MultiCheckablePhotoGridActivity extends Activity
         {
             int key = checkedItems.keyAt(i);
             if (checkedItems.get(key)) {
-                CheckedFile checkedFile = imageFiles.get(key);
-                Uri u = Uri.fromFile(checkedFile.getFile());
+                File file = imageFiles.get(key);
+                Uri u = Uri.fromFile(file);
                 attachmentUris.add(u);
             }
         }
