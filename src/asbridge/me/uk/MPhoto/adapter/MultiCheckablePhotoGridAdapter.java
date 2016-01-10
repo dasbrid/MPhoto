@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by David on 10/11/2015.
  */
-public class CheckablePhotoGridAdapter extends BaseAdapter  {
+public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
 
     private final static String TAG = "PhotoGridAdapter";
 
@@ -57,7 +57,7 @@ public class CheckablePhotoGridAdapter extends BaseAdapter  {
         return gridClickMode;
     }
 
-    public CheckablePhotoGridAdapter(Activity activity, ArrayList<CheckedFile> imageFiles, String albumFolder, int albumMonth, int albumYear, String albumName, String albumType, long albumBucketID, ArrayList<String> bucketIDStrings) {
+    public MultiCheckablePhotoGridAdapter(Activity activity, ArrayList<CheckedFile> imageFiles, String albumFolder, int albumMonth, int albumYear, String albumName, String albumType, long albumBucketID, ArrayList<String> bucketIDStrings) {
         this._context = activity;
         this._files = imageFiles;
         this._albumFolder = albumFolder;
@@ -118,7 +118,7 @@ public class CheckablePhotoGridAdapter extends BaseAdapter  {
         imageDownloader.download(_files.get(position).getFile().getAbsolutePath(), (ImageView) holder.image);
         holder.layout.setChecked(_files.get(position).isChecked());
         // onclick for the image
-        holder.layout.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDStrings));
+//        holder.layout.setOnClickListener(new OnbtnViewPhotoClickListener(position, _albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDStrings));
 
         return convertView;
     }

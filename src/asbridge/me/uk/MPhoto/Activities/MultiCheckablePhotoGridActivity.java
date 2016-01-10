@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.util.SparseBooleanArray;
+import android.view.*;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import asbridge.me.uk.MPhoto.Classes.CheckedFile;
 import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.CheckablePhotoGridAdapter;
+import asbridge.me.uk.MPhoto.adapter.MultiCheckablePhotoGridAdapter;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
@@ -25,11 +27,11 @@ import java.util.ArrayList;
  * Created by David on 10/11/2015.
  * An Activity for viewing (and later editing/sharing) all the photos in an album
  */
-public class CheckablePhotoGridActivity extends Activity
-        implements CheckablePhotoGridAdapter.ISelectionChangedEventListener,
+public class MultiCheckablePhotoGridActivity extends Activity
+        implements MultiCheckablePhotoGridAdapter.ISelectionChangedEventListener,
              DeleteConfirmDialog.DeleteDialogOKListener
 {
-    private CheckablePhotoGridAdapter adapter;
+    private MultiCheckablePhotoGridAdapter adapter;
     private GridView gridView;
     private String albumAbsolutePath;
     private ArrayList<CheckedFile> imageFiles;
@@ -178,13 +180,98 @@ public class CheckablePhotoGridActivity extends Activity
             btnStartSlideshow.setEnabled(false);
         }
         // Gridview adapter
-        adapter = new CheckablePhotoGridAdapter(CheckablePhotoGridActivity.this, imageFiles, albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDstrings);
+        adapter = new MultiCheckablePhotoGridAdapter(MultiCheckablePhotoGridActivity.this, imageFiles, albumFolder, albumMonth, albumYear, albumName, albumType, albumBucketID, bucketIDstrings);
         adapter.setGridClickMode(MODE_SELECT);
-        adapter.setEventListener(this);
+        //adapter.setEventListener(this);
         // setting grid view adapter
         gridView.setAdapter(adapter);
+        gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
+        gridView.setMultiChoiceModeListener(new MultiChoiceModeListener());
         enableDisableButtons(0);
     }
+
+    public class MultiChoiceModeListener implements
+            GridView.MultiChoiceModeListener {
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.photo_grid_context_menu, menu);
+
+            mode.setTitle("Select Items");
+            mode.setSubtitle("One item selected");
+
+            return true;
+        }
+
+        // Called when the user selects a contextual menu item
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_share:
+                    shareSelectedPhotos();
+                    mode.finish(); // Action picked, so close the CAB
+                    return true;
+                case R.id.menu_delete:
+                    //deleteSelectedPhotos();
+                    mode.finish(); // Action picked, so close the CAB
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return true;
+        }
+
+        public void onDestroyActionMode(ActionMode mode) {
+        }
+
+        // callback from grid view in multi select mode
+        // android automatically takes care of setting the item checked (hence changing it's appearance due to the selector)
+        // this is handled automatically in the GridView (not in the Adapter so adapter.getNumSelectedItems() will stil equal 0)
+        public void onItemCheckedStateChanged(ActionMode mode, int position,
+                                              long id, boolean checked) {
+            int selectCount = gridView.getCheckedItemCount();
+            switch (selectCount) {
+                case 1:
+                    mode.setSubtitle("One item selected");
+                    break;
+                default:
+                    mode.setSubtitle("" + selectCount + " items selected");
+                    break;
+            }
+        }
+
+    }
+
+    // share selected on CAB. Share selected images
+    public void shareSelectedPhotos() {
+        final Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        ArrayList<Uri> attachmentUris = new ArrayList<Uri>();
+
+        SparseBooleanArray checkedItems = gridView.getCheckedItemPositions();
+        int numCheckedItems = checkedItems.size();
+
+        for (int i = 0; i < numCheckedItems ; i++)
+        {
+            int key = checkedItems.keyAt(i);
+            if (checkedItems.get(key)) {
+                CheckedFile checkedFile = imageFiles.get(key);
+                Uri u = Uri.fromFile(checkedFile.getFile());
+                attachmentUris.add(u);
+            }
+        }
+
+        emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, attachmentUris);
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Photos");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "I hope you enjoy these photos");
+
+        startActivity(Intent.createChooser(emailIntent, "Send mail:"));
+    }
+
 
     // callback from the activity when the selection changes (number of items selected is passed)
     @Override
@@ -244,12 +331,12 @@ public class CheckablePhotoGridActivity extends Activity
             btnSharePhotos.setVisibility(View.INVISIBLE);
             btnDeletePhotos.setVisibility(View.INVISIBLE);
             btnSelectPhotos.setText("Select photos");
-            adapter.setGridClickMode(CheckablePhotoGridAdapter.GridClickMode.MODE_VIEW);
+            adapter.setGridClickMode(MultiCheckablePhotoGridAdapter.GridClickMode.MODE_VIEW);
         } else {
             btnSharePhotos.setVisibility(View.VISIBLE);
             btnDeletePhotos.setVisibility(View.VISIBLE);
             btnSelectPhotos.setText("Cancel select");
-            adapter.setGridClickMode(CheckablePhotoGridAdapter.GridClickMode.MODE_SELECT);
+            adapter.setGridClickMode(MultiCheckablePhotoGridAdapter.GridClickMode.MODE_SELECT);
         }
     }
 

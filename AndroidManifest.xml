@@ -13,6 +13,9 @@
         <activity android:name=".Activities.CheckablePhotoGridActivity"
                   android:label="View Photos">
         </activity>
+        <activity android:name=".Activities.MultiCheckablePhotoGridActivity"
+                  android:label="View Photos">
+        </activity>
         <activity android:name=".Activities.SlideshowActivity"
                   android:label="Photo View">
 

@@ -131,7 +131,6 @@ public class Utils {
         while (actualHeight / scale * actualWidth / scale > numPixelsAllowed) {
             scale = scale * 2;
         }
-        Log.d(TAG, "num allowed="+numPixelsAllowed+" size="+actualHeight+"x"+actualWidth+" scale="+scale);
         return scale;
     }
 
@@ -203,7 +202,6 @@ public class Utils {
         String photoDatePreference;
         String storedpref;
         storedpref = Utils.getphotoDatePreference(context);
-        Log.d("DAVE", storedpref);
         if (Utils.getphotoDatePreference(context).equals("DateTaken"))
             photoDatePreference = MediaStore.Images.Media.DATE_TAKEN;
         else
@@ -301,7 +299,6 @@ public class Utils {
         String photoDatePreference;
         String storedpref;
         storedpref = Utils.getphotoDatePreference(context);
-        Log.d("DAVE", storedpref);
         if (Utils.getphotoDatePreference(context).equals("DateTaken"))
             photoDatePreference = MediaStore.Images.Media.DATE_TAKEN;
         else
@@ -451,7 +448,6 @@ public class Utils {
         String photoDatePreference;
         String storedpref;
         storedpref = Utils.getphotoDatePreference(context);
-        Log.d("DAVE", storedpref);
         if (Utils.getphotoDatePreference(context).equals("DateTaken"))
             photoDatePreference = MediaStore.Images.Media.DATE_TAKEN;
         else
@@ -542,7 +538,6 @@ public class Utils {
         } finally {
             cur.close();
         }
-        Log.d("DAVE", "using "+ photoDatePreference + " found " +numimages+" images in " + albums.size()+" albums. Of which "+numimagesWithDate+" images with date");
         return albums;
     }
 
@@ -564,7 +559,6 @@ public class Utils {
     public static ArrayList<File> getPhotosLastYear(Context context) {
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR)-1;
-        Log.d(TAG, "getPhotosLastYear,"+year);
         return getMediaInYear(context, year);
     }
 
@@ -639,9 +633,6 @@ public class Utils {
     // Get Media between two dates and optionally limited to n items (using Query) from content provider
     // If limit = 0 then no limit
     public static ArrayList<File> getMediaInDateRange(Context context, long minDate, long maxDate, int limit) {
-
-        Log.d("DAVE", "searching between " + Long.toString(minDate) + " and " + Long.toString(maxDate));
-
         // which image properties are we querying
         String[] projection = new String[]{
                 MediaStore.Images.Media._ID,
@@ -726,7 +717,6 @@ public class Utils {
                     bucket = cur.getString(bucketColumn);
                     dateTakenString = cur.getString(dateTakenColumn);
                     dateTaken = new Date(Long.parseLong(dateTakenString));
-                    Log.d("DATE", dateTaken.toString());
                     data = cur.getString(dataColumn);
 
                     files.add(new File(data));
