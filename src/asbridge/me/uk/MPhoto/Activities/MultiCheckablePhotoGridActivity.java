@@ -167,17 +167,29 @@ public class MultiCheckablePhotoGridActivity extends Activity
     }
 
     // listener for the long press on the grid
-    public class MultiChoiceModeListener implements
-            GridView.MultiChoiceModeListener {
+    public class MultiChoiceModeListener implements GridView.MultiChoiceModeListener {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
             MenuInflater inflater = mode.getMenuInflater();
             inflater.inflate(R.menu.photo_grid_context_menu, menu);
 
             mode.setTitle("Select Items");
-            mode.setSubtitle("One item selected");
+
+            setActionModeSubtitle(mode);
 
             return true;
+        }
+
+        private void setActionModeSubtitle(ActionMode mode) {
+            int selectCount = gridView.getCheckedItemCount();
+            switch (selectCount) {
+                case 1:
+                    mode.setSubtitle("One item selected");
+                    break;
+                default:
+                    mode.setSubtitle("" + selectCount + " items selected");
+                    break;
+            }
         }
 
         // Called when the user selects a contextual menu item
@@ -209,15 +221,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
         // this is handled automatically in the GridView (not in the Adapter so adapter.getNumSelectedItems() will stil equal 0)
         public void onItemCheckedStateChanged(ActionMode mode, int position,
                                               long id, boolean checked) {
-            int selectCount = gridView.getCheckedItemCount();
-            switch (selectCount) {
-                case 1:
-                    mode.setSubtitle("One item selected");
-                    break;
-                default:
-                    mode.setSubtitle("" + selectCount + " items selected");
-                    break;
-            }
+            setActionModeSubtitle(mode);
         }
     }
 
