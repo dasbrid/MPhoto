@@ -26,7 +26,6 @@ public class TabsAdapter extends FragmentPagerAdapter {
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
 
         if (currentFragment != object) {
-            Log.d("DAVE", "change");
             currentFragment = (TabFragment) object;
         }
         super.setPrimaryItem(container, position, object);
