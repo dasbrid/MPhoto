@@ -12,6 +12,7 @@ import android.widget.*;
 import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.MultiCheckablePhotoGridAdapter;
+import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.helper.Utils;
 
 import java.io.File;
@@ -201,7 +202,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 case R.id.menu_delete:
-                    //deleteSelectedPhotos();
+                    showDeleteDialog();
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
@@ -254,25 +255,28 @@ public class MultiCheckablePhotoGridActivity extends Activity
 
     // Delete dialog button clicked (callback)
     public void onDeleteDialogOK() {
-        /*
         Toast.makeText(this, "Delete files", Toast.LENGTH_LONG).show();
-        ArrayList<CheckedFile> selectedFiles = adapter.getSelectedFiles();
-        File fileToDelete;
-        for (int i = 0; i < selectedFiles.size(); i++) {
-            fileToDelete = selectedFiles.get(i).getFile();
-            // Only actually delete if deletion enabled
-            if (AppConstant.ALLOW_DELETE) {
-                fileToDelete.delete();
+
+        SparseBooleanArray checkedItems = gridView.getCheckedItemPositions();
+        int numCheckedItems = checkedItems.size();
+
+        for (int i = 0; i < numCheckedItems ; i++)
+        {
+            int key = checkedItems.keyAt(i);
+            if (checkedItems.get(key)) {
+                File file = imageFiles.get(key);
+                Toast.makeText(this, "Delete "+file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+                if (AppConstant.ALLOW_DELETE) {
+                    file.delete();
+                }
+                imageFiles.remove(key);
             }
-            imageFiles.remove(selectedFiles.get(i));
         }
-        adapter.clearSelection();
         adapter.notifyDataSetChanged();
-        */
     }
 
      // button delete clicked. Delete selected images
-    public void btnDeletePhotosClicked(View v)
+    public void showDeleteDialog()
     {
         // show confirm dialog. OK will call back to OnDeleteDialogOK
         FragmentManager fm = getFragmentManager();
