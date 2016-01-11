@@ -73,6 +73,12 @@ public class PhotosByDateActivity extends FragmentActivity {
 
 
         viewPager.setAdapter(tabsAdapter);
+
+        //https://github.com/codepath/android_guides/wiki/Google-Play-Style-Tabs-using-TabLayout
+        //https://guides.codepath.com/android/google-play-style-tabs-using-tablayout
+        // Give the TabLayout the ViewPager
+        android.support.design.widget.TabLayout tabLayout = (android.support.design.widget.TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     public void btnShowSlideshowClicked(View v) {

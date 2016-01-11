@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res/asbridge.me.uk.MPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -33,11 +34,18 @@
             android:padding="@dimen/photosbydate_button_padding"
             android:textSize="@dimen/photosbydate_button_text_size"
     />
+
     </LinearLayout>
+    <android.support.design.widget.TabLayout
+            android:id="@+id/sliding_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tabbuttons"
+             />
     <android.support.v4.view.ViewPager
             android:id="@+id/pagertabs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tabbuttons"
+            android:layout_below="@id/sliding_tabs"
     />
 </RelativeLayout>
