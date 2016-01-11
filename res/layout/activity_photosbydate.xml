@@ -36,16 +36,66 @@
     />
 
     </LinearLayout>
-    <android.support.design.widget.TabLayout
-            android:id="@+id/sliding_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tabbuttons"
-             />
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:gravity="center_horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/tabindicators"
+                    android:layout_below="@id/tabbuttons">
+
+        <Button android:layout_height="wrap_content" android:layout_width="wrap_content"
+                android:id="@+id/btn0"
+                android:height="20dp"
+                android:width="20dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/rounded_cell" />
+
+        <Button android:layout_height="wrap_content" android:layout_width="wrap_content"
+                android:id="@+id/btn1"
+                android:layout_toRightOf="@id/btn0"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:height="20dp"
+                android:width="20dp"
+                android:background="@drawable/rounded_cell" />
+        <Button android:layout_height="wrap_content" android:layout_width="wrap_content"
+                android:id="@+id/btn2"
+                android:layout_toRightOf="@id/btn1"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:height="20dp"
+                android:width="20dp"
+                android:background="@drawable/rounded_cell" />
+        <Button android:layout_height="wrap_content" android:layout_width="wrap_content"
+                android:id="@+id/btn3"
+                android:layout_toRightOf="@id/btn2"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:height="20dp"
+                android:width="20dp"
+                android:background="@drawable/rounded_cell" />
+        <Button android:layout_height="wrap_content" android:layout_width="wrap_content"
+                android:id="@+id/btn4"
+                android:layout_toRightOf="@id/btn3"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:height="20dp"
+                android:width="20dp"
+                android:background="@drawable/rounded_cell" />
+        <Button android:layout_height="wrap_content" android:layout_width="wrap_content"
+                android:id="@+id/btn5"
+                android:layout_toRightOf="@id/btn4"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:height="20dp"
+                android:width="20dp"
+                android:background="@drawable/rounded_cell" />
+    </RelativeLayout>
     <android.support.v4.view.ViewPager
             android:id="@+id/pagertabs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/sliding_tabs"
+            android:layout_below="@id/tabindicators"
     />
 </RelativeLayout>
