@@ -11,6 +11,7 @@
 
     <application android:label="@string/app_name" android:icon="@drawable/slideshow">
         <activity android:name=".Activities.MultiCheckablePhotoGridActivity"
+                  android:icon="@drawable/icon_view_photos"
                   android:label="View Photos">
         </activity>
         <activity android:name=".Activities.SlideshowActivity"

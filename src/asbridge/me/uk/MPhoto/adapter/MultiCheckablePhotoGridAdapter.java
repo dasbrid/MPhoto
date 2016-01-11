@@ -42,6 +42,7 @@ public class MultiCheckablePhotoGridAdapter extends BaseAdapter  {
 
     @Override
     public int getCount() {
+        if (_files == null) return 0;
         return this._files.size();
     }
 
