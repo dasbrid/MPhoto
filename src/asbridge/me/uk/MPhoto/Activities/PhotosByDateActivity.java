@@ -30,6 +30,7 @@ public class PhotosByDateActivity extends FragmentActivity {
         setContentView(R.layout.activity_photosbydate);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.pagertabs);
+        //http://www.androidbegin.com/tutorial/android-viewpagertabstrip-fragments-tutorial/
 
         Button btnViewPhotos = (Button) findViewById(R.id.btnShowAlbum);
         if (AppConstant.ALLOW_VIEW_PHOTOS == false)
@@ -108,6 +109,7 @@ public class PhotosByDateActivity extends FragmentActivity {
             public void onPageScrolled(int arg0, float arg1, int arg2) {}
             @Override
             public void onPageSelected(int position) {
+                getActionBar().setSelectedNavigationItem(position);
                 btnAction(position);
             }
 
