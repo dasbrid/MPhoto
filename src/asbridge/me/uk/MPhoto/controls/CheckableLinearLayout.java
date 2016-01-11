@@ -58,7 +58,6 @@ public class CheckableLinearLayout extends LinearLayout implements Checkable {
     }
 
     public void setChecked(boolean b) {
-        Log.d("TAG", "setChecked");
         if (b != mChecked) {
             mChecked = b;
             refreshDrawableState();
@@ -75,7 +74,6 @@ public class CheckableLinearLayout extends LinearLayout implements Checkable {
 
     @Override
     public int[] onCreateDrawableState(int extraSpace) {
-        Log.d("CheckableLinearLayout", "onCreateDrawableState");
         final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
         if (isChecked()) {
             mergeDrawableStates(drawableState, CHECKED_STATE_SET);

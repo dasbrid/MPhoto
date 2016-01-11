@@ -202,8 +202,8 @@ public class MultiCheckablePhotoGridActivity extends Activity
                     mode.finish(); // Action picked, so close the CAB
                     return true;
                 case R.id.menu_delete:
-                    showDeleteDialog();
-                    mode.finish(); // Action picked, so close the CAB
+                    showDeleteDialog(mode);
+//                    mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
                     return false;
@@ -254,7 +254,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
 
 
     // Delete dialog button clicked (callback)
-    public void onDeleteDialogOK() {
+    public void onDeleteDialogOK(ActionMode am) {
         Toast.makeText(this, "Delete files", Toast.LENGTH_LONG).show();
 
         SparseBooleanArray checkedItems = gridView.getCheckedItemPositions();
@@ -273,10 +273,11 @@ public class MultiCheckablePhotoGridActivity extends Activity
             }
         }
         adapter.notifyDataSetChanged();
+        am.finish();
     }
 
      // button delete clicked. Delete selected images
-    public void showDeleteDialog()
+    public void showDeleteDialog(ActionMode mode)
     {
         // show confirm dialog. OK will call back to OnDeleteDialogOK
         FragmentManager fm = getFragmentManager();
@@ -285,7 +286,9 @@ public class MultiCheckablePhotoGridActivity extends Activity
         args.putString("title", "Delete Pictures");
         args.putString("message", "Are you sure you want to delete the selected pictures?");
         deleteDialog.setArguments(args);
+        deleteDialog.setActionMode(mode);
         deleteDialog.show(fm, "fragment_delete_dialog");
+//        mode.finish();
     }
 
     // button clicked, launch slideshow for this folder

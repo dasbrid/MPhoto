@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.View;
 import android.widget.*;
 import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
@@ -364,8 +365,9 @@ public class SlideshowActivity extends Activity
         deleteDialog.show(fm, "fragment_delete_dialog");
     }
 
+
     // Delete dialog button clicked (callback)
-    public void onDeleteDialogOK() {
+    public void onDeleteDialogOK(ActionMode am) {
         int currentPage = mViewPager.getCurrentItem();
         File currentFile = this.filelist.get(currentPage);
 

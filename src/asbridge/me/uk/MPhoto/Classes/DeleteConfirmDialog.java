@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.ActionMode;
 
 /**
  * Created by David on 30/11/2015.
@@ -12,7 +13,12 @@ import android.os.Bundle;
 public class DeleteConfirmDialog extends DialogFragment {
 
     public interface DeleteDialogOKListener {
-        void onDeleteDialogOK();
+        void onDeleteDialogOK(ActionMode am);
+    }
+
+    private ActionMode actionMode;
+    public void setActionMode(ActionMode am) {
+        actionMode = am;
     }
 
     @Override
@@ -28,7 +34,7 @@ public class DeleteConfirmDialog extends DialogFragment {
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     DeleteDialogOKListener activity = (DeleteDialogOKListener) getActivity();
-                    activity.onDeleteDialogOK();
+                    activity.onDeleteDialogOK(actionMode);
                 }
             });
 
