@@ -37,47 +37,6 @@ public class PhotosByDateActivity extends FragmentActivity {
             btnViewPhotos.setVisibility(View.INVISIBLE);
         tabsAdapter = new TabsAdapter(getSupportFragmentManager());
 
-        // http://developer.android.com/training/implementing-navigation/lateral.html
-        final ActionBar actionBar = getActionBar();
-        // Specify that tabs should be displayed in the action bar.
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // Create a tab listener that is called when the user changes tabs.
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-
-            public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-                viewPager.setCurrentItem(tab.getPosition());
-                // show the given tab
-            }
-
-            public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-                // hide the given tab
-            }
-
-            public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
-                // probably ignore this event
-            }
-        };
-
-        // Add 3 tabs, specifying the tab's text and TabListener
-        for (int i = 0; i < tabsAdapter.getCount(); i++) {
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText("Tab " + (i + 1))
-                            .setTabListener(tabListener));
-        }
-/*
-        viewPager.setOnPageChangeListener(
-                new ViewPager.SimpleOnPageChangeListener() {
-                    @Override
-                    public void onPageSelected(int position) {
-                        // When swiping between pages, select the
-                        // corresponding tab.
-                        getActionBar().setSelectedNavigationItem(position);
-                    }
-                });
-
-*/
         viewPager.setAdapter(tabsAdapter);
         btn0=(Button)findViewById(R.id.btn0);
         btn0.setMinimumWidth(0);
@@ -101,7 +60,7 @@ public class PhotosByDateActivity extends FragmentActivity {
         //https://github.com/codepath/android_guides/wiki/Google-Play-Style-Tabs-using-TabLayout
         //https://guides.codepath.com/android/google-play-style-tabs-using-tablayout
         // Give the TabLayout the ViewPager
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
 
             @Override
             public void onPageScrollStateChanged(int position) {}
@@ -109,7 +68,6 @@ public class PhotosByDateActivity extends FragmentActivity {
             public void onPageScrolled(int arg0, float arg1, int arg2) {}
             @Override
             public void onPageSelected(int position) {
-                getActionBar().setSelectedNavigationItem(position);
                 btnAction(position);
             }
 
