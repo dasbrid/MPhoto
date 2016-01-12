@@ -92,11 +92,17 @@
                 android:width="20dp"
                 android:background="@drawable/rounded_cell" />
     </RelativeLayout>
+    <asbridge.me.uk.MPhoto.controls.PageIndicator android:layout_width="match_parent"
+                                                  android:layout_height="wrap_content"
+                                                  android:id="@+id/pageindicator"
+                                                  android:layout_below="@id/tabindicators"
+    >
+
+    </asbridge.me.uk.MPhoto.controls.PageIndicator>
     <android.support.v4.view.ViewPager
             android:id="@+id/pagertabs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tabindicators">
-
+            android:layout_below="@id/pageindicator">
     </android.support.v4.view.ViewPager>
 </RelativeLayout>

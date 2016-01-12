@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import asbridge.me.uk.MPhoto.R;
 import asbridge.me.uk.MPhoto.adapter.TabsAdapter;
+import asbridge.me.uk.MPhoto.controls.PageIndicator;
 import asbridge.me.uk.MPhoto.helper.AppConstant;
 import asbridge.me.uk.MPhoto.tabs.TabFragment;
 
@@ -23,6 +24,7 @@ public class PhotosByDateActivity extends FragmentActivity {
     private static final String TAG = "PhotosByDateActivity";
 
     private TabsAdapter tabsAdapter;
+    private PageIndicator pageIndicator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,8 @@ public class PhotosByDateActivity extends FragmentActivity {
             }
 
         });
+        pageIndicator = (PageIndicator) findViewById(R.id.pageindicator);
+        pageIndicator.setNumButtons(6);
     }
     private Button btn0, btn1, btn2, btn3, btn4, btn5;
 
@@ -84,6 +88,7 @@ public class PhotosByDateActivity extends FragmentActivity {
 
     private void setButtonSelected(Button btn) {
         setButton(btn, 40,40);
+
     }
 
     private void setButtonUnselected(Button btn) {
@@ -91,6 +96,7 @@ public class PhotosByDateActivity extends FragmentActivity {
     }
 
     private void btnAction(int action){
+        pageIndicator.setPage(action);
         switch(action){
             case 0:
                 setButtonSelected(btn0);
