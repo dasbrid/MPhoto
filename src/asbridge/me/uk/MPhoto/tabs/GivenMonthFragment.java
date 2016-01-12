@@ -28,15 +28,31 @@ public class GivenMonthFragment extends TabFragment {
     private MonthControl mcMonth;
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("currentYear", ycYear.getNumber());
+        outState.putInt("currentMonth", mcMonth.getMonth());
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_given_month, container, false);
         ycYear= (NumberControl) v.findViewById(R.id.yearControlMonth);
+        mcMonth = (MonthControl) v.findViewById(R.id.monthControlMonth);
         ycYear.setMinNumber(2011);
         ycYear.setMaxNumber(2018);
-        Calendar c = Calendar.getInstance();
-        ycYear.setNumber(c.get(Calendar.YEAR));
 
-        mcMonth = (MonthControl) v.findViewById(R.id.monthControlMonth);
+        if (savedInstanceState == null) {
+            Calendar c = Calendar.getInstance();
+            ycYear.setNumber(c.get(Calendar.YEAR));
+            mcMonth.setMonth(c.get(Calendar.MONTH));
+
+        } else {
+            ycYear.setNumber(savedInstanceState.getInt("currentYear"));
+            mcMonth.setMonth(savedInstanceState.getInt("currentMonth"));
+        }
+
 
         return v;
     }

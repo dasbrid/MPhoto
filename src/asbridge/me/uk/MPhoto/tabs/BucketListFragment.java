@@ -43,10 +43,6 @@ public class BucketListFragment extends TabFragment {
         return v;
     }
 
-    public void bucketClicked(View v) {
-        Toast.makeText(getContext(), "clicked",Toast.LENGTH_LONG).show();
-    }
-
     public void doSlideshow() {
         // start the slideshow activity for the selected bucket
         SparseBooleanArray checked = lvBucketList.getCheckedItemPositions();
@@ -86,7 +82,7 @@ public class BucketListFragment extends TabFragment {
             int position = checked.keyAt(i);
             if (checked.valueAt(i)) {
                 Album selectedItem = bucketAdapter.getAlbum(position);
-                if (albumNames.isEmpty())
+                if (!albumNames.isEmpty())
                     albumNames = albumNames + ", ";
                 albumNames = albumNames + selectedItem.getName();
                 selectedItems.add(selectedItem);

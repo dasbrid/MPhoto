@@ -19,6 +19,13 @@ import java.util.Calendar;
 public class GivenYearFragment extends TabFragment {
 
     private NumberControl ycYear;
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("currentValue", ycYear.getNumber());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_given_year, container, false);
@@ -26,8 +33,13 @@ public class GivenYearFragment extends TabFragment {
         ycYear= (NumberControl) v.findViewById(R.id.yearControl);
         ycYear.setMinNumber(2011);
         ycYear.setMaxNumber(2018);
-        Calendar c = Calendar.getInstance();
-        ycYear.setNumber(c.get(Calendar.YEAR));
+
+        if (savedInstanceState == null) {
+            Calendar c = Calendar.getInstance();
+            ycYear.setNumber(c.get(Calendar.YEAR));
+        } else {
+            ycYear.setNumber(savedInstanceState.getInt("currentValue"));
+        }
 
         return v;
     }
