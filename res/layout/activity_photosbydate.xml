@@ -38,6 +38,8 @@
 
     <asbridge.me.uk.MPhoto.controls.PageIndicator android:layout_width="wrap_content"
                                                   android:layout_height="wrap_content"
+                                                  android:layout_marginTop="16dp"
+                                                  android:layout_marginBottom="16dp"
                                                   android:id="@+id/pageindicator"
                                                   android:layout_below="@id/tabbuttons"
                                                   android:layout_centerHorizontal="true"

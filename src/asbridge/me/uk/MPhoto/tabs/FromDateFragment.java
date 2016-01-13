@@ -26,7 +26,7 @@ public class FromDateFragment extends TabFragment {
         View v = inflater.inflate(R.layout.fragment_from_date, container, false);
         dpFromDate = (DatePicker) v.findViewById(R.id.datepickerFromDate);
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.MONTH, -2);
+//        c.add(Calendar.MONTH, -2);
         dpFromDate.init(c.get(Calendar.YEAR),c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH), null);
         return v;
     }
