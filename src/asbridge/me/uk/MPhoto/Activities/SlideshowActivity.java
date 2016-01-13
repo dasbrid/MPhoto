@@ -1,5 +1,7 @@
 package asbridge.me.uk.MPhoto.Activities;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -10,6 +12,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import asbridge.me.uk.MPhoto.Classes.DeleteConfirmDialog;
 import asbridge.me.uk.MPhoto.Classes.SlideshowViewPager;
@@ -116,25 +119,95 @@ public class SlideshowActivity extends Activity
 
     // button clicked - restart the slideshow
     public void btnPhotoStartSlideshowClicked(View v) {
+        //buttonsLayout.setVisibility(View.GONE);
+        collapse();
+        /*
         btnStartSlideshow.setVisibility(View.INVISIBLE);
         btnPhotoDelete.setVisibility(View.INVISIBLE);
         btnPhotoShare.setVisibility(View.INVISIBLE);
         radioGroupShuffle.setVisibility(View.INVISIBLE);
         btnSlideshowSpeed.setVisibility(View.INVISIBLE);
+        */
+        /*
         page = mViewPager.getCurrentItem();
         startSlideshow();
+        */
     }
 
+    private void collapse() {
+        int finalHeight = buttonsLayout.getHeight();
+
+        ValueAnimator mAnimator = slideAnimator(finalHeight, 0);
+
+        mAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                //Height=0, but it set visibility to GONE
+                buttonsLayout.setVisibility(View.GONE);
+                page = mViewPager.getCurrentItem();
+                startSlideshow();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator a) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+        });
+        mAnimator.start();
+    }
     // called back from the pager when touched
     public void onTouched() {
         stopSlideshow();
+        //buttonsLayout.setVisibility(View.VISIBLE);
+        expand();
+        /*
         btnStartSlideshow.setVisibility(View.VISIBLE);
         btnPhotoDelete.setVisibility(View.VISIBLE);
         btnPhotoShare.setVisibility(View.VISIBLE);
         radioGroupShuffle.setVisibility(View.VISIBLE);
         btnSlideshowSpeed.setVisibility(View.VISIBLE);
+*/
+    }
+private View buttonsLayout;
+
+    private void expand() {
+        //set Visible
+        buttonsLayout.setVisibility(View.VISIBLE);
+
+        final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        final int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        buttonsLayout.measure(widthSpec, heightSpec);
+
+        ValueAnimator mAnimator = slideAnimator(0, buttonsLayout.getMeasuredHeight());
+        mAnimator.start();
     }
 
+    private ValueAnimator slideAnimator(int start, int end) {
+
+        ValueAnimator animator = ValueAnimator.ofInt(start, end);
+
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                //Update Height
+                int value = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = buttonsLayout.getLayoutParams();
+                layoutParams.height = value;
+                buttonsLayout.setLayoutParams(layoutParams);
+            }
+        });
+        return animator;
+    }
     private void stopSlideshow() {
         slideshowOn = false;
     }
@@ -192,17 +265,23 @@ public class SlideshowActivity extends Activity
 
         if (slideshowOn) {
             startSlideshow();
+            buttonsLayout.setVisibility(View.GONE);
+/*
             btnStartSlideshow.setVisibility(View.INVISIBLE);
             btnPhotoDelete.setVisibility(View.INVISIBLE);
             btnPhotoShare.setVisibility(View.INVISIBLE);
             radioGroupShuffle.setVisibility(View.INVISIBLE);
             btnSlideshowSpeed.setVisibility(View.INVISIBLE);
+*/
         } else {
+            buttonsLayout.setVisibility(View.VISIBLE);
+            /*
             btnStartSlideshow.setVisibility(View.VISIBLE);
             btnPhotoDelete.setVisibility(View.VISIBLE);
             btnPhotoShare.setVisibility(View.VISIBLE);
             radioGroupShuffle.setVisibility(View.VISIBLE);
             btnSlideshowSpeed.setVisibility(View.VISIBLE);
+*/
         }
         // Code to make layout fullscreen. In onResume, otherwise when activity comes back it will revert to non-fullscreen
         // http://developer.android.com/training/system-ui/status.html
@@ -259,6 +338,7 @@ public class SlideshowActivity extends Activity
         rbtnShuffleOff = (RadioButton) findViewById(R.id.rbShuffleOff);
         rbtnShuffleOn = (RadioButton) findViewById(R.id.rbShuffleOn);
 
+        buttonsLayout = (View) findViewById(R.id.layout_buttons);
 
         radioGroupShuffle.setOnCheckedChangeListener(this);
 
