@@ -8,6 +8,6 @@
                 android:angle="45"
         />
 
-        <stroke android:color="@color/LightBlue" android:width="2dp" />
+        <stroke android:color="@color/LightBlue" android:width="3dp" />
     </shape>
 </inset>

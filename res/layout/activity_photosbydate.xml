@@ -41,10 +41,9 @@
                                                   android:id="@+id/pageindicator"
                                                   android:layout_below="@id/tabbuttons"
                                                   android:layout_centerHorizontal="true"
-                                                  android:padding="5dp"
-                                                  app:unselectedsize="30"
+                                                  app:unselectedsize="24"
                                                   app:selectedsize="42"
-                                                  app:margin="5"
+                                                  app:margin="3"
     >
 
     </asbridge.me.uk.MPhoto.controls.PageIndicator>

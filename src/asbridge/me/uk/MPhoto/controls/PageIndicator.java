@@ -32,7 +32,7 @@ public class PageIndicator extends LinearLayout {
 
     private static final int DEFAULT_SELECTED_SIZE = 40;
     private static final int DEFAULT_UNSELECTED_SIZE = 20;
-    private static final int DEFAULT_MARGIN = 8;
+    private static final int DEFAULT_MARGIN = 3;
 
     public PageIndicator(Context context) {
         super(context);
@@ -45,6 +45,20 @@ public class PageIndicator extends LinearLayout {
     public PageIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        parseAttributes(context, attrs);
+        initializeViews(context);
+    }
+
+    public PageIndicator(Context context,
+                         AttributeSet attrs,
+                         int defStyle) {
+        super(context, attrs, defStyle);
+
+        parseAttributes(context, attrs);
+        initializeViews(context);
+    }
+
+    private void parseAttributes(Context context, AttributeSet attrs) {
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.PageIndicator,
@@ -53,19 +67,10 @@ public class PageIndicator extends LinearLayout {
         try {
             unselectedSize = a.getInt(R.styleable.PageIndicator_unselectedsize, DEFAULT_UNSELECTED_SIZE);
             selectedSize = a.getInteger(R.styleable.PageIndicator_selectedsize, DEFAULT_SELECTED_SIZE);
-            margin = a.getInteger(R.styleable.PageIndicator_selectedsize, DEFAULT_MARGIN);
+            margin = a.getInteger(R.styleable.PageIndicator_margin, DEFAULT_MARGIN);
         } finally {
             a.recycle();
         }
-
-        initializeViews(context);
-    }
-
-    public PageIndicator(Context context,
-                         AttributeSet attrs,
-                         int defStyle) {
-        super(context, attrs, defStyle);
-        initializeViews(context);
     }
 
     private void initializeViews(Context context) {
