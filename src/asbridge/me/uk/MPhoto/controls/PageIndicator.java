@@ -1,6 +1,7 @@
 package asbridge.me.uk.MPhoto.controls;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,13 +26,38 @@ public class PageIndicator extends LinearLayout {
     private View[] balls;
     private int currentPage = -1;
 
+    private int selectedSize;
+    private int unselectedSize;
+    private int margin;
+
+    private static final int DEFAULT_SELECTED_SIZE = 40;
+    private static final int DEFAULT_UNSELECTED_SIZE = 20;
+    private static final int DEFAULT_MARGIN = 8;
+
     public PageIndicator(Context context) {
         super(context);
+        unselectedSize = DEFAULT_UNSELECTED_SIZE;
+        selectedSize = DEFAULT_SELECTED_SIZE;
+        margin = DEFAULT_MARGIN;
         initializeViews(context);
     }
 
     public PageIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.PageIndicator,
+                0, 0);
+
+        try {
+            unselectedSize = a.getInt(R.styleable.PageIndicator_unselectedsize, DEFAULT_UNSELECTED_SIZE);
+            selectedSize = a.getInteger(R.styleable.PageIndicator_selectedsize, DEFAULT_SELECTED_SIZE);
+            margin = a.getInteger(R.styleable.PageIndicator_selectedsize, DEFAULT_MARGIN);
+        } finally {
+            a.recycle();
+        }
+
         initializeViews(context);
     }
 
@@ -79,17 +105,17 @@ public class PageIndicator extends LinearLayout {
 
     }
 
-    private void setPage(int page) {
-        setPage(page, 40);
+    private void selectPage(int page) {
+        setPage(page, selectedSize);
     }
 
-    private void resetPage(int page) {
-        setPage(page, 20);
+    private void unselectPage(int page) {
+        setPage(page, unselectedSize);
     }
 
     public void changePage(int page) {
-        setPage(page);
-        resetPage(currentPage);
+        selectPage(page);
+        unselectPage(currentPage);
         currentPage = page;
     }
 
@@ -100,10 +126,10 @@ public class PageIndicator extends LinearLayout {
             v = inflater.inflate(ballResId, this, true);
         } else {
             Button btn = new Button(getContext());
-            LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(20, 20);
+            LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(unselectedSize, unselectedSize);
             ll.gravity = Gravity.CENTER_VERTICAL;
-            ll.leftMargin = 5;
-            ll.rightMargin = 5;
+            ll.leftMargin = margin;
+            ll.rightMargin = margin;
             btn.setLayoutParams(ll);
             btn.setBackground(getResources().getDrawable(R.drawable.rounded_cell));
 
