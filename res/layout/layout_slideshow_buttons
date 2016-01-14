@@ -1,62 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:keepScreenOn="true"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp" >
-
-    <asbridge.me.uk.MPhoto.Classes.SlideshowViewPager
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/photopager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:onClick="btnPhotoClicked"
-    />
-<RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="64dp"
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
 >
+
     <Button android:id="@+id/btnPhotoStartSlideshow"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/photo_button_padding"
             android:onClick="btnPhotoStartSlideshowClicked"
+            android:drawableLeft="@drawable/ic_icon_play"
             android:text="Start Slideshow"
     />
     <Button android:id="@+id/btnPhotoDelete"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Delete"
             android:onClick="btnPhotoDeleteClicked"
-
+            android:drawableLeft="@drawable/ic_icon_delete"
             android:layout_toRightOf="@id/btnPhotoStartSlideshow"
             android:padding="@dimen/photo_button_padding"
     />
     <Button android:id="@+id/btnPhotoShare"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Share"
+            android:drawableLeft="@drawable/ic_icon_share"
             android:onClick="btnPhotoShareClicked"
-
-            android:layout_toRightOf="@id/btnPhotoDelete"
+            android:layout_below="@id/btnPhotoStartSlideshow"
             android:padding="@dimen/photo_button_padding"
     />
     <Button android:id="@+id/btnSlideShowSpeed"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Slideshow Speed"
             android:onClick="btnSlideShowSpeedClicked"
-
+            android:layout_toRightOf="@id/btnPhotoShare"
             android:layout_below="@id/btnPhotoStartSlideshow"
             android:padding="@dimen/photo_button_padding"
     />
     <RadioGroup
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/radioGroupShuffleSlideshow"
             android:layout_below="@id/btnSlideShowSpeed"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="3dp"
             android:padding="@dimen/photo_button_padding"
     >
         <RadioButton
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Play in order"
@@ -74,5 +71,4 @@
                 android:textSize="@dimen/radioOptionsTextSize"
         />
     </RadioGroup>
-</RelativeLayout>
 </RelativeLayout>
