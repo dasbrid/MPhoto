@@ -167,16 +167,11 @@ public class SlideshowActivity extends Activity
     }
     // called back from the pager when touched
     public void onTouched() {
-        stopSlideshow();
-        //buttonsLayout.setVisibility(View.VISIBLE);
-        expand();
-        /*
-        btnStartSlideshow.setVisibility(View.VISIBLE);
-        btnPhotoDelete.setVisibility(View.VISIBLE);
-        btnPhotoShare.setVisibility(View.VISIBLE);
-        radioGroupShuffle.setVisibility(View.VISIBLE);
-        btnSlideshowSpeed.setVisibility(View.VISIBLE);
-*/
+        if (slideshowOn) {
+            stopSlideshow();
+            //buttonsLayout.setVisibility(View.VISIBLE);
+            expand();
+        }
     }
 private View buttonsLayout;
 
@@ -266,22 +261,8 @@ private View buttonsLayout;
         if (slideshowOn) {
             startSlideshow();
             buttonsLayout.setVisibility(View.GONE);
-/*
-            btnStartSlideshow.setVisibility(View.INVISIBLE);
-            btnPhotoDelete.setVisibility(View.INVISIBLE);
-            btnPhotoShare.setVisibility(View.INVISIBLE);
-            radioGroupShuffle.setVisibility(View.INVISIBLE);
-            btnSlideshowSpeed.setVisibility(View.INVISIBLE);
-*/
         } else {
             buttonsLayout.setVisibility(View.VISIBLE);
-            /*
-            btnStartSlideshow.setVisibility(View.VISIBLE);
-            btnPhotoDelete.setVisibility(View.VISIBLE);
-            btnPhotoShare.setVisibility(View.VISIBLE);
-            radioGroupShuffle.setVisibility(View.VISIBLE);
-            btnSlideshowSpeed.setVisibility(View.VISIBLE);
-*/
         }
         // Code to make layout fullscreen. In onResume, otherwise when activity comes back it will revert to non-fullscreen
         // http://developer.android.com/training/system-ui/status.html
