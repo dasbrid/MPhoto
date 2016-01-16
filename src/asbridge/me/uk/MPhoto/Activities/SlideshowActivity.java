@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.View;
@@ -437,8 +438,13 @@ private View buttonsLayout;
         mSlideshowPagerAdapter.notifyDataSetChanged();
         modified = true;
         // Only actually delete if deletion enabled
-        if (AppConstant.ALLOW_DELETE)
+        if (AppConstant.ALLOW_DELETE) {
+
+            Toast.makeText(this, "Delete " + currentFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+            getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    MediaStore.Images.ImageColumns.DATA + "=?", new String[]{currentFile.getAbsolutePath()});//url, selectionargs);
             currentFile.delete();
+        }
     }
 
     // button share clicked. Share selected image

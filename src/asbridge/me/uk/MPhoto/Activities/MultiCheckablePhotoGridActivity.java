@@ -44,22 +44,57 @@ public class MultiCheckablePhotoGridActivity extends Activity
     private boolean modified;
 
     private final String TAG = "DAVE:ChkblePhGrAct";
+
+    private ArrayList<File> getFileListFromAlbumCharacteristics() {
+        ArrayList<File> files;
+        // files = Utils.getMediaInBucket(this, this.albumName);
+
+        // TOTD: Check OnResume !!! WHAT ABOUT ALL THE OTHER ALBUM TYPES !!!
+        // CHECK THIS !!! WHAT ABOUT ALL THE OTHER ALBUM TYPES !!!!!!!!!!!!!!!!!
+        // get all files (in this folder and in subfolders)
+        if (albumType.equals("lastYear")) {
+            files = Utils.getPhotosLastYear(this);
+        } else if (albumType.equals("lastNPhotos")) {
+            files = Utils.getLastNPhotosinMedia(this, numPhotos);
+        } else if (albumType.equals("multipleBuckets")) {
+            files = Utils.getMediaInListofBuckets(this, bucketIDstrings);
+        } else if (albumType.equals("bucket")) {
+            files = Utils.getMediaInBucketID(this, albumBucketID);
+        } else if (albumType.equals("thisYear")) {
+            files = Utils.getMediaInCurrentYear(this);
+        } else if (albumType.equals("fromDate")) {
+            files = Utils.getMediaFromDate(this,albumDay, albumMonth, albumYear);
+        } else if (albumType.equals("allPhotos")) {
+            // ALL files
+            files = Utils.getAllMedia(this);
+        } else if (albumMonth == -1 && albumYear != -1) {
+            // Year but no month ... Get all for this year
+            files = Utils.getMediaInYear(this, albumYear);
+        } else if (albumMonth == -2 && albumYear == -2) {
+            // Get RECENT files
+            files = Utils.getRecentMedia(this);
+        } else {
+            // Year and month specified ... get for this month
+            files = Utils.getMediaInMonth(this, albumMonth, albumYear);
+        }
+        return files;
+    }
+
     // Called after starting or when resuming (no saved instance state)
     @Override
     protected void onResume() {
         super.onResume();  // Always call the superclass method first
+        Log.d(TAG, "onResume");
 
         if (modified) {
             Log.d(TAG,"modified");
             this.imageFiles.clear();
-            ArrayList<File> files;
 
-            // TOTD: Check OnResume !!! WHAT ABOUT ALL THE OTHER ALBUM TYPES !!!
-            // CHECK THIS !!! WHAT ABOUT ALL THE OTHER ALBUM TYPES !!!!!!!!!!!!!!!!!
-            // get all files (in this folder and in subfolders)
-            files = Utils.getMediaInBucket(this, this.albumName);
+            ArrayList<File> files = getFileListFromAlbumCharacteristics();
             imageFiles.addAll(files);
             adapter.notifyDataSetChanged();
+        } else {
+            Log.d(TAG, "not modified");
         }
 
     }
@@ -111,36 +146,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
 
         getActionBar().setTitle(albumName);
 
-        ArrayList<File> files;
-
-        Log.d("DAVE", "displaying album for " + albumMonth +"/" + albumYear);
-
-        if (albumType.equals("lastYear")) {
-            files = Utils.getPhotosLastYear(this);
-        } else if (albumType.equals("lastNPhotos")) {
-            files = Utils.getLastNPhotosinMedia(this, numPhotos);
-        } else if (albumType.equals("multipleBuckets")) {
-            files = Utils.getMediaInListofBuckets(this, bucketIDstrings);
-        } else if (albumType.equals("bucket")) {
-            files = Utils.getMediaInBucketID(this, albumBucketID);
-        } else if (albumType.equals("thisYear")) {
-            files = Utils.getMediaInCurrentYear(this);
-        } else if (albumType.equals("fromDate")) {
-            files = Utils.getMediaFromDate(this,albumDay, albumMonth, albumYear);
-        } else if (albumType.equals("allPhotos")) {
-            // ALL files
-            files = Utils.getAllMedia(this);
-        } else if (albumMonth == -1 && albumYear != -1) {
-            // Year but no month ... Get all for this year
-            files = Utils.getMediaInYear(this, albumYear);
-        } else if (albumMonth == -2 && albumYear == -2) {
-            // Get RECENT files
-            files = Utils.getRecentMedia(this);
-        } else {
-            // Year and month specified ... get for this month
-            files = Utils.getMediaInMonth(this, albumMonth, albumYear);
-        }
-
+        ArrayList<File> files = getFileListFromAlbumCharacteristics();
         imageFiles = files;
         // Gridview adapter
         adapter = new MultiCheckablePhotoGridAdapter(MultiCheckablePhotoGridActivity.this, imageFiles);
