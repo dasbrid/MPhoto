@@ -273,7 +273,6 @@ public class MultiCheckablePhotoGridActivity extends Activity
             if (checkedItems.get(key)) {
                 File file = imageFiles.get(key);
                 if (AppConstant.ALLOW_DELETE) {
-                    Toast.makeText(this, "Delete "+file.getAbsolutePath(), Toast.LENGTH_LONG).show();
                     getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                             MediaStore.Images.ImageColumns.DATA + "=?" , new String[]{ file.getAbsolutePath() });//url, selectionargs);
                     file.delete();
