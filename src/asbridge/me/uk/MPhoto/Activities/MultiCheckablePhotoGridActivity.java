@@ -262,8 +262,6 @@ public class MultiCheckablePhotoGridActivity extends Activity
 
     // Delete dialog button clicked (callback)
     public void onDeleteDialogOK(ActionMode am) {
-        Toast.makeText(this, "Delete files", Toast.LENGTH_LONG).show();
-
         SparseBooleanArray checkedItems = gridView.getCheckedItemPositions();
         int numCheckedItems = checkedItems.size();
 

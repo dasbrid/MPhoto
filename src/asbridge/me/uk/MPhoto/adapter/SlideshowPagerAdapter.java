@@ -72,13 +72,18 @@ public class SlideshowPagerAdapter extends PagerAdapter {
 
         Utils.setImageFilename(mContext,Utils.getImageFilename(mContext) + " decoded bitmap");
         iv.setImageBitmap(myBitmap);
- /*
-        ImageView imageView = (ImageView) itemView.findViewById(R.id.slideshowImage);
-        imageView.setImageResource(mResources[position]);
-*/
         container.addView(itemView);
         Utils.setImageFilename(mContext,Utils.getImageFilename(mContext) + " added view");
         return itemView;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        if (fileList.contains((View) object)) {
+            return fileList.indexOf((View) object);
+        } else {
+            return POSITION_NONE;
+        }
     }
 
     @Override

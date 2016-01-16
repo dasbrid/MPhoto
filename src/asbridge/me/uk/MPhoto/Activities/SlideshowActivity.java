@@ -58,10 +58,6 @@ public class SlideshowActivity extends Activity
     private Timer timer;
     private int page = 0;
 
-    private Button btnPhotoShare;
-    private Button btnPhotoDelete;
-    private Button btnStartSlideshow;
-    private Button btnSlideshowSpeed;
     private RadioButton rbtnShuffleOn;
     private RadioButton rbtnShuffleOff;
     private RadioGroup radioGroupShuffle;
@@ -120,19 +116,7 @@ public class SlideshowActivity extends Activity
 
     // button clicked - restart the slideshow
     public void btnPhotoStartSlideshowClicked(View v) {
-        //buttonsLayout.setVisibility(View.GONE);
         collapse();
-        /*
-        btnStartSlideshow.setVisibility(View.INVISIBLE);
-        btnPhotoDelete.setVisibility(View.INVISIBLE);
-        btnPhotoShare.setVisibility(View.INVISIBLE);
-        radioGroupShuffle.setVisibility(View.INVISIBLE);
-        btnSlideshowSpeed.setVisibility(View.INVISIBLE);
-        */
-        /*
-        page = mViewPager.getCurrentItem();
-        startSlideshow();
-        */
     }
 
     private void collapse() {
@@ -312,10 +296,6 @@ private View buttonsLayout;
         }
 
         setContentView(R.layout.activity_slideshow);
-        btnStartSlideshow = (Button) findViewById(R.id.btnPhotoStartSlideshow);
-        btnPhotoDelete = (Button) findViewById(R.id.btnPhotoDelete);
-        btnPhotoShare = (Button) findViewById(R.id.btnPhotoShare);
-        btnSlideshowSpeed = (Button) findViewById(R.id.btnSlideShowSpeed);
         radioGroupShuffle = (RadioGroup) findViewById(R.id.radioGroupShuffleSlideshow);
         rbtnShuffleOff = (RadioButton) findViewById(R.id.rbShuffleOff);
         rbtnShuffleOn = (RadioButton) findViewById(R.id.rbShuffleOn);
@@ -439,8 +419,6 @@ private View buttonsLayout;
         modified = true;
         // Only actually delete if deletion enabled
         if (AppConstant.ALLOW_DELETE) {
-
-            Toast.makeText(this, "Delete " + currentFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
             getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     MediaStore.Images.ImageColumns.DATA + "=?", new String[]{currentFile.getAbsolutePath()});//url, selectionargs);
             currentFile.delete();
