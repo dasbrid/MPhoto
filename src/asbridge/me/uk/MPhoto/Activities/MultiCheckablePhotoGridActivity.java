@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.*;
@@ -260,13 +261,17 @@ public class MultiCheckablePhotoGridActivity extends Activity
         SparseBooleanArray checkedItems = gridView.getCheckedItemPositions();
         int numCheckedItems = checkedItems.size();
 
-        for (int i = 0; i < numCheckedItems ; i++)
+        // we iterate from the highest to the lowest so that deleting from the list doesn't
+        // disturb the items remaining to be deleted
+        for ( int i = numCheckedItems - 1 ; i >= 0 ; i-- )
         {
             int key = checkedItems.keyAt(i);
             if (checkedItems.get(key)) {
                 File file = imageFiles.get(key);
-                Toast.makeText(this, "Delete "+file.getAbsolutePath(), Toast.LENGTH_LONG).show();
                 if (AppConstant.ALLOW_DELETE) {
+                    Toast.makeText(this, "Delete "+file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+                    getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                            MediaStore.Images.ImageColumns.DATA + "=?" , new String[]{ file.getAbsolutePath() });//url, selectionargs);
                     file.delete();
                 }
                 imageFiles.remove(key);
