@@ -372,16 +372,7 @@ private View buttonsLayout;
 
         if (filelist == null || filelist.size() == 0)
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("No photos found")
-                    .setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            enditall();
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
+            showNoFilesDialog();
             filelist = new ArrayList<File>();
         }
 
@@ -392,12 +383,24 @@ private View buttonsLayout;
         numPages = filelist.size();
     }
 
+    private void showNoFilesDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("No photos found")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        enditall();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     // called after the user clicks OK in the no files dialog
     public void enditall() {
         this.finish();
     }
 
-    // button delete clicked.
     public void btnSlideShowSpeedClicked(View v) {
     // show confirm dialog
     FragmentManager fm = getFragmentManager();

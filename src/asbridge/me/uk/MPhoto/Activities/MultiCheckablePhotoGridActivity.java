@@ -78,22 +78,26 @@ public class MultiCheckablePhotoGridActivity extends Activity
         }
         if (files == null || files.size() == 0)
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("No photos found")
-                    .setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            enditall();
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
+            showNoFilesDialog();
         }
         return files;
     }
 
+    private void showNoFilesDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("No photos found")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        enditall();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     // called after the user clicks OK in the no files dialog
-    public void enditall() {
+    private void enditall() {
         this.finish();
     }
 
@@ -227,7 +231,6 @@ public class MultiCheckablePhotoGridActivity extends Activity
                     return true;
                 case R.id.menu_delete:
                     showDeleteDialog(mode);
-//                    mode.finish(); // Action picked, so close the CAB
                     return true;
                 default:
                     return false;
@@ -297,6 +300,10 @@ public class MultiCheckablePhotoGridActivity extends Activity
                 imageFiles.remove(key);
             }
         }
+        if (imageFiles.size() == 0)
+        {
+            showNoFilesDialog();
+        }
         adapter.notifyDataSetChanged();
         am.finish();
     }
@@ -313,7 +320,6 @@ public class MultiCheckablePhotoGridActivity extends Activity
         deleteDialog.setArguments(args);
         deleteDialog.setActionMode(mode);
         deleteDialog.show(fm, "fragment_delete_dialog");
-//        mode.finish();
     }
 
     // button clicked, launch slideshow for this folder
