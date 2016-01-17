@@ -398,7 +398,8 @@ private View buttonsLayout;
 
     // called after the user clicks OK in the no files dialog
     public void enditall() {
-        this.finish();
+        // calls finish, but also returns the modified state
+        onBackPressed();
     }
 
     public void btnSlideShowSpeedClicked(View v) {
@@ -430,15 +431,18 @@ private View buttonsLayout;
         int currentPage = mViewPager.getCurrentItem();
         File currentFile = this.filelist.get(currentPage);
 
-        this.filelist.remove(currentFile);
-        mViewPager.invalidate();
-        mSlideshowPagerAdapter.notifyDataSetChanged();
         modified = true;
         // Only actually delete if deletion enabled
         if (AppConstant.ALLOW_DELETE) {
             getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     MediaStore.Images.ImageColumns.DATA + "=?", new String[]{currentFile.getAbsolutePath()});//url, selectionargs);
             currentFile.delete();
+            this.filelist.remove(currentFile);
+            mViewPager.invalidate();
+            mSlideshowPagerAdapter.notifyDataSetChanged();
+        }
+        if (this.filelist.size()==0) {
+            showNoFilesDialog();
         }
     }
 
