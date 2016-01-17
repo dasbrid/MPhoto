@@ -92,7 +92,6 @@ public class BucketListFragment extends TabFragment {
 
         if (selectedItems.size() > 0 ) {
             Intent intent;
-
             intent = new Intent(getActivity(), MultiCheckablePhotoGridActivity.class);
 
             intent.putExtra("albumType", "multipleBuckets");

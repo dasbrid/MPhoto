@@ -285,7 +285,10 @@ public class Utils {
         ArrayList<File> files = new ArrayList<File>();
         for (String bucketIDStrings : bucketIDStringss) {
             long bucketID = Long.parseLong(bucketIDStrings);
-            files.addAll(getMediaInBucketID(context, bucketID));
+            ArrayList<File> newfiles = getMediaInBucketID(context, bucketID);
+            if (newfiles != null) {
+                files.addAll(getMediaInBucketID(context, bucketID));
+            }
         }
         return files;
     }

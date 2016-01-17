@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -341,8 +343,6 @@ private View buttonsLayout;
             slideshowSharedState = true;
         }
 
-        Log.d("DAVE", "displaying photos for " + albumMonth +"/" + albumYear);
-
         if (albumType.equals("lastYear")) {
             filelist = Utils.getPhotosLastYear(this);
         } else if (albumType.equals("lastNPhotos")) {
@@ -370,10 +370,19 @@ private View buttonsLayout;
         }
 
 
-        if (filelist == null)
+        if (filelist == null || filelist.size() == 0)
         {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("No photos found")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            enditall();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
             filelist = new ArrayList<File>();
-            Toast.makeText(this,"No pictures found", Toast.LENGTH_LONG).show();
         }
 
         mSlideshowPagerAdapter.setFileList(filelist);
@@ -381,6 +390,11 @@ private View buttonsLayout;
 
         modified = false;
         numPages = filelist.size();
+    }
+
+    // called after the user clicks OK in the no files dialog
+    public void enditall() {
+        this.finish();
     }
 
     // button delete clicked.

@@ -1,7 +1,9 @@
 package asbridge.me.uk.MPhoto.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,10 +49,7 @@ public class MultiCheckablePhotoGridActivity extends Activity
 
     private ArrayList<File> getFileListFromAlbumCharacteristics() {
         ArrayList<File> files;
-        // files = Utils.getMediaInBucket(this, this.albumName);
 
-        // TOTD: Check OnResume !!! WHAT ABOUT ALL THE OTHER ALBUM TYPES !!!
-        // CHECK THIS !!! WHAT ABOUT ALL THE OTHER ALBUM TYPES !!!!!!!!!!!!!!!!!
         // get all files (in this folder and in subfolders)
         if (albumType.equals("lastYear")) {
             files = Utils.getPhotosLastYear(this);
@@ -77,7 +76,25 @@ public class MultiCheckablePhotoGridActivity extends Activity
             // Year and month specified ... get for this month
             files = Utils.getMediaInMonth(this, albumMonth, albumYear);
         }
+        if (files == null || files.size() == 0)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("No photos found")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            enditall();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
         return files;
+    }
+
+    // called after the user clicks OK in the no files dialog
+    public void enditall() {
+        this.finish();
     }
 
     // Called after starting or when resuming (no saved instance state)
